@@ -21,3 +21,4 @@ build/
 *.exp
 *.iobj
 *.ipdb
+*.dll
