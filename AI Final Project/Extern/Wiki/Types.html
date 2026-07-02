@@ -1,0 +1,1054 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="System.html">
+      
+      
+        <link rel="next" href="Vector.html">
+      
+      
+      <link rel="icon" href="assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.21">
+    
+    
+      
+        <title>Types - C Processing</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.66ac8b77.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+        <script src="https://unpkg.com/iframe-worker/shim"></script>
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#table-of-contents" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="index.html" title="C Processing" class="md-header__button md-logo" aria-label="C Processing" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            C Processing
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Types
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="index.html" title="C Processing" class="md-nav__button md-logo" aria-label="C Processing" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    C Processing
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="index.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="Color.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Color
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="Engine.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Engine
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="Font.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Font
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="Graphics.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Graphics
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="Image.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Image
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="Input.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Input
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="Math.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Math
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="Matrix.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Matrix
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="Random.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Random
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="Settings.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Settings
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="Sound.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Sound
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="System.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    System
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="Types.html" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Types
+  </span>
+  
+
+      </a>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="Vector.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Vector
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<p>This section contains all C_Processing types declared in cprocessing_common.h</p>
+<h1 id="table-of-contents">Table Of Contents</h1>
+<ul>
+<li><a href="#cp_bool">CP_BOOL</a></li>
+<li><a href="#cp_image">CP_Image</a></li>
+<li><a href="#cp_sound">CP_Sound</a></li>
+<li><a href="#cp_font">CP_Font</a></li>
+<li><a href="#cp_color">CP_Color</a></li>
+<li><a href="#cp_colorhsl">CP_ColorHSL</a></li>
+<li><a href="#cp_line_cap_mode">CP_LINE_CAP_MODE</a></li>
+<li><a href="#cp_line_joint_mode">CP_LINE_JOINT_MODE</a></li>
+<li><a href="#cp_position_mode">CP_POSITION_MODE</a></li>
+<li><a href="#cp_blend_mode">CP_BLEND_MODE</a></li>
+<li><a href="#cp_image_filter_mode">CP_IMAGE_FILTER_MODE</a></li>
+<li><a href="#cp_image_wrap_mode">CP_IMAGE_WRAP_MODE</a></li>
+<li><a href="#cp_text_align_horizontal">CP_TEXT_ALIGN_HORIZONTAL</a></li>
+<li><a href="#cp_text_align_vertical">CP_TEXT_ALIGN_VERTICAL</a></li>
+<li><a href="#cp_sound_group">CP_SOUND_GROUP</a></li>
+<li><a href="#cp_vector">CP_Vector</a></li>
+<li><a href="#cp_matrix">CP_Matrix</a></li>
+<li><a href="#cp_key">CP_KEY</a></li>
+<li><a href="#cp_mouse">CP_MOUSE</a></li>
+<li><a href="#cp_gamepad">CP_GAMEPAD</a></li>
+<li><a href="#cp_max_gamepads">CP_MAX_GAMEPADS</a></li>
+</ul>
+<h1 id="cp_bool">CP_BOOL</h1>
+<p>A TRUE (1) or FALSE (0) type.</p>
+<h1 id="cp_image">CP_Image</h1>
+<p>A type used to store loaded images.</p>
+<h2 id="related">Related</h2>
+<ul>
+<li><a href="Image.html">All Image Functions</a></li>
+<li><a href="Image.html#cp_image_load">CP_Image_Load</a></li>
+<li><a href="Image.html#cp_image_draw">CP_Image_Draw</a></li>
+<li><a href="Image.html#cp_image_free">CP_Image_Free</a></li>
+</ul>
+<h1 id="cp_sound">CP_Sound</h1>
+<p>A type used to store loaded sounds.</p>
+<h2 id="related_1">Related</h2>
+<ul>
+<li><a href="Sound.html">All Sound Functions</a></li>
+<li><a href="Sound.html#cp_sound_load">CP_Sound_Load</a></li>
+<li><a href="Sound.html#cp_sound_play">CP_Sound_Play</a></li>
+<li><a href="Sound.html#cp_sound_free">CP_Sound_Free</a></li>
+</ul>
+<h1 id="cp_font">CP_Font</h1>
+<p>A type used to store loaded fonts.</p>
+<h2 id="related_2">Related</h2>
+<ul>
+<li><a href="Font.html">All Font Functions</a></li>
+<li><a href="Font.html#cp_font_load">CP_Font_Load</a></li>
+<li><a href="Font.html#cp_font_set">CP_Font_Set</a></li>
+</ul>
+<h1 id="cp_color">CP_Color</h1>
+<p>A type that stores red, green, blue, and alpha values of a color (RGBA). Each color is represented by a number between 0 and 255.</p>
+<h2 id="common-colors">Common Colors</h2>
+<ul>
+<li>black - CP_Color_Create(0, 0, 0, 255)</li>
+<li>white - CP_Color_Create(255, 255, 255, 255)</li>
+<li>gray 50% - CP_Color_Create(128, 128, 128, 255)</li>
+<li>red - CP_Color_Create(255, 0, 0, 255)</li>
+<li>green - CP_Color_Create(0, 255, 0, 255)</li>
+<li>blue - CP_Color_Create(0, 0, 255, 255)</li>
+</ul>
+<h2 id="related_3">Related</h2>
+<ul>
+<li><a href="Color.html">All Color Functions</a></li>
+<li><a href="#cp_colorhsl">CP_ColorHSL</a></li>
+<li><a href="Color.html#cp_color_create">CP_Color_Create</a></li>
+</ul>
+<h1 id="cp_colorhsl">CP_ColorHSL</h1>
+<p>A type that stores the hue, saturation, light, and alpha of a color (HSLA). Hue has a range of 0 - 360, Saturation and Light have a range of 0 - 100, and Alpha has a range of 0 - 255.</p>
+<h2 id="related_4">Related</h2>
+<ul>
+<li><a href="Color.html">All HSL Color Functions</a></li>
+<li><a href="Color.html#cp_colorhsl_create">CP_ColorHSL_Create</a></li>
+</ul>
+<h1 id="cp_line_cap_mode">CP_LINE_CAP_MODE</h1>
+<p>Indicates how the ends of lines should be drawn. The default is CP_LINE_CAP_BUTT.</p>
+<h2 id="valid-enums">Valid Enums</h2>
+<ul>
+<li>CP_LINE_CAP_BUTT</li>
+<li>CP_LINE_CAP_ROUND</li>
+<li>CP_LINE_CAP_SQUARE</li>
+</ul>
+<h2 id="related_5">Related</h2>
+<ul>
+<li><a href="Settings.html#cp_settings_linecapmode">CP_Settings_LineCapMode</a></li>
+</ul>
+<h1 id="cp_line_joint_mode">CP_LINE_JOINT_MODE</h1>
+<p>Controls how sharp corners are when drawing. Default is CP_LINE_JOINT_BEVEL.</p>
+<h2 id="valid-enums_1">Valid Enums</h2>
+<ul>
+<li>CP_LINE_JOINT_ROUND</li>
+<li>CP_LINE_JOINT_BEVEL</li>
+<li>CP_LINE_JOINT_MITER</li>
+</ul>
+<h2 id="related_6">Related</h2>
+<ul>
+<li><a href="Settings.html#cp_settings_linejointmode">CP_Settings_LineJointMode</a></li>
+</ul>
+<h1 id="cp_position_mode">CP_POSITION_MODE</h1>
+<p>Controls the local origin for drawing functions. Center will draw objects from the center, corner will draw from the top left corner.</p>
+<h2 id="valid-enums_2">Valid Enums</h2>
+<ul>
+<li>CP_POSITION_CENTER</li>
+<li>CP_POSITION_CORNER</li>
+</ul>
+<h2 id="related_7">Related</h2>
+<ul>
+<li><a href="Settings.html#cp_settings_rectmode">CP_Settings_RectMode</a></li>
+<li><a href="Settings.html#cp_settings_ellipsemode">CP_Settings_EllipseMode</a></li>
+<li><a href="Settings.html#cp_settings_imagemode">CP_Settings_ImageMode</a></li>
+</ul>
+<h1 id="cp_blend_mode">CP_BLEND_MODE</h1>
+<p>Controls the math that is done when two colors are drawn on top of each other. CP_BLEND_ALPHA is the default.</p>
+<h2 id="valid-enums_3">Valid Enums</h2>
+<ul>
+<li>CP_BLEND_ALPHA - Blends the two colors together naturally</li>
+<li>CP_BLEND_ADD - Adds the overlapping color values together</li>
+<li>CP_BLEND_SUBTRACT - Subtracts the first color from the second color</li>
+<li>CP_BLEND_MULTIPLY - Multiplies the color values together</li>
+<li>CP_BLEND_MIN - Takes the lower values in each color</li>
+<li>CP_BLEND_MAX - Takes the highest values in each color</li>
+</ul>
+<h2 id="related_8">Related</h2>
+<ul>
+<li><a href="Settings.html#cp_settings_blendmode">CP_Settings_BlendMode</a></li>
+</ul>
+<h1 id="cp_image_filter_mode">CP_IMAGE_FILTER_MODE</h1>
+<p>Chooses what math to use when anti-aliasing images.</p>
+<h2 id="valid-enums_4">Valid Enums</h2>
+<ul>
+<li>CP_IMAGE_FILTER_NEAREST - Filters the nearest pixel of the image, good for pixel art, has sharp edges</li>
+<li>CP_IMAGE_FILTER_LINEAR - Attempts to blend all nearby pixels together to have smoother edges/lines</li>
+</ul>
+<h2 id="related_9">Related</h2>
+<ul>
+<li><a href="Settings.html#cp_settings_imagefiltermode">CP_Settings_ImageFilterMode</a></li>
+</ul>
+<h1 id="cp_image_wrap_mode">CP_IMAGE_WRAP_MODE</h1>
+<p>Controls the math for what happens at the edge of textures.</p>
+<h2 id="valid-enums_5">Valid Enums</h2>
+<ul>
+<li>CP_IMAGE_WRAP_CLAMP - Samples the edge of the border when drawing texels outside the image</li>
+<li>CP_IMAGE_WRAP_CLAMP_EDGE - Samples the pixel closest to the edge of the border when drawing texels outside the image</li>
+<li>CP_IMAGE_WRAP_REPEAT - Consistently repeats the image when drawing texels outside the image</li>
+<li>cp_IMAGE_WRAP_MIRROR - Consistently mirrors the image when drawing texels outside the image</li>
+</ul>
+<h2 id="related_10">Related</h2>
+<ul>
+<li><a href="Settings.html#cp_settings_imagewrapmode">CP_Settings_ImageWrapMode</a></li>
+</ul>
+<h1 id="cp_text_align_horizontal">CP_TEXT_ALIGN_HORIZONTAL</h1>
+<p>Controls the horizontal alignment of text when drawing.</p>
+<h2 id="valid-enums_6">Valid Enums</h2>
+<ul>
+<li>CP_TEXT_ALIGN_H_LEFT - Aligns it so the starting point is to the left of the text and grows towards the right.</li>
+<li>CP_TEXT_ALIGN_H_CENTER - Aligns it so the starting point is the center of the text and it grows outward.</li>
+<li>CP_TEXT_ALIGN_H_RIGHT - Aligns it so the starting point is to the right of the text and grows towards the left.</li>
+</ul>
+<h2 id="related_11">Related</h2>
+<ul>
+<li><a href="Settings.html#cp_settings_textalignment">CP_Settings_TextAlignment</a></li>
+</ul>
+<h1 id="cp_text_align_vertical">CP_TEXT_ALIGN_VERTICAL</h1>
+<p>Controls the vertical alignment of text when drawing.</p>
+<h2 id="valid-enums_7">Valid Enums</h2>
+<ul>
+<li>CP_TEXT_ALIGN_V_TOP - Aligns it so that the starting point is above the tallest letter in the text.</li>
+<li>CP_TEXT_ALIGN_V_MIDDLE - Aligns it so the starting point is in the center (vertically) of the text.</li>
+<li>CP_TEXT_ALIGN_V_BOTTOM - Aligns it so that the starting point is below the lowest letter in the text, including tails (such as lower-case g).</li>
+<li>CP_TEXT_ALIGN_V_BASELINE - Aligns it so that the starting point is below the letters in the text, excluding tails.</li>
+</ul>
+<h2 id="related_12">Related</h2>
+<ul>
+<li><a href="Settings.html#cp_settings_textalignment">CP_Settings_TextAlignment</a></li>
+</ul>
+<h1 id="cp_sound_group">CP_SOUND_GROUP</h1>
+<p>Allows for the organization of sounds within different groups.</p>
+<h2 id="valid-enums_8">Valid Enums</h2>
+<ul>
+<li>CP_SOUND_GROUP_0</li>
+<li>CP_SOUND_GROUP_1</li>
+<li>CP_SOUND_GROUP_2</li>
+<li>CP_SOUND_GROUP_3</li>
+<li>CP_SOUND_GROUP_4</li>
+<li>CP_SOUND_GROUP_5</li>
+<li>CP_SOUND_GROUP_6</li>
+<li>CP_SOUND_GROUP_7</li>
+<li>CP_SOUND_GROUP_8</li>
+<li>CP_SOUND_GROUP_9</li>
+<li>CP_SOUND_GROUP_MAX</li>
+<li>CP_SOUND_GROUP_SFX = CP_SOUND_GROUP_0</li>
+<li>CP_SOUND_GROUP_MUSIC = CP_SOUND_GROUP_1</li>
+</ul>
+<h2 id="related_13">Related</h2>
+<ul>
+<li><a href="Sound.html">All Sound Functions</a></li>
+<li><a href="Sound.html#cp_sound_resumegroup">CP_Sound_ResumeGroup</a></li>
+<li><a href="Sound.html#cp_sound_pausegroup">CP_Sound_PauseGroup</a></li>
+</ul>
+<h1 id="cp_vector">CP_Vector</h1>
+<p>A structure that holds two float values. Used for linear algebra, position values, or any purpose requiring two floats.</p>
+<h2 id="example">Example</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">update</span><span class="p">()</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="p">{</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="c1">// create a position vec2</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="n">CP_Vector</span><span class="w"> </span><span class="n">position</span><span class="p">;</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="c1">// set the position</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="n">position</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="n">position</span><span class="p">.</span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">200</span><span class="p">;</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="c1">// &quot;move&quot; the position by 100 in the x-axis and y-axis </span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">    </span><span class="c1">// by adding 100 to each component of the vector.</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">    </span><span class="n">position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CP_Vector_Add</span><span class="p">(</span><span class="n">position</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">);</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">    </span><span class="c1">// draw a rectangle at the position</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">    </span><span class="n">CP_Graphics_DrawRect</span><span class="p">(</span><span class="n">position</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">position</span><span class="p">.</span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">50</span><span class="p">);</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="p">}</span>
+</span></code></pre></div>
+<h2 id="related_14">Related</h2>
+<ul>
+<li><a href="Vector.html">All Vector Functions</a></li>
+<li><a href="Graphics.html#cp_graphics_drawrect">CP_Graphics_DrawRect</a></li>
+</ul>
+<h1 id="cp_matrix">CP_Matrix</h1>
+<p>A structure that holds 9 floats, used for linear algebra, transformations, or any other purpose requiring 9 floats.</p>
+<h2 id="example_1">Example</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">update</span><span class="p">()</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="p">{</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="c1">// create a transform and set it to initialized values</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="n">CP_Matrix</span><span class="w"> </span><span class="n">transform</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CP_Matrix_Identity</span><span class="p">();</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="c1">// make the matrix a translation transform by (100, 100)</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="n">transform</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CP_Matrix_Translate</span><span class="p">((</span><span class="n">CP_Vector</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="w"> </span><span class="p">});</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="c1">// create a vec2 position</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="n">CP_Vector</span><span class="w"> </span><span class="n">position</span><span class="p">;</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">    </span><span class="n">position</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">    </span><span class="n">position</span><span class="p">.</span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">    </span><span class="c1">// apply that matrix to the point and store it in the position</span>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">    </span><span class="n">position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CP_Matrix_MultiplyVector</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span><span class="w"> </span><span class="n">position</span><span class="p">);</span>
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="p">}</span>
+</span></code></pre></div>
+<h2 id="related_15">Related</h2>
+<ul>
+<li><a href="Matrix.html">All Matrix Functions</a></li>
+<li><a href="Graphics.html#cp_graphics_drawrect">CP_Graphics_DrawRect</a></li>
+</ul>
+<h1 id="cp_key">CP_KEY</h1>
+<p>An Enum used to check keyboard operations.</p>
+<h2 id="valid-enums_9">Valid Enums</h2>
+<ul>
+<li>KEY_SPACE</li>
+<li>KEY_APOSTROPHE</li>
+<li>KEY_COMMA</li>
+<li>KEY_MINUS</li>
+<li>KEY_PERIOD</li>
+<li>KEY_SLASH</li>
+<li>KEY_0</li>
+<li>KEY_1</li>
+<li>KEY_2</li>
+<li>KEY_3</li>
+<li>KEY_4</li>
+<li>KEY_5</li>
+<li>KEY_6</li>
+<li>KEY_7</li>
+<li>KEY_8</li>
+<li>KEY_9</li>
+<li>KEY_SEMICOLON</li>
+<li>KEY_EQUAL</li>
+<li>KEY_A</li>
+<li>KEY_B</li>
+<li>KEY_C</li>
+<li>KEY_D</li>
+<li>KEY_E</li>
+<li>KEY_F</li>
+<li>KEY_G</li>
+<li>KEY_H</li>
+<li>KEY_I</li>
+<li>KEY_J</li>
+<li>KEY_K</li>
+<li>KEY_L</li>
+<li>KEY_M</li>
+<li>KEY_N</li>
+<li>KEY_O</li>
+<li>KEY_P</li>
+<li>KEY_Q</li>
+<li>KEY_R</li>
+<li>KEY_S</li>
+<li>KEY_T</li>
+<li>KEY_U</li>
+<li>KEY_V</li>
+<li>KEY_W</li>
+<li>KEY_X</li>
+<li>KEY_Y</li>
+<li>KEY_Z</li>
+<li>KEY_LEFT_BRACKET</li>
+<li>KEY_BACKSLASH</li>
+<li>KEY_RIGHT_BRACKET</li>
+<li>KEY_GRAVE_ACCENT</li>
+<li>KEY_WORLD_1</li>
+<li>KEY_WORLD_2</li>
+<li>KEY_ESCAPE</li>
+<li>KEY_ENTER</li>
+<li>KEY_TAB</li>
+<li>KEY_BACKSPACE</li>
+<li>KEY_INSERT</li>
+<li>KEY_DELETE</li>
+<li>KEY_RIGHT</li>
+<li>KEY_LEFT</li>
+<li>KEY_DOWN</li>
+<li>KEY_UP</li>
+<li>KEY_PAGE_UP</li>
+<li>KEY_PAGE_DOWN</li>
+<li>KEY_HOME</li>
+<li>KEY_END</li>
+<li>KEY_CAPS_LOCK</li>
+<li>KEY_SCROLL_LOCK</li>
+<li>KEY_NUM_LOCK</li>
+<li>KEY_PRINT_SCREEN</li>
+<li>KEY_PAUSE</li>
+<li>KEY_F1</li>
+<li>KEY_F2</li>
+<li>KEY_F3</li>
+<li>KEY_F4</li>
+<li>KEY_F5</li>
+<li>KEY_F6</li>
+<li>KEY_F7</li>
+<li>KEY_F8</li>
+<li>KEY_F9</li>
+<li>KEY_F10</li>
+<li>KEY_F11</li>
+<li>KEY_F12</li>
+<li>KEY_F13</li>
+<li>KEY_F14</li>
+<li>KEY_F15</li>
+<li>KEY_F16</li>
+<li>KEY_F17</li>
+<li>KEY_F18</li>
+<li>KEY_F19</li>
+<li>KEY_F20</li>
+<li>KEY_F21</li>
+<li>KEY_F22</li>
+<li>KEY_F23</li>
+<li>KEY_F24</li>
+<li>KEY_F25</li>
+<li>KEY_KP_0</li>
+<li>KEY_KP_1</li>
+<li>KEY_KP_2</li>
+<li>KEY_KP_3</li>
+<li>KEY_KP_4</li>
+<li>KEY_KP_5</li>
+<li>KEY_KP_6</li>
+<li>KEY_KP_7</li>
+<li>KEY_KP_8</li>
+<li>KEY_KP_9</li>
+<li>KEY_KP_DECIMAL</li>
+<li>KEY_KP_DIVIDE</li>
+<li>KEY_KP_MULTIPLY</li>
+<li>KEY_KP_SUBTRACT</li>
+<li>KEY_KP_ADD</li>
+<li>KEY_KP_ENTER</li>
+<li>KEY_KP_EQUAL</li>
+<li>KEY_LEFT_SHIFT</li>
+<li>KEY_LEFT_CONTROL</li>
+<li>KEY_LEFT_ALT</li>
+<li>KEY_LEFT_SUPER</li>
+<li>KEY_RIGHT_SHIFT</li>
+<li>KEY_RIGHT_CONTROL</li>
+<li>KEY_RIGHT_ALT</li>
+<li>KEY_RIGHT_SUPER</li>
+<li>KEY_MENU</li>
+</ul>
+<h2 id="related_16">Related</h2>
+<ul>
+<li><a href="Input.html">All Input Functions</a></li>
+<li><a href="Input.html#cp_input_keytriggered">CP_Input_KeyTriggered</a></li>
+<li><a href="Input.html#cp_input_keyreleased">CP_Input_KeyReleased</a></li>
+</ul>
+<h1 id="cp_mouse">CP_MOUSE</h1>
+<p>An Enum to check Mouse operations.</p>
+<h2 id="valid-enums_10">Valid Enums</h2>
+<ul>
+<li>MOUSE_BUTTON_1</li>
+<li>MOUSE_BUTTON_2</li>
+<li>MOUSE_BUTTON_3</li>
+<li>MOUSE_BUTTON_4</li>
+<li>MOUSE_BUTTON_5</li>
+<li>MOUSE_BUTTON_6</li>
+<li>MOUSE_BUTTON_7</li>
+<li>MOUSE_BUTTON_8</li>
+<li>MOUSE_BUTTON_LAST = MOUSE_BUTTON_8</li>
+<li>MOUSE_BUTTON_LEFT = MOUSE_BUTTON_1</li>
+<li>MOUSE_BUTTON_MIDDLE = MOUSE_BUTTON_3</li>
+<li>MOUSE_BUTTON_RIGHT = MOUSE_BUTTON_2</li>
+</ul>
+<h2 id="related_17">Related</h2>
+<ul>
+<li><a href="Input.html">All Input Functions</a></li>
+<li><a href="Input.html#cp_input_mouseclicked">CP_Input_MouseClicked</a></li>
+<li><a href="Input.html#cp_input_mousedown">CP_Input_MouseDown</a></li>
+</ul>
+<h1 id="cp_gamepad">CP_GAMEPAD</h1>
+<p>An Enum to check gamepad operations.</p>
+<h2 id="valid-enums_11">Valid Enums</h2>
+<ul>
+<li>GAMEPAD_DPAD_UP</li>
+<li>GAMEPAD_DPAD_DOWN</li>
+<li>GAMEPAD_DPAD_LEFT</li>
+<li>GAMEPAD_DPAD_RIGHT</li>
+<li>GAMEPAD_START</li>
+<li>GAMEPAD_BACK</li>
+<li>GAMEPAD_LEFT_THUMB</li>
+<li>GAMEPAD_RIGHT_THUMB</li>
+<li>GAMEPAD_LEFT_SHOULDER</li>
+<li>GAMEPAD_RIGHT_SHOULDER</li>
+<li>GAMEPAD_A</li>
+<li>GAMEPAD_B</li>
+<li>GAMEPAD_X</li>
+<li>GAMEPAD_Y</li>
+</ul>
+<h2 id="related_18">Related</h2>
+<ul>
+<li><a href="Input.html">All Input Functions</a></li>
+<li><a href="Input.html#cp_input_gamepaddown">CP_Input_GamepadDown</a></li>
+<li><a href="Input.html#cp_input_gamepadreleased">CP_Input_GamepadReleased</a></li>
+</ul>
+<h1 id="cp_max_gamepads">CP_MAX_GAMEPADS</h1>
+<p>An int indicating the max number of gamepads, the current max is 4.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": ".", "features": ["content.code.copy", "content.code.select"], "search": "assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="assets/javascripts/bundle.a7c05c9e.min.js"></script>
+      
+    
+  </body>
+</html>

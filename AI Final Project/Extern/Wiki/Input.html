@@ -1,0 +1,1694 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="Image.html">
+      
+      
+        <link rel="next" href="Math.html">
+      
+      
+      <link rel="icon" href="assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.21">
+    
+    
+      
+        <title>Input - C Processing</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.66ac8b77.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+        <script src="https://unpkg.com/iframe-worker/shim"></script>
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#table-of-contents" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="index.html" title="C Processing" class="md-header__button md-logo" aria-label="C Processing" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            C Processing
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Input
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="index.html" title="C Processing" class="md-nav__button md-logo" aria-label="C Processing" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    C Processing
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="index.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="Color.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Color
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="Engine.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Engine
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="Font.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Font
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="Graphics.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Graphics
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="Image.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Image
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="Input.html" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Input
+  </span>
+  
+
+      </a>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="Math.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Math
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="Matrix.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Matrix
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="Random.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Random
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="Settings.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Settings
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="Sound.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Sound
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="System.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    System
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="Types.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Types
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="Vector.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Vector
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<p>This section contains all functions relating to keyboard, mouse, and gamepad input.</p>
+<h1 id="table-of-contents">Table Of Contents</h1>
+<ul>
+<li><a href="#cp_input_keytriggered">CP_Input_KeyTriggered</a></li>
+<li><a href="#cp_input_keyreleased">CP_Input_KeyReleased</a></li>
+<li><a href="#cp_input_keydown">CP_Input_KeyDown</a></li>
+<li><a href="#cp_input_mousetriggered">CP_Input_MouseTriggered</a></li>
+<li><a href="#cp_input_mousereleased">CP_Input_MouseReleased</a></li>
+<li><a href="#cp_input_mousedown">CP_Input_MouseDown</a></li>
+<li><a href="#cp_input_mousemoved">CP_Input_MouseMoved</a></li>
+<li><a href="#cp_input_mouseclicked">CP_Input_MouseClicked</a></li>
+<li><a href="#cp_input_mousedoubleclicked">CP_Input_MouseDoubleClicked</a></li>
+<li><a href="#cp_input_mousedragged">CP_Input_MouseDragged</a></li>
+<li><a href="#cp_input_mousewheel">CP_Input_MouseWheel</a></li>
+<li><a href="#cp_input_getmousex">CP_Input_GetMouseX</a></li>
+<li><a href="#cp_input_getmousey">CP_Input_GetMouseY</a></li>
+<li><a href="#cp_input_getmousepreviousx">CP_Input_GetMousePreviousX</a></li>
+<li><a href="#cp_input_getmousepreviousy">CP_Input_GetMousePreviousY</a></li>
+<li><a href="#cp_input_getmousedeltax">CP_Input_GetMouseDeltaX</a></li>
+<li><a href="#cp_input_getmousedeltay">CP_Input_GetMouseDeltaY</a></li>
+<li><a href="#cp_input_getmouseworldx">CP_Input_GetMouseWorldX</a></li>
+<li><a href="#cp_input_getmouseworldy">CP_Input_GetMouseWorldY</a></li>
+<li><a href="#cp_input_gamepadtriggered">CP_Input_GamepadTriggered</a></li>
+<li><a href="#cp_input_gamepadtriggeredadvanced">CP_Input_GamepadTriggeredAdvanced</a></li>
+<li><a href="#cp_input_gamepadreleased">CP_Input_GamepadReleased</a></li>
+<li><a href="#cp_input_gamepadreleasedadvanced">CP_Input_GamepadReleasedAdvanced</a></li>
+<li><a href="#cp_input_gamepaddown">CP_Input_GamepadDown</a></li>
+<li><a href="#cp_input_gamepaddownadvanced">CP_Input_GamepadDownAdvanced</a></li>
+<li><a href="#cp_input_gamepadrighttrigger">CP_Input_GamepadRightTrigger</a></li>
+<li><a href="#cp_input_gamepadrighttriggeradvanced">CP_Input_GamepadRightTriggerAdvanced</a></li>
+<li><a href="#cp_input_gamepadlefttrigger">CP_Input_GamepadLeftTrigger</a></li>
+<li><a href="#cp_input_gamepadlefttriggeradvanced">CP_Input_GamepadLeftTriggerAdvanced</a></li>
+<li><a href="#cp_input_gamepadrightstick">CP_Input_GamepadRightStick</a></li>
+<li><a href="#cp_input_gamepadrightstickadvanced">CP_Input_GamepadRightStickAdvanced</a></li>
+<li><a href="#cp_input_gamepadleftstick">CP_Input_GamepadLeftStick</a></li>
+<li><a href="#cp_input_gamepadleftstickadvanced">CP_Input_GamepadLeftStickAdvanced</a></li>
+<li><a href="#cp_input_gamepadconnected">CP_Input_GamepadConnected</a></li>
+<li><a href="Sound.html#cp_sound_load">CP_Input_GamepadConnectedAdvanced</a></li>
+</ul>
+<h1 id="cp_input_keytriggered">CP_Input_KeyTriggered</h1>
+<p>Returns TRUE if the specified key was just pressed this frame. Returns FALSE otherwise, including when the key is held down.</p>
+<h2 id="function">Function</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">CP_BOOL</span><span class="w"> </span><span class="nf">CP_Input_KeyTriggered</span><span class="p">(</span><span class="n">CP_KEY</span><span class="w"> </span><span class="n">keyCode</span><span class="p">);</span>
+</span></code></pre></div>
+<h3 id="parameters">Parameters</h3>
+<ul>
+<li>keyCode <a href="Types.html#cp_key">CP_KEY</a> - The key being checked.</li>
+</ul>
+<h3 id="return">Return</h3>
+<ul>
+<li><a href="Types.html#cp_bool">CP_BOOL</a> - Will be TRUE if the key was pressed this frame, FALSE otherwise.</li>
+</ul>
+<h2 id="example">Example</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">update</span><span class="p">()</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="p">{</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="c1">// If this is the first frame the spacebar is pressed</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">CP_Input_KeyTriggered</span><span class="p">(</span><span class="n">KEY_SPACE</span><span class="p">))</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">        </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">192</span><span class="p">,</span><span class="w"> </span><span class="mi">203</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">));</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="c1">// If spacebar is being held</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">CP_Input_KeyDown</span><span class="p">(</span><span class="n">KEY_SPACE</span><span class="p">))</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">        </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span><span class="w"> </span><span class="mi">180</span><span class="p">,</span><span class="w"> </span><span class="mi">220</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">));</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">    </span><span class="c1">// If spacebar was just released</span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">    </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">CP_Input_KeyReleased</span><span class="p">(</span><span class="n">KEY_SPACE</span><span class="p">))</span>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">        </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">));</span>
+</span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">    </span><span class="c1">// Default state</span>
+</span><span id="__span-1-19"><a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="w">    </span><span class="k">else</span>
+</span><span id="__span-1-20"><a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-1-21"><a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="w">        </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">));</span>
+</span><span id="__span-1-22"><a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-1-23"><a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="p">}</span>
+</span></code></pre></div>
+<h2 id="related">Related</h2>
+<ul>
+<li><a href="Types.html#cp_key">CP_KEY</a></li>
+<li><a href="Types.html#cp_bool">CP_BOOL</a></li>
+<li><a href="Input.html#cp_input_keydown">CP_Input_KeyDown</a></li>
+<li><a href="Input.html#cp_input_keyreleased">CP_Input_KeyReleased</a></li>
+<li><a href="Graphics.html#cp_graphics_clearbackground">CP_Graphics_ClearBackground</a></li>
+<li><a href="Color.html#cp_color_create">CP_Color_Create</a></li>
+</ul>
+<h1 id="cp_input_keyreleased">CP_Input_KeyReleased</h1>
+<p>Returns TRUE if the specified key was released this frame. Returns FALSE otherwise.</p>
+<h2 id="function_1">Function</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">CP_BOOL</span><span class="w"> </span><span class="nf">CP_Input_KeyReleased</span><span class="p">(</span><span class="n">CP_KEY</span><span class="w"> </span><span class="n">keyCode</span><span class="p">);</span>
+</span></code></pre></div>
+<h3 id="parameters_1">Parameters</h3>
+<ul>
+<li>keyCode <a href="Types.html#cp_key">CP_KEY</a> - The key being checked.</li>
+</ul>
+<h3 id="return_1">Return</h3>
+<ul>
+<li><a href="Types.html#cp_bool">CP_BOOL</a> - Will be TRUE if the key was just released, FALSE otherwise.</li>
+</ul>
+<h2 id="example_1">Example</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">update</span><span class="p">()</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="p">{</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="c1">// If this is the first frame the spacebar is pressed</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">CP_Input_KeyTriggered</span><span class="p">(</span><span class="n">KEY_SPACE</span><span class="p">))</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">        </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">192</span><span class="p">,</span><span class="w"> </span><span class="mi">203</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">));</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">    </span><span class="c1">// If spacebar is being held</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">    </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">CP_Input_KeyDown</span><span class="p">(</span><span class="n">KEY_SPACE</span><span class="p">))</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">        </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span><span class="w"> </span><span class="mi">180</span><span class="p">,</span><span class="w"> </span><span class="mi">220</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">));</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">    </span><span class="c1">// If spacebar was just released</span>
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">    </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">CP_Input_KeyReleased</span><span class="p">(</span><span class="n">KEY_SPACE</span><span class="p">))</span>
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="w">        </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">));</span>
+</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="w">    </span><span class="c1">// Default state</span>
+</span><span id="__span-3-19"><a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="w">    </span><span class="k">else</span>
+</span><span id="__span-3-20"><a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-3-21"><a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a><span class="w">        </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">));</span>
+</span><span id="__span-3-22"><a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-3-23"><a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a><span class="p">}</span>
+</span></code></pre></div>
+<h2 id="related_1">Related</h2>
+<ul>
+<li><a href="Types.html#cp_key">CP_KEY</a></li>
+<li><a href="Types.html#cp_bool">CP_BOOL</a></li>
+<li><a href="Input.html#cp_input_keydown">CP_Input_KeyDown</a></li>
+<li><a href="Input.html#cp_input_keytriggered">CP_Input_KeyTriggered</a></li>
+<li><a href="Graphics.html#cp_graphics_clearbackground">CP_Graphics_ClearBackground</a></li>
+<li><a href="Color.html#cp_color_create">CP_Color_Create</a></li>
+</ul>
+<h1 id="cp_input_keydown">CP_Input_KeyDown</h1>
+<p>Returns TRUE if the specified key is down. Note: This is true on the first frame and any subsequent frames that the key may be held. Returns FALSE otherwise.</p>
+<h2 id="function_2">Function</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">CP_BOOL</span><span class="w"> </span><span class="nf">CP_Input_KeyDown</span><span class="p">(</span><span class="n">CP_KEY</span><span class="w"> </span><span class="n">keyCode</span><span class="p">);</span>
+</span></code></pre></div>
+<h3 id="parameters_2">Parameters</h3>
+<ul>
+<li>keyCode <a href="Types.html#cp_key">CP_KEY</a> - The key being checked.</li>
+</ul>
+<h3 id="return_2">Return</h3>
+<ul>
+<li><a href="Types.html#cp_bool">CP_BOOL</a> - Will be TRUE if the key is being held down, FALSE otherwise.</li>
+</ul>
+<h2 id="example_2">Example</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">update</span><span class="p">()</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="p">{</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="c1">// If this is the first frame the spacebar is pressed</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">CP_Input_KeyTriggered</span><span class="p">(</span><span class="n">KEY_SPACE</span><span class="p">))</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">        </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">192</span><span class="p">,</span><span class="w"> </span><span class="mi">203</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">));</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">    </span><span class="c1">// If spacebar is being held</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">    </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">CP_Input_KeyDown</span><span class="p">(</span><span class="n">KEY_SPACE</span><span class="p">))</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">        </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span><span class="w"> </span><span class="mi">180</span><span class="p">,</span><span class="w"> </span><span class="mi">220</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">));</span>
+</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="w">    </span><span class="c1">// If spacebar was just released</span>
+</span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="w">    </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">CP_Input_KeyReleased</span><span class="p">(</span><span class="n">KEY_SPACE</span><span class="p">))</span>
+</span><span id="__span-5-15"><a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-5-16"><a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="w">        </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">));</span>
+</span><span id="__span-5-17"><a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-5-18"><a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="w">    </span><span class="c1">// Default state</span>
+</span><span id="__span-5-19"><a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a><span class="w">    </span><span class="k">else</span>
+</span><span id="__span-5-20"><a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-5-21"><a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a><span class="w">        </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">));</span>
+</span><span id="__span-5-22"><a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-5-23"><a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a><span class="p">}</span>
+</span></code></pre></div>
+<h2 id="related_2">Related</h2>
+<ul>
+<li><a href="Types.html#cp_key">CP_KEY</a></li>
+<li><a href="Types.html#cp_bool">CP_BOOL</a></li>
+<li><a href="Input.html#cp_input_keyreleased">CP_Input_KeyReleased</a></li>
+<li><a href="Input.html#cp_input_keytriggered">CP_Input_KeyTriggered</a></li>
+<li><a href="Graphics.html#cp_graphics_clearbackground">CP_Graphics_ClearBackground</a></li>
+<li><a href="Color.html#cp_color_create">CP_Color_Create</a></li>
+</ul>
+<h1 id="cp_input_mousetriggered">CP_Input_MouseTriggered</h1>
+<p>Returns TRUE if the specified mouse button was pressed this frame. Returns FALSE otherwise, including when the button is held down.</p>
+<h2 id="function_3">Function</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">CP_BOOL</span><span class="w"> </span><span class="nf">CP_Input_MouseTriggered</span><span class="p">(</span><span class="n">CP_MOUSE</span><span class="w"> </span><span class="n">button</span><span class="p">);</span>
+</span></code></pre></div>
+<h3 id="parameters_3">Parameters</h3>
+<ul>
+<li>button <a href="Types.html#cp_mouse">CP_MOUSE</a> - The mouse button being checked.</li>
+</ul>
+<h3 id="return_3">Return</h3>
+<ul>
+<li><a href="Types.html#cp_bool">CP_BOOL</a> - Will be TRUE when the button was just pressed, FALSE otherwise.</li>
+</ul>
+<h2 id="example_3">Example</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">update</span><span class="p">()</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="p">{</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span><span class="c1">// If this is the first frame the left mouse button is pressed</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">CP_Input_MouseTriggered</span><span class="p">(</span><span class="n">MOUSE_BUTTON_LEFT</span><span class="p">))</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">        </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">192</span><span class="p">,</span><span class="w"> </span><span class="mi">203</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">));</span>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">    </span><span class="c1">// If left mouse button is being held</span>
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">    </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">CP_Input_MouseDown</span><span class="p">(</span><span class="n">MOUSE_BUTTON_LEFT</span><span class="p">))</span>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="w">        </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span><span class="w"> </span><span class="mi">180</span><span class="p">,</span><span class="w"> </span><span class="mi">220</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">));</span>
+</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-7-13"><a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="w">    </span><span class="c1">// If left mouse button was just released</span>
+</span><span id="__span-7-14"><a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="w">    </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">CP_Input_MouseReleased</span><span class="p">(</span><span class="n">MOUSE_BUTTON_LEFT</span><span class="p">))</span>
+</span><span id="__span-7-15"><a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-7-16"><a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a><span class="w">        </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">));</span>
+</span><span id="__span-7-17"><a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-7-18"><a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a><span class="w">    </span><span class="c1">// Default state</span>
+</span><span id="__span-7-19"><a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a><span class="w">    </span><span class="k">else</span>
+</span><span id="__span-7-20"><a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-7-21"><a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a><span class="w">        </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">));</span>
+</span><span id="__span-7-22"><a id="__codelineno-7-22" name="__codelineno-7-22" href="#__codelineno-7-22"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-7-23"><a id="__codelineno-7-23" name="__codelineno-7-23" href="#__codelineno-7-23"></a><span class="p">}</span>
+</span></code></pre></div>
+<h2 id="related_3">Related</h2>
+<ul>
+<li><a href="Types.html#cp_mouse">CP_MOUSE</a></li>
+<li><a href="Types.html#cp_bool">CP_BOOL</a></li>
+<li><a href="Input.html#cp_input_mousedown">CP_Input_MouseDown</a></li>
+<li><a href="Input.html#cp_input_mousereleased">CP_Input_MouseReleased</a></li>
+<li><a href="Graphics.html#cp_graphics_clearbackground">CP_Graphics_ClearBackground</a></li>
+<li><a href="Color.html#cp_color_create">CP_Color_Create</a></li>
+</ul>
+<h1 id="cp_input_mousereleased">CP_Input_MouseReleased</h1>
+<p>Returns TRUE if the specified mouse button was released this frame. Returns FALSE otherwise.</p>
+<h2 id="function_4">Function</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="n">CP_BOOL</span><span class="w"> </span><span class="nf">CP_Input_MouseReleased</span><span class="p">(</span><span class="n">CP_MOUSE</span><span class="w"> </span><span class="n">button</span><span class="p">);</span>
+</span></code></pre></div>
+<h3 id="parameters_4">Parameters</h3>
+<ul>
+<li>button <a href="Types.html#cp_mouse">CP_MOUSE</a> - The mouse button being checked.</li>
+</ul>
+<h3 id="return_4">Return</h3>
+<ul>
+<li><a href="Types.html#cp_bool">CP_BOOL</a> - Will be TRUE if the button was just released, otherwise FALSE.</li>
+</ul>
+<h2 id="example_4">Example</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">update</span><span class="p">()</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="p">{</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">    </span><span class="c1">// If this is the first frame the left mouse button is pressed</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">CP_Input_MouseTriggered</span><span class="p">(</span><span class="n">MOUSE_BUTTON_LEFT</span><span class="p">))</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">        </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">192</span><span class="p">,</span><span class="w"> </span><span class="mi">203</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">));</span>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="w">    </span><span class="c1">// If left mouse button is being held</span>
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="w">    </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">CP_Input_MouseDown</span><span class="p">(</span><span class="n">MOUSE_BUTTON_LEFT</span><span class="p">))</span>
+</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="w">        </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span><span class="w"> </span><span class="mi">180</span><span class="p">,</span><span class="w"> </span><span class="mi">220</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">));</span>
+</span><span id="__span-9-12"><a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-9-13"><a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a><span class="w">    </span><span class="c1">// If left mouse button was just released</span>
+</span><span id="__span-9-14"><a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a><span class="w">    </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">CP_Input_MouseReleased</span><span class="p">(</span><span class="n">MOUSE_BUTTON_LEFT</span><span class="p">))</span>
+</span><span id="__span-9-15"><a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-9-16"><a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a><span class="w">        </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">));</span>
+</span><span id="__span-9-17"><a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-9-18"><a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a><span class="w">    </span><span class="c1">// Default state</span>
+</span><span id="__span-9-19"><a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a><span class="w">    </span><span class="k">else</span>
+</span><span id="__span-9-20"><a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-9-21"><a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a><span class="w">        </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">));</span>
+</span><span id="__span-9-22"><a id="__codelineno-9-22" name="__codelineno-9-22" href="#__codelineno-9-22"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-9-23"><a id="__codelineno-9-23" name="__codelineno-9-23" href="#__codelineno-9-23"></a><span class="p">}</span>
+</span></code></pre></div>
+<h2 id="related_4">Related</h2>
+<ul>
+<li><a href="Types.html#cp_mouse">CP_MOUSE</a></li>
+<li><a href="Types.html#cp_bool">CP_BOOL</a></li>
+<li><a href="Input.html#cp_input_mousedown">CP_Input_MouseDown</a></li>
+<li><a href="Input.html#cp_input_mousetriggered">CP_Input_MouseTriggered</a></li>
+<li><a href="Graphics.html#cp_graphics_clearbackground">CP_Graphics_ClearBackground</a></li>
+<li><a href="Color.html#cp_color_create">CP_Color_Create</a></li>
+</ul>
+<h1 id="cp_input_mousedown">CP_Input_MouseDown</h1>
+<p>Returns TRUE if the mouse button is pressed. Note: This is true on the first frame and any subsequent frames the button remains pressed. Returns FALSE otherwise.</p>
+<h2 id="function_5">Function</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="n">CP_BOOL</span><span class="w"> </span><span class="nf">CP_Input_MouseDown</span><span class="p">(</span><span class="n">CP_MOUSE</span><span class="w"> </span><span class="n">button</span><span class="p">);</span>
+</span></code></pre></div>
+<h3 id="parameters_5">Parameters</h3>
+<ul>
+<li>button <a href="Types.html#cp_mouse">CP_MOUSE</a> - The mouse button being checked.</li>
+</ul>
+<h3 id="return_5">Return</h3>
+<ul>
+<li><a href="Types.html#cp_bool">CP_BOOL</a> - Will be TRUE when the button is pressed, FALSE otherwise.</li>
+</ul>
+<h2 id="example_5">Example</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">update</span><span class="p">()</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="p">{</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">    </span><span class="c1">// If this is the first frame the left mouse button is pressed</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">CP_Input_MouseTriggered</span><span class="p">(</span><span class="n">MOUSE_BUTTON_LEFT</span><span class="p">))</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="w">        </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">192</span><span class="p">,</span><span class="w"> </span><span class="mi">203</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">));</span>
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="w">    </span><span class="c1">// If left mouse button is being held</span>
+</span><span id="__span-11-9"><a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="w">    </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">CP_Input_MouseDown</span><span class="p">(</span><span class="n">MOUSE_BUTTON_LEFT</span><span class="p">))</span>
+</span><span id="__span-11-10"><a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-11-11"><a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="w">        </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span><span class="w"> </span><span class="mi">180</span><span class="p">,</span><span class="w"> </span><span class="mi">220</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">));</span>
+</span><span id="__span-11-12"><a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-11-13"><a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a><span class="w">    </span><span class="c1">// If left mouse button was just released</span>
+</span><span id="__span-11-14"><a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a><span class="w">    </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">CP_Input_MouseReleased</span><span class="p">(</span><span class="n">MOUSE_BUTTON_LEFT</span><span class="p">))</span>
+</span><span id="__span-11-15"><a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-11-16"><a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a><span class="w">        </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">));</span>
+</span><span id="__span-11-17"><a id="__codelineno-11-17" name="__codelineno-11-17" href="#__codelineno-11-17"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-11-18"><a id="__codelineno-11-18" name="__codelineno-11-18" href="#__codelineno-11-18"></a><span class="w">    </span><span class="c1">// Default state</span>
+</span><span id="__span-11-19"><a id="__codelineno-11-19" name="__codelineno-11-19" href="#__codelineno-11-19"></a><span class="w">    </span><span class="k">else</span>
+</span><span id="__span-11-20"><a id="__codelineno-11-20" name="__codelineno-11-20" href="#__codelineno-11-20"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-11-21"><a id="__codelineno-11-21" name="__codelineno-11-21" href="#__codelineno-11-21"></a><span class="w">        </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">));</span>
+</span><span id="__span-11-22"><a id="__codelineno-11-22" name="__codelineno-11-22" href="#__codelineno-11-22"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-11-23"><a id="__codelineno-11-23" name="__codelineno-11-23" href="#__codelineno-11-23"></a><span class="p">}</span>
+</span></code></pre></div>
+<h2 id="related_5">Related</h2>
+<ul>
+<li><a href="Types.html#cp_mouse">CP_MOUSE</a></li>
+<li><a href="Types.html#cp_bool">CP_BOOL</a></li>
+<li><a href="Input.html#cp_input_mousereleased">CP_Input_MouseReleased</a></li>
+<li><a href="Input.html#cp_input_mousetriggered">CP_Input_MouseTriggered</a></li>
+<li><a href="Graphics.html#cp_graphics_clearbackground">CP_Graphics_ClearBackground</a></li>
+<li><a href="Color.html#cp_color_create">CP_Color_Create</a></li>
+</ul>
+<h1 id="cp_input_mousemoved">CP_Input_MouseMoved</h1>
+<p>This function returns TRUE if the mouse was moved since the last frame. Returns FALSE otherwise.</p>
+<h2 id="function_6">Function</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">CP_BOOL</span><span class="w"> </span><span class="nf">CP_Input_MouseMoved</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</span></code></pre></div>
+<h3 id="parameters_6">Parameters</h3>
+<p>This function has no parameters.</p>
+<h3 id="return_6">Return</h3>
+<ul>
+<li><a href="Types.html#cp_bool">CP_BOOL</a> - Will be TRUE if the mouse has been moved, FALSE otherwise.</li>
+</ul>
+<h2 id="example_6">Example</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="p">{</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">CP_Input_MouseMoved</span><span class="p">())</span>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">        </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">));</span>
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="w">    </span><span class="k">else</span>
+</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-13-9"><a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="w">        </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">));</span>
+</span><span id="__span-13-10"><a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-13-11"><a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="p">}</span>
+</span></code></pre></div>
+<h2 id="related_6">Related</h2>
+<ul>
+<li><a href="Graphics.html#cp_graphics_clearbackground">CP_Graphics_ClearBackground</a></li>
+<li><a href="Color.html#cp_color_create">CP_Color_Create</a></li>
+</ul>
+<h1 id="cp_input_mouseclicked">CP_Input_MouseClicked</h1>
+<p>This function returns TRUE if the left mouse button was <strong>released</strong> this frame. Returns FALSE otherwise.</p>
+<h2 id="function_7">Function</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="n">CP_Bool</span><span class="w"> </span><span class="nf">CP_Input_MouseClicked</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</span></code></pre></div>
+<h3 id="parameters_7">Parameters</h3>
+<p>This function has no parameters.</p>
+<h3 id="return_7">Return</h3>
+<ul>
+<li><a href="Types.html#cp_bool">CP_BOOL</a> - Will be TRUE if the left button was released, FALSE otherwise.</li>
+</ul>
+<h2 id="example_7">Example</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="n">CP_Color</span><span class="w"> </span><span class="n">bgColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">);</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="kt">void</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="p">{</span>
+</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="w">    </span><span class="c1">// Get a random color for the background when the mouse is clicked</span>
+</span><span id="__span-15-6"><a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">CP_Input_MouseClicked</span><span class="p">())</span>
+</span><span id="__span-15-7"><a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-15-8"><a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="w">        </span><span class="n">bgColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="n">CP_Random_RangeInt</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">),</span><span class="w"> </span><span class="n">CP_Random_RangeInt</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">),</span><span class="w"> </span><span class="n">CP_Random_RangeInt</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">),</span><span class="w"> </span><span class="mi">255</span><span class="p">);</span>
+</span><span id="__span-15-9"><a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-15-10"><a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a>
+</span><span id="__span-15-11"><a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a><span class="w">    </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">bgColor</span><span class="p">);</span>
+</span><span id="__span-15-12"><a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a><span class="p">}</span>
+</span></code></pre></div>
+<h2 id="related_7">Related</h2>
+<ul>
+<li><a href="Color.html#cp_color_create">CP_Color_Create</a></li>
+<li><a href="Random.html#cp_random_rangeint">CP_Random_RangeInt</a></li>
+<li><a href="Graphics.html#cp_graphics_clearbackground">CP_Graphics_ClearBackground</a></li>
+</ul>
+<h1 id="cp_input_mousedoubleclicked">CP_Input_MouseDoubleClicked</h1>
+<p>This function returns TRUE if the left mouse button has been double-clicked. Returns FALSE otherwise.</p>
+<h2 id="function_8">Function</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="n">CP_Bool</span><span class="w"> </span><span class="nf">CP_Input_MouseDoubleClicked</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</span></code></pre></div>
+<h3 id="parameters_8">Parameters</h3>
+<p>This function has no parameters.</p>
+<h3 id="return_8">Return</h3>
+<ul>
+<li><a href="Types.html#cp_bool">CP_BOOL</a> - Will be TRUE if the left button was double-clicked, FALSE otherwise.</li>
+</ul>
+<h2 id="example_8">Example</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="n">CP_Color</span><span class="w"> </span><span class="n">bgColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">);</span>
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="kt">void</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="p">{</span>
+</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="w">    </span><span class="c1">// Get a random color for the background when the mouse is double-clicked</span>
+</span><span id="__span-17-6"><a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">CP_Input_MouseDoubleClicked</span><span class="p">())</span>
+</span><span id="__span-17-7"><a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-17-8"><a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a><span class="w">        </span><span class="n">bgColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="n">CP_Random_RangeInt</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">),</span><span class="w"> </span><span class="n">CP_Random_RangeInt</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">),</span><span class="w"> </span><span class="n">CP_Random_RangeInt</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">),</span><span class="w"> </span><span class="mi">255</span><span class="p">);</span>
+</span><span id="__span-17-9"><a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-17-10"><a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a>
+</span><span id="__span-17-11"><a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a><span class="w">    </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">bgColor</span><span class="p">);</span>
+</span><span id="__span-17-12"><a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a><span class="p">}</span>
+</span></code></pre></div>
+<h2 id="related_8">Related</h2>
+<ul>
+<li><a href="Color.html#cp_color_create">CP_Color_Create</a></li>
+<li><a href="Random.html#cp_random_rangeint">CP_Random_RangeInt</a></li>
+<li><a href="Graphics.html#cp_graphics_clearbackground">CP_Graphics_ClearBackground</a></li>
+</ul>
+<h1 id="cp_input_mousedragged">CP_Input_MouseDragged</h1>
+<p>This function returns TRUE if the specified mouse button is being held while the mouse is also moved. Returns FALSE otherwise.</p>
+<h2 id="function_9">Function</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="n">CP_Bool</span><span class="w"> </span><span class="nf">CP_Input_MouseDragged</span><span class="p">(</span><span class="n">CP_Mouse</span><span class="w"> </span><span class="n">button</span><span class="p">);</span>
+</span></code></pre></div>
+<h3 id="parameters_9">Parameters</h3>
+<ul>
+<li>button <a href="Types.html#cp_mouse">CP_MOUSE</a> - The mouse button being checked.</li>
+</ul>
+<h3 id="return_9">Return</h3>
+<ul>
+<li><a href="Types.html#cp_bool">CP_BOOL</a> - Will be TRUE if the specified button is held and moved, FALSE otherwise.</li>
+</ul>
+<h2 id="example_9">Example</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="kt">float</span><span class="w"> </span><span class="n">delta</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">;</span>
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="kt">void</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="p">{</span>
+</span><span id="__span-19-5"><a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">CP_Input_MouseDragged</span><span class="p">(</span><span class="n">MOUSE_BUTTON_LEFT</span><span class="p">))</span>
+</span><span id="__span-19-6"><a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-19-7"><a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">CP_Input_GetMouseDeltaX</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">)</span>
+</span><span id="__span-19-8"><a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a><span class="w">        </span><span class="p">{</span>
+</span><span id="__span-19-9"><a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a><span class="w">            </span><span class="n">delta</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="mf">5.0f</span><span class="p">;</span>
+</span><span id="__span-19-10"><a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-19-11"><a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a><span class="w">        </span><span class="k">else</span>
+</span><span id="__span-19-12"><a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a><span class="w">        </span><span class="p">{</span>
+</span><span id="__span-19-13"><a id="__codelineno-19-13" name="__codelineno-19-13" href="#__codelineno-19-13"></a><span class="w">            </span><span class="n">delta</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mf">5.0f</span><span class="p">;</span>
+</span><span id="__span-19-14"><a id="__codelineno-19-14" name="__codelineno-19-14" href="#__codelineno-19-14"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-19-15"><a id="__codelineno-19-15" name="__codelineno-19-15" href="#__codelineno-19-15"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-19-16"><a id="__codelineno-19-16" name="__codelineno-19-16" href="#__codelineno-19-16"></a>
+</span><span id="__span-19-17"><a id="__codelineno-19-17" name="__codelineno-19-17" href="#__codelineno-19-17"></a><span class="w">    </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">));</span>
+</span><span id="__span-19-18"><a id="__codelineno-19-18" name="__codelineno-19-18" href="#__codelineno-19-18"></a><span class="w">    </span><span class="n">CP_Graphics_DrawCircle</span><span class="p">(</span><span class="n">CP_System_GetWindowWidth</span><span class="p">()</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">2.0f</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">delta</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">CP_System_GetWindowHeight</span><span class="p">()</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">2.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">4.0f</span><span class="p">);</span>
+</span><span id="__span-19-19"><a id="__codelineno-19-19" name="__codelineno-19-19" href="#__codelineno-19-19"></a><span class="p">}</span>
+</span></code></pre></div>
+<h2 id="related_9">Related</h2>
+<ul>
+<li><a href="Types.html#cp_mouse">CP_MOUSE</a></li>
+<li><a href="Graphics.html#cp_graphics_clearbackground">CP_Graphics_ClearBackground</a></li>
+<li><a href="Color.html#cp_color_create">CP_Color_Create</a></li>
+<li><a href="Graphics.html#cp_graphics_drawcircle">CP_Graphics_DrawCircle</a></li>
+<li><a href="System.html#cp_system_getwindowwidth">CP_System_GetWindowWidth</a></li>
+<li><a href="System.html#cp_system_getwindowheight">CP_System_GetWindowHeight</a></li>
+</ul>
+<h1 id="cp_input_mousewheel">CP_Input_MouseWheel</h1>
+<p>Returns the change in y position of the mouse wheel for the frame.</p>
+<h2 id="function_10">Function</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="kt">float</span><span class="w"> </span><span class="nf">CP_Input_MouseWheel</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</span></code></pre></div>
+<h3 id="parameters_10">Parameters</h3>
+<p>This function has no parameters.</p>
+<h3 id="return_10">Return</h3>
+<ul>
+<li>float - The mouse wheel change since last frame.</li>
+</ul>
+<h2 id="example_10">Example</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="kt">float</span><span class="w"> </span><span class="n">prevMouseWheel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">;</span>
+</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="n">CP_Color</span><span class="w"> </span><span class="n">bgColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">62</span><span class="p">,</span><span class="w"> </span><span class="mi">157</span><span class="p">,</span><span class="w"> </span><span class="mi">189</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">);</span>
+</span><span id="__span-21-3"><a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a>
+</span><span id="__span-21-4"><a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="kt">void</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span><span id="__span-21-5"><a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a><span class="p">{</span>
+</span><span id="__span-21-6"><a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">newMouseWheel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CP_Input_MouseWheel</span><span class="p">();</span>
+</span><span id="__span-21-7"><a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">newMouseWheel</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">prevMouseWheel</span><span class="p">)</span>
+</span><span id="__span-21-8"><a id="__codelineno-21-8" name="__codelineno-21-8" href="#__codelineno-21-8"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-21-9"><a id="__codelineno-21-9" name="__codelineno-21-9" href="#__codelineno-21-9"></a><span class="w">        </span><span class="n">bgColor</span><span class="p">.</span><span class="n">a</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</span><span id="__span-21-10"><a id="__codelineno-21-10" name="__codelineno-21-10" href="#__codelineno-21-10"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-21-11"><a id="__codelineno-21-11" name="__codelineno-21-11" href="#__codelineno-21-11"></a><span class="w">    </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">newMouseWheel</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">prevMouseWheel</span><span class="p">)</span>
+</span><span id="__span-21-12"><a id="__codelineno-21-12" name="__codelineno-21-12" href="#__codelineno-21-12"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-21-13"><a id="__codelineno-21-13" name="__codelineno-21-13" href="#__codelineno-21-13"></a><span class="w">        </span><span class="n">bgColor</span><span class="p">.</span><span class="n">a</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</span><span id="__span-21-14"><a id="__codelineno-21-14" name="__codelineno-21-14" href="#__codelineno-21-14"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-21-15"><a id="__codelineno-21-15" name="__codelineno-21-15" href="#__codelineno-21-15"></a>
+</span><span id="__span-21-16"><a id="__codelineno-21-16" name="__codelineno-21-16" href="#__codelineno-21-16"></a><span class="w">    </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">bgColor</span><span class="p">);</span>
+</span><span id="__span-21-17"><a id="__codelineno-21-17" name="__codelineno-21-17" href="#__codelineno-21-17"></a><span class="p">}</span>
+</span></code></pre></div>
+<h2 id="related_10">Related</h2>
+<ul>
+<li><a href="Color.html#cp_color_create">CP_Color_Create</a></li>
+<li><a href="Graphics.html#cp_graphics_clearbackground">CP_Graphics_ClearBackground</a></li>
+</ul>
+<h1 id="cp_input_getmousex">CP_Input_GetMouseX</h1>
+<p>This function returns the current horizontal coordinate of the mouse. This will track the position of the mouse anywhere on the screen, even if the window is in the background.</p>
+<h2 id="function_11">Function</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="kt">float</span><span class="w"> </span><span class="nf">CP_Input_GetMouseX</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</span></code></pre></div>
+<h3 id="parameters_11">Parameters</h3>
+<p>This function has no parameters.</p>
+<h3 id="return_11">Return</h3>
+<ul>
+<li>float - The current X position of the mouse.</li>
+</ul>
+<h2 id="example_11">Example</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">draw</span><span class="p">()</span>
+</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="p">{</span>
+</span><span id="__span-23-3"><a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="w">    </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">));</span>
+</span><span id="__span-23-4"><a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a><span class="w">    </span><span class="n">CP_Graphics_DrawLine</span><span class="p">(</span><span class="n">CP_Input_GetMouseX</span><span class="p">(),</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="n">CP_Input_GetMouseX</span><span class="p">(),</span><span class="w"> </span><span class="mi">80</span><span class="p">);</span>
+</span><span id="__span-23-5"><a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a><span class="p">}</span>
+</span></code></pre></div>
+<h2 id="related_11">Related</h2>
+<ul>
+<li><a href="Graphics.html#cp_graphics_clearbackground">CP_Graphics_ClearBackground</a></li>
+<li><a href="Color.html#cp_color_create">CP_Color_Create</a></li>
+<li><a href="Graphics.html#cp_graphics_drawline">CP_Graphics_DrawLine</a></li>
+</ul>
+<h1 id="cp_input_getmousey">CP_Input_GetMouseY</h1>
+<p>This function returns the current vertical coordinate of the mouse. This will track the position of the mouse anywhere on the screen, even if the window is in the background.</p>
+<h2 id="function_12">Function</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="kt">float</span><span class="w"> </span><span class="nf">CP_Input_GetMouseY</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</span></code></pre></div>
+<h3 id="parameters_12">Parameters</h3>
+<p>This function has no parameters.</p>
+<h3 id="return_12">Return</h3>
+<ul>
+<li>float - The current Y position of the mouse.</li>
+</ul>
+<h2 id="example_12">Example</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">draw</span><span class="p">()</span>
+</span><span id="__span-25-2"><a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="p">{</span>
+</span><span id="__span-25-3"><a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="w">    </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">));</span>
+</span><span id="__span-25-4"><a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a><span class="w">    </span><span class="n">CP_Graphics_DrawLine</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="n">CP_Input_GetMouseY</span><span class="p">(),</span><span class="w"> </span><span class="mi">80</span><span class="p">,</span><span class="w"> </span><span class="n">CP_Input_GetMouseY</span><span class="p">());</span>
+</span><span id="__span-25-5"><a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a><span class="p">}</span>
+</span></code></pre></div>
+<h2 id="related_12">Related</h2>
+<ul>
+<li><a href="Graphics.html#cp_graphics_clearbackground">CP_Graphics_ClearBackground</a></li>
+<li><a href="Color.html#cp_color_create">CP_Color_Create</a></li>
+<li><a href="Graphics.html#cp_graphics_drawline">CP_Graphics_DrawLine</a></li>
+</ul>
+<h1 id="cp_input_getmousepreviousx">CP_Input_GetMousePreviousX</h1>
+<p>This function always returns the previous horizontal coordinate of the mouse. This value will be the same as <a href="#cp_input_getmousex">CP_Input_GetMouseX</a> the previous frame. This will track the position of the mouse anywhere on the screen, even if the window is in the background.</p>
+<h2 id="function_13">Function</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="kt">float</span><span class="w"> </span><span class="nf">CP_Input_GetMousePreviousX</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</span></code></pre></div>
+<h3 id="parameters_13">Parameters</h3>
+<p>This function has no parameters.</p>
+<h3 id="return_13">Return</h3>
+<ul>
+<li>float - The X position of the mouse on the previous frame.</li>
+</ul>
+<h2 id="example_13">Example</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">draw</span><span class="p">()</span>
+</span><span id="__span-27-2"><a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="p">{</span>
+</span><span id="__span-27-3"><a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a><span class="w">    </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">));</span>
+</span><span id="__span-27-4"><a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a><span class="w">    </span><span class="n">CP_Graphics_DrawLine</span><span class="p">(</span><span class="n">CP_Input_GetMouseX</span><span class="p">(),</span><span class="w"> </span><span class="n">CP_Input_GetMouseY</span><span class="p">(),</span><span class="w"> </span><span class="n">CP_Input_GetMousePreviousX</span><span class="p">(),</span><span class="w"> </span><span class="n">CP_Input_GetMousePreviousY</span><span class="p">());</span>
+</span><span id="__span-27-5"><a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a><span class="p">}</span>
+</span></code></pre></div>
+<h2 id="related_13">Related</h2>
+<ul>
+<li><a href="Input.html#cp_input_getmousex">CP_Input_GetMouseX</a></li>
+<li><a href="Input.html#cp_input_getmousey">CP_Input_GetMouseY</a></li>
+<li><a href="Input.html#cp_input_getmousepreviousy">CP_Input_GetMousePreviousY</a></li>
+<li><a href="Graphics.html#cp_graphics_drawline">CP_Graphics_DrawLine</a></li>
+<li><a href="Graphics.html#cp_graphics_clearbackground">CP_Graphics_ClearBackground</a></li>
+<li><a href="Color.html#cp_color_create">CP_Color_Create</a></li>
+</ul>
+<h1 id="cp_input_getmousepreviousy">CP_Input_GetMousePreviousY</h1>
+<p>This function always returns the previous vertical coordinate of the mouse. This value will be the same as <a href="#cp_input_getmousey">CP_Input_GetMouseY</a> the previous frame. This will track the position of the mouse anywhere on the screen, even if the window is in the background.</p>
+<h2 id="function_14">Function</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="kt">float</span><span class="w"> </span><span class="nf">CP_Input_GetMousePreviousY</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</span></code></pre></div>
+<h3 id="parameters_14">Parameters</h3>
+<p>This function has no parameters.</p>
+<h3 id="return_14">Return</h3>
+<ul>
+<li>float - The Y position of the mouse on the previous frame.</li>
+</ul>
+<h2 id="example_14">Example</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-29-1"><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">draw</span><span class="p">()</span>
+</span><span id="__span-29-2"><a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a><span class="p">{</span>
+</span><span id="__span-29-3"><a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a><span class="w">    </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">));</span>
+</span><span id="__span-29-4"><a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a><span class="w">    </span><span class="n">CP_Graphics_DrawLine</span><span class="p">(</span><span class="n">CP_Input_GetMouseX</span><span class="p">(),</span><span class="w"> </span><span class="n">CP_Input_GetMouseY</span><span class="p">(),</span><span class="w"> </span><span class="n">CP_Input_GetMousePreviousX</span><span class="p">(),</span><span class="w"> </span><span class="n">CP_Input_GetMousePreviousY</span><span class="p">());</span>
+</span><span id="__span-29-5"><a id="__codelineno-29-5" name="__codelineno-29-5" href="#__codelineno-29-5"></a><span class="p">}</span>
+</span></code></pre></div>
+<h2 id="related_14">Related</h2>
+<ul>
+<li><a href="Input.html#cp_input_getmousex">CP_Input_GetMouseX</a></li>
+<li><a href="Input.html#cp_input_getmousey">CP_Input_GetMouseY</a></li>
+<li><a href="Input.html#cp_input_getmousepreviousx">CP_Input_GetMousePreviousX</a></li>
+<li><a href="Graphics.html#cp_graphics_drawline">CP_Graphics_DrawLine</a></li>
+<li><a href="Graphics.html#cp_graphics_clearbackground">CP_Graphics_ClearBackground</a></li>
+<li><a href="Color.html#cp_color_create">CP_Color_Create</a></li>
+</ul>
+<h1 id="cp_input_getmousedeltax">CP_Input_GetMouseDeltaX</h1>
+<p>This function returns the difference between the mouse's horizontal coordinate on the previous frame and on this frame.</p>
+<h2 id="function_15">Function</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-30-1"><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="kt">float</span><span class="w"> </span><span class="nf">CP_Input_GetMouseDeltaX</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</span></code></pre></div>
+<h3 id="parameters_15">Parameters</h3>
+<p>This function has no parameters.</p>
+<h3 id="return_15">Return</h3>
+<ul>
+<li>float - The difference in the X position from the previous frame.</li>
+</ul>
+<h2 id="example_15">Example</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-31-1"><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="kt">float</span><span class="w"> </span><span class="n">horizontalChange</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CP_Input_GetMouseDeltaX</span><span class="p">();</span>
+</span></code></pre></div>
+<h2 id="related_15">Related</h2>
+<ul>
+<li><a href="#cp_input_getmousedeltay">CP_Input_GetMouseDeltaY</a></li>
+</ul>
+<h1 id="cp_input_getmousedeltay">CP_Input_GetMouseDeltaY</h1>
+<p>This function returns the difference between the mouse's vertical coordinate on the previous frame and on this frame.</p>
+<h2 id="function_16">Function</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-32-1"><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="kt">float</span><span class="w"> </span><span class="nf">CP_Input_GetMouseDeltaY</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</span></code></pre></div>
+<h3 id="parameters_16">Parameters</h3>
+<p>This function has no parameters.</p>
+<h3 id="return_16">Return</h3>
+<ul>
+<li>float - The difference in the Y position from the previous frame.</li>
+</ul>
+<h2 id="example_16">Example</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-33-1"><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="kt">float</span><span class="w"> </span><span class="n">verticalChange</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CP_Input_GetMouseDeltaY</span><span class="p">();</span>
+</span></code></pre></div>
+<h2 id="related_16">Related</h2>
+<ul>
+<li><a href="#cp_input_getmousedeltax">CP_Input_GetMouseDeltaX</a></li>
+</ul>
+<h1 id="cp_input_getmouseworldx">CP_Input_GetMouseWorldX</h1>
+<p>Returns the current horizontal coordinate of the mouse in world space. This means that the mouse position will be translated by any transformation functions called (<a href="Settings.html#cp_settings_translate">CP_Settings_Translate</a>, <a href="Settings.html#cp_settings_scale">CP_Settings_Scale</a>, <a href="Settings.html#cp_settings_rotate">CP_Settings_Rotate</a>). This will track the position of the mouse anywhere on the screen, even if the window is in the background.</p>
+<h2 id="function_17">Function</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-34-1"><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a><span class="kt">float</span><span class="w"> </span><span class="nf">CP_Input_GetMouseWorldX</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</span></code></pre></div>
+<h3 id="parameters_17">Parameters</h3>
+<p>This function has no parameters.</p>
+<h3 id="return_17">Return</h3>
+<ul>
+<li>float - The X position of the mouse in world space.</li>
+</ul>
+<h2 id="example_17">Example</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-35-1"><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">draw</span><span class="p">()</span>
+</span><span id="__span-35-2"><a id="__codelineno-35-2" name="__codelineno-35-2" href="#__codelineno-35-2"></a><span class="p">{</span>
+</span><span id="__span-35-3"><a id="__codelineno-35-3" name="__codelineno-35-3" href="#__codelineno-35-3"></a><span class="w">    </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">));</span>
+</span><span id="__span-35-4"><a id="__codelineno-35-4" name="__codelineno-35-4" href="#__codelineno-35-4"></a><span class="w">    </span><span class="n">CP_Settings_Translate</span><span class="p">(</span><span class="n">CP_Input_GetMouseX</span><span class="p">(),</span><span class="w"> </span><span class="n">CP_Input_GetMouseY</span><span class="p">());</span>
+</span><span id="__span-35-5"><a id="__codelineno-35-5" name="__codelineno-35-5" href="#__codelineno-35-5"></a><span class="w">    </span><span class="n">CP_Graphics_DrawLine</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">CP_Input_GetMouseWorldX</span><span class="p">(),</span><span class="w"> </span><span class="n">CP_Input_GetMouseWorldY</span><span class="p">());</span>
+</span><span id="__span-35-6"><a id="__codelineno-35-6" name="__codelineno-35-6" href="#__codelineno-35-6"></a><span class="p">}</span>
+</span></code></pre></div>
+<h2 id="related_17">Related</h2>
+<ul>
+<li><a href="Input.html#cp_input_getmousex">CP_Input_GetMouseX</a></li>
+<li><a href="Input.html#cp_input_getmousey">CP_Input_GetMouseY</a></li>
+<li><a href="Input.html#cp_input_getmouseworldy">CP_Input_GetMouseWorldY</a></li>
+<li><a href="Settings.html#cp_settings_translate">CP_Settings_Translate</a></li>
+<li><a href="Graphics.html#cp_graphics_drawline">CP_Graphics_DrawLine</a></li>
+<li><a href="Graphics.html#cp_graphics_clearbackground">CP_Graphics_ClearBackground</a></li>
+<li><a href="Color.html#cp_color_create">CP_Color_Create</a></li>
+</ul>
+<h1 id="cp_input_getmouseworldy">CP_Input_GetMouseWorldY</h1>
+<p>Returns the current vertical coordinate of the mouse in world space. This means that the mouse position will be translated by any transformation functions called (<a href="Settings.html#cp_settings_translate">CP_Settings_Translate</a>, <a href="Settings.html#cp_settings_scale">CP_Settings_Scale</a>, <a href="Settings.html#cp_settings_rotate">CP_Settings_Rotate</a>). This will track the position of the mouse anywhere on the screen, even if the window is in the background.</p>
+<h2 id="function_18">Function</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-36-1"><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a><span class="kt">float</span><span class="w"> </span><span class="nf">CP_Input_GetMouseWorldX</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</span></code></pre></div>
+<h3 id="parameters_18">Parameters</h3>
+<p>This function has no parameters.</p>
+<h3 id="return_18">Return</h3>
+<ul>
+<li>float - The Y position of the mouse in world space.</li>
+</ul>
+<h2 id="example_18">Example</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-37-1"><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">draw</span><span class="p">()</span>
+</span><span id="__span-37-2"><a id="__codelineno-37-2" name="__codelineno-37-2" href="#__codelineno-37-2"></a><span class="p">{</span>
+</span><span id="__span-37-3"><a id="__codelineno-37-3" name="__codelineno-37-3" href="#__codelineno-37-3"></a><span class="w">    </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">));</span>
+</span><span id="__span-37-4"><a id="__codelineno-37-4" name="__codelineno-37-4" href="#__codelineno-37-4"></a><span class="w">    </span><span class="n">CP_Settings_Translate</span><span class="p">(</span><span class="n">CP_Input_GetMouseX</span><span class="p">(),</span><span class="w"> </span><span class="n">CP_Input_GetMouseY</span><span class="p">());</span>
+</span><span id="__span-37-5"><a id="__codelineno-37-5" name="__codelineno-37-5" href="#__codelineno-37-5"></a><span class="w">    </span><span class="n">CP_Graphics_DrawLine</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">CP_Input_GetMouseWorldX</span><span class="p">(),</span><span class="w"> </span><span class="n">CP_Input_GetMouseWorldY</span><span class="p">());</span>
+</span><span id="__span-37-6"><a id="__codelineno-37-6" name="__codelineno-37-6" href="#__codelineno-37-6"></a><span class="p">}</span>
+</span></code></pre></div>
+<h2 id="related_18">Related</h2>
+<ul>
+<li><a href="Input.html#cp_input_getmousex">CP_Input_GetMouseX</a></li>
+<li><a href="Input.html#cp_input_getmousey">CP_Input_GetMouseY</a></li>
+<li><a href="Input.html#cp_input_getmouseworldx">CP_Input_GetMouseWorldX</a></li>
+<li><a href="Settings.html#cp_settings_translate">CP_Settings_Translate</a></li>
+<li><a href="Graphics.html#cp_graphics_drawline">CP_Graphics_DrawLine</a></li>
+<li><a href="Graphics.html#cp_graphics_clearbackground">CP_Graphics_ClearBackground</a></li>
+<li><a href="Color.html#cp_color_create">CP_Color_Create</a></li>
+</ul>
+<h1 id="cp_input_gamepadtriggered">CP_Input_GamepadTriggered</h1>
+<p>This function returns TRUE when the specified gamepad button has been pressed on this frame but was not pressed on the previous frame. Returns FALSE otherwise.</p>
+<h2 id="function_19">Function</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-38-1"><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a><span class="n">CP_BOOL</span><span class="w"> </span><span class="nf">CP_Input_GamepadTriggered</span><span class="p">(</span><span class="n">CP_GAMEPAD</span><span class="w"> </span><span class="n">button</span><span class="p">);</span>
+</span></code></pre></div>
+<h3 id="parameters_19">Parameters</h3>
+<ul>
+<li>button (<a href="Types.html#cp_gamepad">CP_GAMEPAD</a>) - The enum value corresponding to the button you want to check.</li>
+</ul>
+<h3 id="return_19">Return</h3>
+<ul>
+<li><a href="Types.html#cp_bool">CP_BOOL</a> - Will be TRUE when the button was initially pressed, FALSE otherwise.</li>
+</ul>
+<h2 id="example_19">Example</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-39-1"><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">update</span><span class="p">()</span>
+</span><span id="__span-39-2"><a id="__codelineno-39-2" name="__codelineno-39-2" href="#__codelineno-39-2"></a><span class="p">{</span>
+</span><span id="__span-39-3"><a id="__codelineno-39-3" name="__codelineno-39-3" href="#__codelineno-39-3"></a><span class="w">    </span><span class="n">CP_Color</span><span class="w"> </span><span class="n">bgColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">);</span>
+</span><span id="__span-39-4"><a id="__codelineno-39-4" name="__codelineno-39-4" href="#__codelineno-39-4"></a>
+</span><span id="__span-39-5"><a id="__codelineno-39-5" name="__codelineno-39-5" href="#__codelineno-39-5"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">CP_Input_GamepadTriggered</span><span class="p">(</span><span class="n">GAMEPAD_A</span><span class="p">))</span>
+</span><span id="__span-39-6"><a id="__codelineno-39-6" name="__codelineno-39-6" href="#__codelineno-39-6"></a><span class="w">        </span><span class="n">bgColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">);</span>
+</span><span id="__span-39-7"><a id="__codelineno-39-7" name="__codelineno-39-7" href="#__codelineno-39-7"></a>
+</span><span id="__span-39-8"><a id="__codelineno-39-8" name="__codelineno-39-8" href="#__codelineno-39-8"></a><span class="w">    </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">bgColor</span><span class="p">);</span>
+</span><span id="__span-39-9"><a id="__codelineno-39-9" name="__codelineno-39-9" href="#__codelineno-39-9"></a><span class="p">}</span>
+</span></code></pre></div>
+<h2 id="related_19">Related</h2>
+<ul>
+<li><a href="Types.html#cp_color">CP_Color</a></li>
+<li><a href="Color.html#cp_color_create">CP_Color_Create</a></li>
+<li><a href="Graphics.html#cp_graphics_clearbackground">CP_Graphics_ClearBackground</a></li>
+</ul>
+<h1 id="cp_input_gamepadtriggeredadvanced">CP_Input_GamepadTriggeredAdvanced</h1>
+<p>Allows you to specify the index for a specific gamepad to check. This index should be from 0 to 3 (indexes outside this range will cause the function to return FALSE). The behavior is otherwise the same as <a href="Input.html#cp_input_gamepadtriggered">CP_Input_GamepadTriggered</a>.</p>
+<h2 id="function_20">Function</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-40-1"><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a><span class="n">CP_BOOL</span><span class="w"> </span><span class="nf">CP_Input_GamepadTriggeredAdvanced</span><span class="p">(</span><span class="n">CP_GAMEPAD</span><span class="w"> </span><span class="n">button</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">gamepadIndex</span><span class="p">);</span>
+</span></code></pre></div>
+<h3 id="parameters_20">Parameters</h3>
+<ul>
+<li>button (<a href="Types.html#cp_gamepad">CP_GAMEPAD</a>) - The enum value corresponding to the button you want to check.</li>
+<li>gamepadIndex (int) - The index of the gamepad to check.</li>
+</ul>
+<h3 id="return_20">Return</h3>
+<ul>
+<li><a href="Types.html#cp_bool">CP_BOOL</a> - Will be TRUE when the specified button on the specified gamepad is triggered, FALSE otherwise.</li>
+</ul>
+<h2 id="example_20">Example</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-41-1"><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">update</span><span class="p">()</span>
+</span><span id="__span-41-2"><a id="__codelineno-41-2" name="__codelineno-41-2" href="#__codelineno-41-2"></a><span class="p">{</span>
+</span><span id="__span-41-3"><a id="__codelineno-41-3" name="__codelineno-41-3" href="#__codelineno-41-3"></a><span class="w">    </span><span class="n">CP_Color</span><span class="w"> </span><span class="n">bgColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">);</span>
+</span><span id="__span-41-4"><a id="__codelineno-41-4" name="__codelineno-41-4" href="#__codelineno-41-4"></a>
+</span><span id="__span-41-5"><a id="__codelineno-41-5" name="__codelineno-41-5" href="#__codelineno-41-5"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">CP_Input_GamepadTriggeredAdvanced</span><span class="p">(</span><span class="n">GAMEPAD_A</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">))</span>
+</span><span id="__span-41-6"><a id="__codelineno-41-6" name="__codelineno-41-6" href="#__codelineno-41-6"></a><span class="w">        </span><span class="n">bgColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">);</span>
+</span><span id="__span-41-7"><a id="__codelineno-41-7" name="__codelineno-41-7" href="#__codelineno-41-7"></a>
+</span><span id="__span-41-8"><a id="__codelineno-41-8" name="__codelineno-41-8" href="#__codelineno-41-8"></a><span class="w">    </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">bgColor</span><span class="p">);</span>
+</span><span id="__span-41-9"><a id="__codelineno-41-9" name="__codelineno-41-9" href="#__codelineno-41-9"></a><span class="p">}</span>
+</span></code></pre></div>
+<h2 id="related_20">Related</h2>
+<ul>
+<li><a href="Types.html#cp_color">CP_Color</a></li>
+<li><a href="Color.html#cp_color_create">CP_Color_Create</a></li>
+<li><a href="Graphics.html#cp_graphics_clearbackground">CP_Graphics_ClearBackground</a></li>
+</ul>
+<h1 id="cp_input_gamepadreleased">CP_Input_GamepadReleased</h1>
+<p>This function returns TRUE when the specified button was pressed on the previous frame and is not pressed on this frame. Returns FALSE otherwise.</p>
+<h2 id="function_21">Function</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-42-1"><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a><span class="n">CP_BOOL</span><span class="w"> </span><span class="nf">CP_Input_GamepadReleased</span><span class="p">(</span><span class="n">CP_GAMEPAD</span><span class="w"> </span><span class="n">button</span><span class="p">);</span>
+</span></code></pre></div>
+<h3 id="parameters_21">Parameters</h3>
+<ul>
+<li>button (<a href="Types.html#cp_gamepad">CP_GAMEPAD</a>) - The enum value corresponding to the button you want to check.</li>
+</ul>
+<h3 id="return_21">Return</h3>
+<ul>
+<li><a href="Types.html#cp_bool">CP_BOOL</a> - Will be TRUE when the button is released, FALSE otherwise.</li>
+</ul>
+<h2 id="example_21">Example</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-43-1"><a id="__codelineno-43-1" name="__codelineno-43-1" href="#__codelineno-43-1"></a><span class="n">CP_Color</span><span class="w"> </span><span class="n">bgColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">);</span>
+</span><span id="__span-43-2"><a id="__codelineno-43-2" name="__codelineno-43-2" href="#__codelineno-43-2"></a>
+</span><span id="__span-43-3"><a id="__codelineno-43-3" name="__codelineno-43-3" href="#__codelineno-43-3"></a><span class="kt">void</span><span class="w"> </span><span class="nf">update</span><span class="p">()</span>
+</span><span id="__span-43-4"><a id="__codelineno-43-4" name="__codelineno-43-4" href="#__codelineno-43-4"></a><span class="p">{</span>
+</span><span id="__span-43-5"><a id="__codelineno-43-5" name="__codelineno-43-5" href="#__codelineno-43-5"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">CP_Input_GamepadTriggered</span><span class="p">(</span><span class="n">GAMEPAD_X</span><span class="p">))</span>
+</span><span id="__span-43-6"><a id="__codelineno-43-6" name="__codelineno-43-6" href="#__codelineno-43-6"></a><span class="w">        </span><span class="n">bgColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">);</span>
+</span><span id="__span-43-7"><a id="__codelineno-43-7" name="__codelineno-43-7" href="#__codelineno-43-7"></a><span class="w">    </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">CP_Input_GamepadReleased</span><span class="p">(</span><span class="n">GAMEPAD_X</span><span class="p">))</span>
+</span><span id="__span-43-8"><a id="__codelineno-43-8" name="__codelineno-43-8" href="#__codelineno-43-8"></a><span class="w">        </span><span class="n">bgColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">);</span>
+</span><span id="__span-43-9"><a id="__codelineno-43-9" name="__codelineno-43-9" href="#__codelineno-43-9"></a>
+</span><span id="__span-43-10"><a id="__codelineno-43-10" name="__codelineno-43-10" href="#__codelineno-43-10"></a><span class="w">    </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">bgColor</span><span class="p">);</span>
+</span><span id="__span-43-11"><a id="__codelineno-43-11" name="__codelineno-43-11" href="#__codelineno-43-11"></a><span class="p">}</span>
+</span></code></pre></div>
+<h2 id="related_21">Related</h2>
+<ul>
+<li><a href="Types.html#cp_color">CP_Color</a></li>
+<li><a href="Color.html#cp_color_create">CP_Color_Create</a></li>
+<li><a href="Input.html#cp_input_gamepadtriggered">CP_Input_GamepadTriggered</a></li>
+<li><a href="Graphics.html#cp_graphics_clearbackground">CP_Graphics_ClearBackground</a></li>
+</ul>
+<h1 id="cp_input_gamepadreleasedadvanced">CP_Input_GamepadReleasedAdvanced</h1>
+<p>Allows you to specify the index for a specific gamepad to check. This index should be from 0 to 3 (indexes outside this range will cause the function to return FALSE). The behavior is otherwise the same as <a href="Input.html#cp_input_gamepadreleased">CP_Input_GamepadReleased</a>.</p>
+<h2 id="function_22">Function</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-44-1"><a id="__codelineno-44-1" name="__codelineno-44-1" href="#__codelineno-44-1"></a><span class="n">CP_BOOL</span><span class="w"> </span><span class="nf">CP_Input_GamepadReleasedAdvanced</span><span class="p">(</span><span class="n">CP_GAMEPAD</span><span class="w"> </span><span class="n">button</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">gamepadIndex</span><span class="p">);</span>
+</span></code></pre></div>
+<h3 id="parameters_22">Parameters</h3>
+<ul>
+<li>button (<a href="Types.html#cp_gamepad">CP_GAMEPAD</a>) - The enum value corresponding to the button you want to check.</li>
+<li>gamepadIndex (int) - The index of the gamepad to check.</li>
+</ul>
+<h3 id="return_22">Return</h3>
+<ul>
+<li><a href="Types.html#cp_bool">CP_BOOL</a> - Will be TRUE when the specified button and gamepad is released, FALSE otherwise.</li>
+</ul>
+<h2 id="example_22">Example</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-45-1"><a id="__codelineno-45-1" name="__codelineno-45-1" href="#__codelineno-45-1"></a><span class="n">CP_Color</span><span class="w"> </span><span class="n">bgColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">);</span>
+</span><span id="__span-45-2"><a id="__codelineno-45-2" name="__codelineno-45-2" href="#__codelineno-45-2"></a>
+</span><span id="__span-45-3"><a id="__codelineno-45-3" name="__codelineno-45-3" href="#__codelineno-45-3"></a><span class="kt">void</span><span class="w"> </span><span class="nf">update</span><span class="p">()</span>
+</span><span id="__span-45-4"><a id="__codelineno-45-4" name="__codelineno-45-4" href="#__codelineno-45-4"></a><span class="p">{</span>
+</span><span id="__span-45-5"><a id="__codelineno-45-5" name="__codelineno-45-5" href="#__codelineno-45-5"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">CP_Input_GamepadTriggeredAdvanced</span><span class="p">(</span><span class="n">GAMEPAD_X</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">))</span>
+</span><span id="__span-45-6"><a id="__codelineno-45-6" name="__codelineno-45-6" href="#__codelineno-45-6"></a><span class="w">        </span><span class="n">bgColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">);</span>
+</span><span id="__span-45-7"><a id="__codelineno-45-7" name="__codelineno-45-7" href="#__codelineno-45-7"></a><span class="w">    </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">CP_Input_GamepadReleasedAdvanced</span><span class="p">(</span><span class="n">GAMEPAD_X</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">))</span>
+</span><span id="__span-45-8"><a id="__codelineno-45-8" name="__codelineno-45-8" href="#__codelineno-45-8"></a><span class="w">        </span><span class="n">bgColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">);</span>
+</span><span id="__span-45-9"><a id="__codelineno-45-9" name="__codelineno-45-9" href="#__codelineno-45-9"></a>
+</span><span id="__span-45-10"><a id="__codelineno-45-10" name="__codelineno-45-10" href="#__codelineno-45-10"></a><span class="w">    </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">bgColor</span><span class="p">);</span>
+</span><span id="__span-45-11"><a id="__codelineno-45-11" name="__codelineno-45-11" href="#__codelineno-45-11"></a><span class="p">}</span>
+</span></code></pre></div>
+<h2 id="related_22">Related</h2>
+<ul>
+<li><a href="Types.html#cp_color">CP_Color</a></li>
+<li><a href="Color.html#cp_color_create">CP_Color_Create</a></li>
+<li><a href="Input.html#cp_input_gamepadtriggeredadvanced">CP_Input_GamepadTriggeredAdvanced</a></li>
+<li><a href="Graphics.html#cp_graphics_clearbackground">CP_Graphics_ClearBackground</a></li>
+</ul>
+<h1 id="cp_input_gamepaddown">CP_Input_GamepadDown</h1>
+<p>This function returns TRUE when the specified gamepad button is pressed. It will continue to return TRUE as long as the button is held down. Returns FALSE otherwise.</p>
+<h2 id="function_23">Function</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-46-1"><a id="__codelineno-46-1" name="__codelineno-46-1" href="#__codelineno-46-1"></a><span class="n">CP_BOOL</span><span class="w"> </span><span class="nf">CP_Input_GamepadDown</span><span class="p">(</span><span class="n">CP_GAMEPAD</span><span class="w"> </span><span class="n">button</span><span class="p">);</span>
+</span></code></pre></div>
+<h3 id="parameters_23">Parameters</h3>
+<ul>
+<li>button (<a href="Types.html#cp_gamepad">CP_GAMEPAD</a>) - The enum value corresponding to the button you want to check.</li>
+</ul>
+<h3 id="return_23">Return</h3>
+<ul>
+<li><a href="Types.html#cp_bool">CP_BOOL</a> - Will be TRUE when the button is held down, FALSE otherwise.</li>
+</ul>
+<h2 id="example_23">Example</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-47-1"><a id="__codelineno-47-1" name="__codelineno-47-1" href="#__codelineno-47-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">update</span><span class="p">()</span>
+</span><span id="__span-47-2"><a id="__codelineno-47-2" name="__codelineno-47-2" href="#__codelineno-47-2"></a><span class="p">{</span>
+</span><span id="__span-47-3"><a id="__codelineno-47-3" name="__codelineno-47-3" href="#__codelineno-47-3"></a><span class="w">    </span><span class="n">CP_Color</span><span class="w"> </span><span class="n">bgColor</span><span class="p">;</span>
+</span><span id="__span-47-4"><a id="__codelineno-47-4" name="__codelineno-47-4" href="#__codelineno-47-4"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">CP_Input_GamepadDown</span><span class="p">(</span><span class="n">GAMEPAD_A</span><span class="p">))</span>
+</span><span id="__span-47-5"><a id="__codelineno-47-5" name="__codelineno-47-5" href="#__codelineno-47-5"></a><span class="w">        </span><span class="n">bgColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="w"> </span><span class="mi">104</span><span class="p">,</span><span class="w"> </span><span class="mi">107</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">);</span>
+</span><span id="__span-47-6"><a id="__codelineno-47-6" name="__codelineno-47-6" href="#__codelineno-47-6"></a><span class="w">    </span><span class="k">else</span>
+</span><span id="__span-47-7"><a id="__codelineno-47-7" name="__codelineno-47-7" href="#__codelineno-47-7"></a><span class="w">        </span><span class="n">bgColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">166</span><span class="p">,</span><span class="w"> </span><span class="mi">235</span><span class="p">,</span><span class="w"> </span><span class="mi">237</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">);</span>
+</span><span id="__span-47-8"><a id="__codelineno-47-8" name="__codelineno-47-8" href="#__codelineno-47-8"></a>
+</span><span id="__span-47-9"><a id="__codelineno-47-9" name="__codelineno-47-9" href="#__codelineno-47-9"></a><span class="w">    </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">bgColor</span><span class="p">);</span>
+</span><span id="__span-47-10"><a id="__codelineno-47-10" name="__codelineno-47-10" href="#__codelineno-47-10"></a><span class="p">}</span>
+</span></code></pre></div>
+<h2 id="related_23">Related</h2>
+<ul>
+<li><a href="Types.html#cp_color">CP_Color</a></li>
+<li><a href="Color.html#cp_color_create">CP_Color_Create</a></li>
+<li><a href="Graphics.html#cp_graphics_clearbackground">CP_Graphics_ClearBackground</a></li>
+</ul>
+<h1 id="cp_input_gamepaddownadvanced">CP_Input_GamepadDownAdvanced</h1>
+<p>Allows you to specify the index for a specific gamepad to check. This index should be from 0 to 3 (indexes outside this range will cause the function to return FALSE). The behavior is otherwise the same as <a href="Input.html#cp_input_gamepaddown">CP_Input_GamepadDown</a>.</p>
+<h2 id="function_24">Function</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-48-1"><a id="__codelineno-48-1" name="__codelineno-48-1" href="#__codelineno-48-1"></a><span class="n">CP_BOOL</span><span class="w"> </span><span class="nf">CP_Input_GamepadDownAdvanced</span><span class="p">(</span><span class="n">CP_GAMEPAD</span><span class="w"> </span><span class="n">button</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">gamepadIndex</span><span class="p">);</span>
+</span></code></pre></div>
+<h3 id="parameters_24">Parameters</h3>
+<ul>
+<li>button (<a href="Types.html#cp_gamepad">CP_GAMEPAD</a>) - The enum value corresponding to the button you want to check.</li>
+<li>gamepadIndex (int) - The index of the gamepad to check.</li>
+</ul>
+<h3 id="return_24">Return</h3>
+<ul>
+<li><a href="Types.html#cp_bool">CP_BOOL</a> - Will be TRUE when the specified button and gamepad is held down, FALSE otherwise.</li>
+</ul>
+<h2 id="example_24">Example</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-49-1"><a id="__codelineno-49-1" name="__codelineno-49-1" href="#__codelineno-49-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">update</span><span class="p">()</span>
+</span><span id="__span-49-2"><a id="__codelineno-49-2" name="__codelineno-49-2" href="#__codelineno-49-2"></a><span class="p">{</span>
+</span><span id="__span-49-3"><a id="__codelineno-49-3" name="__codelineno-49-3" href="#__codelineno-49-3"></a><span class="w">    </span><span class="n">CP_Color</span><span class="w"> </span><span class="n">bgColor</span><span class="p">;</span>
+</span><span id="__span-49-4"><a id="__codelineno-49-4" name="__codelineno-49-4" href="#__codelineno-49-4"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">CP_Input_GamepadDownAdvanced</span><span class="p">(</span><span class="n">GAMEPAD_A</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">))</span>
+</span><span id="__span-49-5"><a id="__codelineno-49-5" name="__codelineno-49-5" href="#__codelineno-49-5"></a><span class="w">        </span><span class="n">bgColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="w"> </span><span class="mi">104</span><span class="p">,</span><span class="w"> </span><span class="mi">107</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">);</span>
+</span><span id="__span-49-6"><a id="__codelineno-49-6" name="__codelineno-49-6" href="#__codelineno-49-6"></a><span class="w">    </span><span class="k">else</span>
+</span><span id="__span-49-7"><a id="__codelineno-49-7" name="__codelineno-49-7" href="#__codelineno-49-7"></a><span class="w">        </span><span class="n">bgColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">166</span><span class="p">,</span><span class="w"> </span><span class="mi">235</span><span class="p">,</span><span class="w"> </span><span class="mi">237</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">);</span>
+</span><span id="__span-49-8"><a id="__codelineno-49-8" name="__codelineno-49-8" href="#__codelineno-49-8"></a>
+</span><span id="__span-49-9"><a id="__codelineno-49-9" name="__codelineno-49-9" href="#__codelineno-49-9"></a><span class="w">    </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">bgColor</span><span class="p">);</span>
+</span><span id="__span-49-10"><a id="__codelineno-49-10" name="__codelineno-49-10" href="#__codelineno-49-10"></a><span class="p">}</span>
+</span></code></pre></div>
+<h2 id="related_24">Related</h2>
+<ul>
+<li><a href="Types.html#cp_color">CP_Color</a></li>
+<li><a href="Color.html#cp_color_create">CP_Color_Create</a></li>
+<li><a href="Graphics.html#cp_graphics_clearbackground">CP_Graphics_ClearBackground</a></li>
+</ul>
+<h1 id="cp_input_gamepadrighttrigger">CP_Input_GamepadRightTrigger</h1>
+<p>Returns the current value from the gamepad's right trigger.</p>
+<h2 id="function_25">Function</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-50-1"><a id="__codelineno-50-1" name="__codelineno-50-1" href="#__codelineno-50-1"></a><span class="kt">float</span><span class="w"> </span><span class="nf">CP_Input_GamepadRightTrigger</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</span></code></pre></div>
+<h3 id="parameters_25">Parameters</h3>
+<p>This function has no parameters.</p>
+<h3 id="return_25">Return</h3>
+<ul>
+<li>float - The right trigger value.</li>
+</ul>
+<h2 id="example_25">Example</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-51-1"><a id="__codelineno-51-1" name="__codelineno-51-1" href="#__codelineno-51-1"></a>
+</span></code></pre></div>
+<h2 id="related_25">Related</h2>
+<h1 id="cp_input_gamepadrighttriggeradvanced">CP_Input_GamepadRightTriggerAdvanced</h1>
+<p>Allows you to specify the index for a specific gamepad to check. This index should be from 0 to 3 (indexes outside this range will cause the function to return 0). The behavior is otherwise the same as <a href="Input.html#cp_input_gamepadrighttrigger">CP_Input_GamepadRightTrigger</a>.</p>
+<h2 id="function_26">Function</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-52-1"><a id="__codelineno-52-1" name="__codelineno-52-1" href="#__codelineno-52-1"></a><span class="kt">float</span><span class="w"> </span><span class="nf">CP_Input_GamepadRightTriggerAdvanced</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">gamepadIndex</span><span class="p">);</span>
+</span></code></pre></div>
+<h3 id="parameters_26">Parameters</h3>
+<ul>
+<li>button (int) - The index of the gamepad you want to check.</li>
+</ul>
+<h3 id="return_26">Return</h3>
+<ul>
+<li>float - The value of the right trigger on the specified gamepad.</li>
+</ul>
+<h2 id="example_26">Example</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-53-1"><a id="__codelineno-53-1" name="__codelineno-53-1" href="#__codelineno-53-1"></a>
+</span></code></pre></div>
+<h2 id="related_26">Related</h2>
+<h1 id="cp_input_gamepadlefttrigger">CP_Input_GamepadLeftTrigger</h1>
+<p>Returns the current value from the gamepad's left trigger.</p>
+<h2 id="function_27">Function</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-54-1"><a id="__codelineno-54-1" name="__codelineno-54-1" href="#__codelineno-54-1"></a><span class="kt">float</span><span class="w"> </span><span class="nf">CP_Input_GamepadLeftTrigger</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</span></code></pre></div>
+<h3 id="parameters_27">Parameters</h3>
+<p>This function has no parameters.</p>
+<h3 id="return_27">Return</h3>
+<ul>
+<li>float - The left trigger value.</li>
+</ul>
+<h2 id="example_27">Example</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-55-1"><a id="__codelineno-55-1" name="__codelineno-55-1" href="#__codelineno-55-1"></a>
+</span></code></pre></div>
+<h2 id="related_27">Related</h2>
+<h1 id="cp_input_gamepadlefttriggeradvanced">CP_Input_GamepadLeftTriggerAdvanced</h1>
+<p>Allows you to specify the index for a specific gamepad to check. This index should be from 0 to 3 (indexes outside this range will cause the function to return 0). The behavior is otherwise the same as <a href="Input.html#cp_input_gamepadlefttrigger">CP_Input_GamepadLeftTrigger</a>.</p>
+<h2 id="function_28">Function</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-56-1"><a id="__codelineno-56-1" name="__codelineno-56-1" href="#__codelineno-56-1"></a><span class="kt">float</span><span class="w"> </span><span class="nf">CP_Input_GamepadLeftTriggerAdvanced</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">gamepadIndex</span><span class="p">);</span>
+</span></code></pre></div>
+<h3 id="parameters_28">Parameters</h3>
+<ul>
+<li>button (int) - The index of the gamepad you want to check.</li>
+</ul>
+<h3 id="return_28">Return</h3>
+<ul>
+<li>float - The value of the left trigger on the specified gamepad.</li>
+</ul>
+<h2 id="example_28">Example</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-57-1"><a id="__codelineno-57-1" name="__codelineno-57-1" href="#__codelineno-57-1"></a>
+</span></code></pre></div>
+<h2 id="related_28">Related</h2>
+<h1 id="cp_input_gamepadrightstick">CP_Input_GamepadRightStick</h1>
+<p>Returns a <a href="Types.html#cp_vector">CP_Vector</a> with the current X and Y position values from the gamepad's right stick.</p>
+<h2 id="function_29">Function</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-58-1"><a id="__codelineno-58-1" name="__codelineno-58-1" href="#__codelineno-58-1"></a><span class="n">CP_Vector</span><span class="w"> </span><span class="nf">CP_Input_GamepadRightStick</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</span></code></pre></div>
+<h3 id="parameters_29">Parameters</h3>
+<p>This function has no parameters.</p>
+<h3 id="return_29">Return</h3>
+<ul>
+<li><a href="Types.html#cp_vector">CP_Vector</a> - The right stick X and Y values.</li>
+</ul>
+<h2 id="example_29">Example</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-59-1"><a id="__codelineno-59-1" name="__codelineno-59-1" href="#__codelineno-59-1"></a>
+</span></code></pre></div>
+<h2 id="related_29">Related</h2>
+<h1 id="cp_input_gamepadrightstickadvanced">CP_Input_GamepadRightStickAdvanced</h1>
+<p>Allows you to specify the index for a specific gamepad to check. This index should be from 0 to 3 (indexes outside this range will cause the function to return zeroes). The behavior is otherwise the same as <a href="Input.html#cp_input_gamepadrightstick">CP_Input_GamepadRightStick</a>.</p>
+<h2 id="function_30">Function</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-60-1"><a id="__codelineno-60-1" name="__codelineno-60-1" href="#__codelineno-60-1"></a><span class="n">CP_Vector</span><span class="w"> </span><span class="nf">CP_Input_GamepadRightStickAdvanced</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">gamepadIndex</span><span class="p">);</span>
+</span></code></pre></div>
+<h3 id="parameters_30">Parameters</h3>
+<ul>
+<li>button (int) - The index of the gamepad you want to check.</li>
+</ul>
+<h3 id="return_30">Return</h3>
+<ul>
+<li><a href="Types.html#cp_vector">CP_Vector</a> - The right stick X and Y values on the specified gamepad.</li>
+</ul>
+<h2 id="example_30">Example</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-61-1"><a id="__codelineno-61-1" name="__codelineno-61-1" href="#__codelineno-61-1"></a>
+</span></code></pre></div>
+<h2 id="related_30">Related</h2>
+<h1 id="cp_input_gamepadleftstick">CP_Input_GamepadLeftStick</h1>
+<p>Returns a <a href="Types.html#cp_vector">CP_Vector</a> with the current X and Y position values from the gamepad's left stick.</p>
+<h2 id="function_31">Function</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-62-1"><a id="__codelineno-62-1" name="__codelineno-62-1" href="#__codelineno-62-1"></a><span class="n">CP_Vector</span><span class="w"> </span><span class="nf">CP_Input_GamepadLeftStick</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</span></code></pre></div>
+<h3 id="parameters_31">Parameters</h3>
+<p>This function has no parameters.</p>
+<h3 id="return_31">Return</h3>
+<ul>
+<li><a href="Types.html#cp_vector">CP_Vector</a> - The left stick X and Y values.</li>
+</ul>
+<h2 id="example_31">Example</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-63-1"><a id="__codelineno-63-1" name="__codelineno-63-1" href="#__codelineno-63-1"></a>
+</span></code></pre></div>
+<h2 id="related_31">Related</h2>
+<h1 id="cp_input_gamepadleftstickadvanced">CP_Input_GamepadLeftStickAdvanced</h1>
+<p>Allows you to specify the index for a specific gamepad to check. This index should be from 0 to 3 (indexes outside this range will cause the function to return zeroes). The behavior is otherwise the same as <a href="Input.html#cp_input_gamepadleftstick">CP_Input_GamepadLeftStick</a>.</p>
+<h2 id="function_32">Function</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-64-1"><a id="__codelineno-64-1" name="__codelineno-64-1" href="#__codelineno-64-1"></a><span class="n">CP_Vector</span><span class="w"> </span><span class="nf">CP_Input_GamepadLeftStickAdvanced</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">gamepadIndex</span><span class="p">);</span>
+</span></code></pre></div>
+<h3 id="parameters_32">Parameters</h3>
+<ul>
+<li>button (int) - The index of the gamepad you want to check.</li>
+</ul>
+<h3 id="return_32">Return</h3>
+<ul>
+<li><a href="Types.html#cp_vector">CP_Vector</a> - The left stick X and Y values on the specified gamepad.</li>
+</ul>
+<h2 id="example_32">Example</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-65-1"><a id="__codelineno-65-1" name="__codelineno-65-1" href="#__codelineno-65-1"></a>
+</span></code></pre></div>
+<h2 id="related_32">Related</h2>
+<h1 id="cp_input_gamepadconnected">CP_Input_GamepadConnected</h1>
+<p>Returns TRUE if there is a gamepad connected, and FALSE if there is not.</p>
+<h2 id="function_33">Function</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-66-1"><a id="__codelineno-66-1" name="__codelineno-66-1" href="#__codelineno-66-1"></a><span class="n">CP_BOOL</span><span class="w"> </span><span class="nf">CP_Input_GamepadConnected</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</span></code></pre></div>
+<h3 id="parameters_33">Parameters</h3>
+<p>This function has no parameters.</p>
+<h3 id="return_33">Return</h3>
+<ul>
+<li><a href="Types.html#cp_bool">CP_BOOL</a> - Will be TRUE if a gamepad is connected, FALSE if not.</li>
+</ul>
+<h2 id="example_33">Example</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-67-1"><a id="__codelineno-67-1" name="__codelineno-67-1" href="#__codelineno-67-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">update</span><span class="p">()</span>
+</span><span id="__span-67-2"><a id="__codelineno-67-2" name="__codelineno-67-2" href="#__codelineno-67-2"></a><span class="p">{</span>
+</span><span id="__span-67-3"><a id="__codelineno-67-3" name="__codelineno-67-3" href="#__codelineno-67-3"></a><span class="w">    </span><span class="n">CP_Color</span><span class="w"> </span><span class="n">bgColor</span><span class="p">;</span>
+</span><span id="__span-67-4"><a id="__codelineno-67-4" name="__codelineno-67-4" href="#__codelineno-67-4"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">CP_Input_GamepadConnected</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">CP_Input_GamepadDown</span><span class="p">(</span><span class="n">GAMEPAD_A</span><span class="p">))</span>
+</span><span id="__span-67-5"><a id="__codelineno-67-5" name="__codelineno-67-5" href="#__codelineno-67-5"></a><span class="w">        </span><span class="n">bgColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="w"> </span><span class="mi">104</span><span class="p">,</span><span class="w"> </span><span class="mi">107</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">);</span>
+</span><span id="__span-67-6"><a id="__codelineno-67-6" name="__codelineno-67-6" href="#__codelineno-67-6"></a><span class="w">    </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">CP_Input_KeyDown</span><span class="p">(</span><span class="n">KEY_A</span><span class="p">))</span>
+</span><span id="__span-67-7"><a id="__codelineno-67-7" name="__codelineno-67-7" href="#__codelineno-67-7"></a><span class="w">        </span><span class="n">bgColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="w"> </span><span class="mi">104</span><span class="p">,</span><span class="w"> </span><span class="mi">107</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">);</span>
+</span><span id="__span-67-8"><a id="__codelineno-67-8" name="__codelineno-67-8" href="#__codelineno-67-8"></a><span class="w">    </span><span class="k">else</span>
+</span><span id="__span-67-9"><a id="__codelineno-67-9" name="__codelineno-67-9" href="#__codelineno-67-9"></a><span class="w">        </span><span class="n">bgColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">166</span><span class="p">,</span><span class="w"> </span><span class="mi">235</span><span class="p">,</span><span class="w"> </span><span class="mi">237</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">);</span>
+</span><span id="__span-67-10"><a id="__codelineno-67-10" name="__codelineno-67-10" href="#__codelineno-67-10"></a>
+</span><span id="__span-67-11"><a id="__codelineno-67-11" name="__codelineno-67-11" href="#__codelineno-67-11"></a><span class="w">    </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">bgColor</span><span class="p">);</span>
+</span><span id="__span-67-12"><a id="__codelineno-67-12" name="__codelineno-67-12" href="#__codelineno-67-12"></a><span class="p">}</span>
+</span></code></pre></div>
+<h2 id="related_33">Related</h2>
+<ul>
+<li><a href="Input.html#cp_input_gamepaddown">CP_Input_GamepadDown</a></li>
+<li><a href="Input.html#cp_input_keydown">CP_Input_KeyDown</a></li>
+<li><a href="Types.html#cp_color">CP_Color</a></li>
+<li><a href="Color.html#cp_color_create">CP_Color_Create</a></li>
+<li><a href="Graphics.html#cp_graphics_clearbackground">CP_Graphics_ClearBackground</a></li>
+</ul>
+<h1 id="cp_input_gamepadconnectedadvanced">CP_Input_GamepadConnectedAdvanced</h1>
+<p>Returns TRUE if there is a gamepad connected at the specified index, and FALSE if there is not.</p>
+<h2 id="function_34">Function</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-68-1"><a id="__codelineno-68-1" name="__codelineno-68-1" href="#__codelineno-68-1"></a><span class="n">CP_BOOL</span><span class="w"> </span><span class="nf">CP_Input_GamepadConnectedAdvanced</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">gamepadIndex</span><span class="p">);</span>
+</span></code></pre></div>
+<h3 id="parameters_34">Parameters</h3>
+<ul>
+<li>button (int) - The index of the gamepad you want to check for.</li>
+</ul>
+<h3 id="return_34">Return</h3>
+<ul>
+<li><a href="Types.html#cp_bool">CP_BOOL</a> - Will be TRUE if there is a gamepad connected at the specified index, FALSE otherwise.</li>
+</ul>
+<h2 id="example_34">Example</h2>
+<div class="language-C highlight"><pre><span></span><code><span id="__span-69-1"><a id="__codelineno-69-1" name="__codelineno-69-1" href="#__codelineno-69-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">update</span><span class="p">()</span>
+</span><span id="__span-69-2"><a id="__codelineno-69-2" name="__codelineno-69-2" href="#__codelineno-69-2"></a><span class="p">{</span>
+</span><span id="__span-69-3"><a id="__codelineno-69-3" name="__codelineno-69-3" href="#__codelineno-69-3"></a><span class="w">    </span><span class="n">CP_Color</span><span class="w"> </span><span class="n">bgColor</span><span class="p">;</span>
+</span><span id="__span-69-4"><a id="__codelineno-69-4" name="__codelineno-69-4" href="#__codelineno-69-4"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">CP_Input_GamepadConnectedAdvanced</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">CP_Input_GamepadDownAdvanced</span><span class="p">(</span><span class="n">GAMEPAD_A</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">))</span>
+</span><span id="__span-69-5"><a id="__codelineno-69-5" name="__codelineno-69-5" href="#__codelineno-69-5"></a><span class="w">        </span><span class="n">bgColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="w"> </span><span class="mi">104</span><span class="p">,</span><span class="w"> </span><span class="mi">107</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">);</span>
+</span><span id="__span-69-6"><a id="__codelineno-69-6" name="__codelineno-69-6" href="#__codelineno-69-6"></a><span class="w">    </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">CP_Input_KeyDown</span><span class="p">(</span><span class="n">KEY_A</span><span class="p">))</span>
+</span><span id="__span-69-7"><a id="__codelineno-69-7" name="__codelineno-69-7" href="#__codelineno-69-7"></a><span class="w">        </span><span class="n">bgColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="w"> </span><span class="mi">104</span><span class="p">,</span><span class="w"> </span><span class="mi">107</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">);</span>
+</span><span id="__span-69-8"><a id="__codelineno-69-8" name="__codelineno-69-8" href="#__codelineno-69-8"></a><span class="w">    </span><span class="k">else</span>
+</span><span id="__span-69-9"><a id="__codelineno-69-9" name="__codelineno-69-9" href="#__codelineno-69-9"></a><span class="w">        </span><span class="n">bgColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CP_Color_Create</span><span class="p">(</span><span class="mi">166</span><span class="p">,</span><span class="w"> </span><span class="mi">235</span><span class="p">,</span><span class="w"> </span><span class="mi">237</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">);</span>
+</span><span id="__span-69-10"><a id="__codelineno-69-10" name="__codelineno-69-10" href="#__codelineno-69-10"></a>
+</span><span id="__span-69-11"><a id="__codelineno-69-11" name="__codelineno-69-11" href="#__codelineno-69-11"></a><span class="w">    </span><span class="n">CP_Graphics_ClearBackground</span><span class="p">(</span><span class="n">bgColor</span><span class="p">);</span>
+</span><span id="__span-69-12"><a id="__codelineno-69-12" name="__codelineno-69-12" href="#__codelineno-69-12"></a><span class="p">}</span>
+</span></code></pre></div>
+<h2 id="related_34">Related</h2>
+<ul>
+<li><a href="Input.html#cp_input_gamepaddownadvanced">CP_Input_GamepadDownAdvanced</a></li>
+<li><a href="Input.html#cp_input_keydown">CP_Input_KeyDown</a></li>
+<li><a href="Types.html#cp_color">CP_Color</a></li>
+<li><a href="Color.html#cp_color_create">CP_Color_Create</a></li>
+<li><a href="Graphics.html#cp_graphics_clearbackground">CP_Graphics_ClearBackground</a></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": ".", "features": ["content.code.copy", "content.code.select"], "search": "assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="assets/javascripts/bundle.a7c05c9e.min.js"></script>
+      
+    
+  </body>
+</html>
