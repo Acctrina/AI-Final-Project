@@ -101,6 +101,10 @@ xcopy "$(SolutionDir)Extern\CProcessing\lib\x64\fmod.dll" "$(OutDir)" /s /r /y /
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\Sim.cpp" />
+    <ClCompile Include="src\AI.cpp" />
+    <ClCompile Include="src\Nav.cpp" />
+    <ClCompile Include="src\Renderer.cpp" />
     <ClCompile Include="..\Extern\imgui\imgui.cpp">
       <WarningLevel>TurnOffAllWarnings</WarningLevel>
       <SDLCheck>false</SDLCheck>
@@ -173,6 +177,11 @@ xcopy "$(SolutionDir)Extern\CProcessing\lib\x64\fmod.dll" "$(OutDir)" /s /r /y /
     <ClInclude Include="..\Extern\imgui\imstb_textedit.h" />
     <ClInclude Include="..\Extern\imgui\imstb_truetype.h" />
     <ClInclude Include="..\Extern\MinHook\include\MinHook.h" />
+    <ClInclude Include="src\Config.h" />
+    <ClInclude Include="src\Sim.h" />
+    <ClInclude Include="src\AI.h" />
+    <ClInclude Include="src\Nav.h" />
+    <ClInclude Include="src\Renderer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -19,10 +19,25 @@
     <Filter Include="MinHook">
       <UniqueIdentifier>{b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Simulation">
+      <UniqueIdentifier>{c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sim.cpp">
+      <Filter>Simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AI.cpp">
+      <Filter>Simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Nav.cpp">
+      <Filter>Simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderer.cpp">
+      <Filter>Simulation</Filter>
     </ClCompile>
     <ClCompile Include="..\Extern\imgui\imgui.cpp">
       <Filter>ImGui</Filter>
@@ -91,6 +106,21 @@
     </ClInclude>
     <ClInclude Include="..\Extern\MinHook\include\MinHook.h">
       <Filter>MinHook</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Config.h">
+      <Filter>Simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sim.h">
+      <Filter>Simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AI.h">
+      <Filter>Simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Nav.h">
+      <Filter>Simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer.h">
+      <Filter>Simulation</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

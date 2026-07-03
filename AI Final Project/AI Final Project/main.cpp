@@ -10,10 +10,17 @@
 
 #include "MinHook.h"
 
+#include "src/Sim.h"
+#include "src/Renderer.h"
+
 // Provided by imgui_impl_win32.cpp; forward-declared here as the backend examples do.
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-CP_Image logo;
+// Lane simulation plus the rendering/debug toggles driven from the keyboard.
+static World         g_world;
+static RenderOptions g_render = { true, false, false };
+static bool          g_paused = false;
+static float         g_accum  = 0.0f;
 
 // CProcessing owns the GLFW window and its message loop, and only exposes the HWND.
 // We subclass the window procedure so ImGui sees input first, then chain to GLFW's proc.
@@ -109,11 +116,10 @@ static void imgui_shutdown(void)
 
 void game_init(void)
 {
-	logo = CP_Image_Load("Assets/DigiPen_Singapore_WEB_RED.png");
-	CP_Settings_ImageMode(CP_POSITION_CORNER);
-	CP_Settings_ImageWrapMode(CP_IMAGE_WRAP_CLAMP);
+	World_Init(g_world, 1337u);
 
-	CP_System_SetWindowSize(CP_Image_GetWidth(logo), CP_Image_GetHeight(logo));
+	CP_System_SetWindowSize(g_world.cfg.windowWidth, g_world.cfg.windowHeight);
+	CP_System_SetFrameRate(60.0f);
 
 	// Init ImGui after the final window size is set so we grab the current HWND.
 	imgui_init();
@@ -121,19 +127,57 @@ void game_init(void)
 
 void game_update(void)
 {
-	CP_Graphics_ClearBackground(CP_Color_Create(0, 0, 0, 255));
-	CP_Image_Draw(logo, 0.f, 0.f, CP_Image_GetWidth(logo), CP_Image_GetHeight(logo), 255);
-	if (CP_Input_KeyDown(KEY_Q))
+	// Champion order for this frame: a right-click either targets the enemy under the
+	// cursor (attack-move) or the ground point (A* move). Consumed once, on the click.
+	SimInput in;
+	in.issued       = false;
+	in.worldPoint   = CP_Vector_Zero();
+	in.targetEntity = InvalidId();
+	if (CP_Input_MouseTriggered(MOUSE_BUTTON_RIGHT))
 	{
-		CP_Engine_Terminate();
+		CP_Vector cursor = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());
+		in.issued       = true;
+		in.worldPoint   = cursor;
+		in.targetEntity = World_PickEnemyAt(g_world, cursor, TEAM_BLUE, 10.0f);
 	}
 
+	// Debug / flow toggles.
+	if (CP_Input_KeyTriggered(KEY_SPACE)) g_paused = !g_paused;
+	if (CP_Input_KeyTriggered(KEY_1))     g_render.showAggroLines = !g_render.showAggroLines;
+	if (CP_Input_KeyTriggered(KEY_2))     g_render.showRanges = !g_render.showRanges;
+	bool step = CP_Input_KeyTriggered(KEY_PERIOD) || CP_Input_KeyTriggered(KEY_RIGHT);
+
+	// Fixed-timestep advance: the sim only ever steps by cfg.fixedDt, so it stays
+	// deterministic and reproducible regardless of the real frame rate.
+	float dt = CP_System_GetDt();
+	if (dt > g_world.cfg.maxFrameTime)
+		dt = g_world.cfg.maxFrameTime;
+
+	if (!g_paused)
+	{
+		g_accum += dt;
+		while (g_accum >= g_world.cfg.fixedDt)
+		{
+			Sim_Tick(g_world, g_world.cfg.fixedDt, in);
+			in.issued = false; // apply the click on the first sub-step only
+			g_accum -= g_world.cfg.fixedDt;
+		}
+	}
+	else if (step)
+	{
+		Sim_Tick(g_world, g_world.cfg.fixedDt, in);
+	}
+
+	g_render.paused = g_paused;
+	Render_World(g_world, g_render);
+
+	if (CP_Input_KeyDown(KEY_Q))
+		CP_Engine_Terminate();
 }
 
 void game_exit(void)
 {
 	imgui_shutdown();
-	CP_Image_Free(&logo);
 }
 
 

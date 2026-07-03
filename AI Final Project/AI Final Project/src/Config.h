@@ -1,0 +1,178 @@
+#pragma once
+
+// Core types shared across the whole simulation: enums, entity handles, a small
+// vector-math shim over CP_Vector, a deterministic RNG, and the tunables struct.
+// This header carries no rendering or UI code so the sim stays inspectable.
+
+#include <cstdint>
+#include "cprocessing.h"
+
+// --- Teams and entity taxonomy -------------------------------------------------
+
+enum Team
+{
+	TEAM_BLUE,
+	TEAM_RED,
+	TEAM_NEUTRAL
+};
+
+enum EntityKind
+{
+	KIND_MINION,
+	KIND_TOWER,
+	KIND_CHAMPION,
+	KIND_PROJECTILE
+};
+
+enum MinionType
+{
+	MINION_MELEE,
+	MINION_CASTER,
+	MINION_CANNON
+};
+
+// Intentionally three states; every behaviour below has to fall out of these.
+enum FsmState
+{
+	STATE_MARCHING,
+	STATE_IN_COMBAT,
+	STATE_THREATENED
+};
+
+// --- Entity handles ------------------------------------------------------------
+// Minions die constantly and storage is a growing/reused vector, so we never keep
+// raw pointers between ticks. A handle is a slot index plus a generation counter;
+// when a slot is reused the generation bumps and every stale handle resolves null.
+
+static const uint16_t INVALID_INDEX = 0xFFFF;
+
+struct EntityId
+{
+	uint16_t index;
+	uint16_t gen;
+};
+
+inline EntityId InvalidId()          { EntityId id; id.index = INVALID_INDEX; id.gen = 0; return id; }
+inline bool     IsValidId(EntityId a){ return a.index != INVALID_INDEX; }
+inline bool     SameId(EntityId a, EntityId b) { return a.index == b.index && a.gen == b.gen; }
+
+// --- Vector-math shim ----------------------------------------------------------
+// Thin wrappers so the sim reads cleanly. CP_Vector is plain {x,y} data; using the
+// framework's math here is pure (deterministic) and keeps us from reinventing it.
+
+inline CP_Vector V(float x, float y)              { return CP_Vector_Set(x, y); }
+inline CP_Vector VAdd(CP_Vector a, CP_Vector b)   { return CP_Vector_Add(a, b); }
+inline CP_Vector VSub(CP_Vector a, CP_Vector b)   { return CP_Vector_Subtract(a, b); }
+inline CP_Vector VScale(CP_Vector a, float s)     { return CP_Vector_Scale(a, s); }
+inline float     VLen(CP_Vector a)                { return CP_Vector_Length(a); }
+inline float     VDist(CP_Vector a, CP_Vector b)  { return CP_Vector_Distance(a, b); }
+
+// Normalize that is safe on the zero vector (returns zero instead of NaN).
+inline CP_Vector VNorm(CP_Vector a)
+{
+	float l = VLen(a);
+	if (l > 0.0001f)
+		return VScale(a, 1.0f / l);
+	return CP_Vector_Zero();
+}
+
+// Clamp a vector to a maximum length.
+inline CP_Vector VLimit(CP_Vector a, float maxLen)
+{
+	float l = VLen(a);
+	if (l > maxLen && l > 0.0001f)
+		return VScale(a, maxLen / l);
+	return a;
+}
+
+// --- Deterministic RNG ---------------------------------------------------------
+// Our own seedable xorshift, kept per-World, so scenarios replay identically. We
+// deliberately do NOT use CProcessing's global RNG (shared mutable state).
+
+struct Rng
+{
+	uint32_t s;
+};
+
+inline void Rng_Seed(Rng& r, uint32_t seed) { r.s = seed ? seed : 0x9E3779B9u; }
+
+inline uint32_t Rng_Next(Rng& r)
+{
+	r.s ^= r.s << 13;
+	r.s ^= r.s >> 17;
+	r.s ^= r.s << 5;
+	return r.s;
+}
+
+inline float Rng_Float(Rng& r) // [0, 1)
+{
+	return (Rng_Next(r) & 0xFFFFFFu) / (float)0x1000000;
+}
+
+inline float Rng_Range(Rng& r, float lo, float hi)
+{
+	return lo + Rng_Float(r) * (hi - lo);
+}
+
+// --- Tunables ------------------------------------------------------------------
+// Every magic number lives here so tuning (and later, per-scenario overrides) has
+// exactly one home. Defaults are filled by Config_Default().
+
+struct Config
+{
+	// Timing
+	float fixedDt;        // sim step length; sim never reads wall-clock
+	float maxFrameTime;   // clamp on accumulated real time (spiral-of-death guard)
+
+	// Window size. Single knob for resolution; the lane is placed relative to it.
+	int   windowWidth;
+	int   windowHeight;
+
+	// The lane runs diagonally between two base points (League/Dota-style) with a
+	// fixed band width. Towers and the champion spawn sit at parameters along it.
+	CP_Vector blueBase;    // lower-left nexus
+	CP_Vector redBase;     // upper-right nexus
+	float     laneWidth;
+	float     blueTowerT;  // tower position along the lane: 0 at blue base .. 1 at red
+	float     redTowerT;
+	float     towerOffset; // perpendicular shift off the lane axis, so the centre stays clear
+	float     champSpawnT;
+
+	// Waves
+	float waveInterval;      // seconds between waves
+	float spawnSpacing;      // seconds between minions within a wave
+	int   meleePerWave;
+	int   casterPerWave;
+	int   cannonEveryNWaves; // a siege/cannon minion joins every Nth wave
+
+	// Steering
+	float separationRange;
+	float separationStrength;
+	float arriveRadius;
+	float avoidLookahead;   // how far ahead a minion looks for blockers to route around
+	float avoidStrength;    // lateral force applied to steer around a blocker
+
+	// Minion stats: hp, damage, attackRange, cooldown, speed, radius
+	float meleeHp,   meleeDmg,   meleeRange,   meleeCooldown,   meleeSpeed,   meleeRadius;
+	float casterHp,  casterDmg,  casterRange,  casterCooldown,  casterSpeed,  casterRadius;
+	float cannonHp,  cannonDmg,  cannonRange,  cannonCooldown,  cannonSpeed,  cannonRadius;
+
+	// Minion target acquisition radius
+	float detectRange;
+	// Extra range past detectRange before a minion drops a target it already committed
+	// to (hysteresis, so it holds a target instead of re-picking "closest" every tick).
+	float targetLeash;
+	// How long a minion remembers who last hit it (feeds the "threatened" rule).
+	float attackerMemory;
+
+	// Tower
+	float towerHp, towerDmg, towerRange, towerCooldown, towerRadius;
+
+	// Champion (player)
+	float champHp, champDmg, champRange, champCooldown, champSpeed, champRadius;
+
+	// Projectiles (committed, homing shots for ranged attackers)
+	float projSpeed, projRadius;
+};
+
+Config Config_Default();
