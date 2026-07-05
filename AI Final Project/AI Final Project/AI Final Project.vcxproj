@@ -101,6 +101,7 @@ xcopy "$(SolutionDir)Extern\CProcessing\lib\x64\fmod.dll" "$(OutDir)" /s /r /y /
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\Sandbox.cpp" />
     <ClCompile Include="src\Sim.cpp" />
     <ClCompile Include="src\AI.cpp" />
     <ClCompile Include="src\Nav.cpp" />
@@ -178,6 +179,7 @@ xcopy "$(SolutionDir)Extern\CProcessing\lib\x64\fmod.dll" "$(OutDir)" /s /r /y /
     <ClInclude Include="..\Extern\imgui\imstb_truetype.h" />
     <ClInclude Include="..\Extern\MinHook\include\MinHook.h" />
     <ClInclude Include="src\Config.h" />
+    <ClInclude Include="src\Sandbox.h" />
     <ClInclude Include="src\Sim.h" />
     <ClInclude Include="src\AI.h" />
     <ClInclude Include="src\Nav.h" />
