@@ -3,6 +3,7 @@
 #include "imgui.h"
 
 #include <cfloat>
+#include <algorithm>
 
 // ----------------------------------------------------------------------------
 // Private helpers
@@ -497,11 +498,11 @@ void Sandbox_DrawImGui(World& w, RenderOptions& render, SandboxState& sandbox, f
             ImGui::TextColored(ImVec4(0.95f, 0.78f, 0.28f, 1.0f), "%s", sandbox.currentScenario);
 
             ImGui::TableSetColumnIndex(1);
-            ImGui::TextColored(ImVec4(0.45f, 0.73f, 1.00f, 1.0f), "Blue %.1fs", w.waves[TEAM_BLUE].nextWaveTimer);
+            ImGui::TextColored(ImVec4(0.45f, 0.73f, 1.00f, 1.0f), "Blue %.1fs", (std::max)(0.0f, w.waves[TEAM_BLUE].nextWaveTimer));
             ImGui::SameLine(0.0f, 12.0f);
             ImGui::TextUnformatted("|");
             ImGui::SameLine(0.0f, 12.0f);
-            ImGui::TextColored(ImVec4(1.00f, 0.38f, 0.38f, 1.0f), "Red %.1fs", w.waves[TEAM_RED].nextWaveTimer);
+            ImGui::TextColored(ImVec4(1.00f, 0.38f, 0.38f, 1.0f), "Red %.1fs", (std::max)(0.0f, w.waves[TEAM_RED].nextWaveTimer));
 
             ImGui::EndTable();
         }
