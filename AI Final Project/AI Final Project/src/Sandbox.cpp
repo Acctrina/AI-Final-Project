@@ -481,9 +481,32 @@ void Sandbox_DrawImGui(World& w, RenderOptions& render, SandboxState& sandbox, f
             ImGui::EndTable();
         }
 
-        ImGui::TextColored(ImVec4(0.92f, 0.94f, 0.98f, 1.0f), "Current Scenario:");
+        if (ImGui::BeginTable("scenario_wave_strip", 2, ImGuiTableFlags_SizingStretchSame))
+        {
+            ImGui::TableNextRow();
+
+            ImGui::TableSetColumnIndex(0);
+            ImGui::TextColored(ImVec4(0.92f, 0.94f, 0.98f, 1.0f), "Current Scenario:");
+
+            ImGui::TableSetColumnIndex(1);
+            ImGui::TextColored(ImVec4(0.92f, 0.94f, 0.98f, 1.0f), "Next Wave in:");
+
+            ImGui::TableNextRow();
+
+            ImGui::TableSetColumnIndex(0);
+            ImGui::TextColored(ImVec4(0.95f, 0.78f, 0.28f, 1.0f), "%s", sandbox.currentScenario);
+
+            ImGui::TableSetColumnIndex(1);
+            ImGui::TextColored(ImVec4(0.45f, 0.73f, 1.00f, 1.0f), "Blue %.1fs", w.waves[TEAM_BLUE].nextWaveTimer);
+            ImGui::SameLine(0.0f, 12.0f);
+            ImGui::TextUnformatted("|");
+            ImGui::SameLine(0.0f, 12.0f);
+            ImGui::TextColored(ImVec4(1.00f, 0.38f, 0.38f, 1.0f), "Red %.1fs", w.waves[TEAM_RED].nextWaveTimer);
+
+            ImGui::EndTable();
+        }
+
         ImGui::Spacing();
-        ImGui::TextColored(ImVec4(0.95f, 0.78f, 0.28f, 1.0f), "%s", sandbox.currentScenario);
 
 
         ImGui::Dummy(ImVec2(0, 6));
