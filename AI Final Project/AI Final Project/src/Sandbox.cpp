@@ -443,9 +443,9 @@ void Sandbox_DrawImGui(World& w, RenderOptions& render, SandboxState& sandbox, f
     const float full = ImGui::GetContentRegionAvail().x;
     const float half = Sandbox_HalfButtonWidth();
 
-    // ------------------------------------------------------------------------
-    // Header
-    // ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
+// Header
+// ------------------------------------------------------------------------
     {
         const ImVec4 stateColor = paused
             ? ImVec4(0.90f, 0.72f, 0.30f, 1.0f)
@@ -464,22 +464,27 @@ void Sandbox_DrawImGui(World& w, RenderOptions& render, SandboxState& sandbox, f
 
             ImGui::TableSetColumnIndex(1);
             ImGui::TextUnformatted("FPS");
-            ImGui::Text("%.1f", io.Framerate);
+            ImGui::TextColored(ImVec4(0.40f, 0.82f, 0.78f, 1.0f), "%.1f", io.Framerate);
 
             ImGui::TableSetColumnIndex(2);
             ImGui::TextUnformatted("Tick");
-            ImGui::Text("%lld", w.tick);
+            ImGui::TextColored(ImVec4(0.78f, 0.72f, 0.92f, 1.0f), "%lld", w.tick);
 
             ImGui::TableSetColumnIndex(3);
             ImGui::TextUnformatted("Blue");
-            ImGui::Text("%d", CountAlive(w, KIND_MINION, TEAM_BLUE));
+            ImGui::TextColored(ImVec4(0.45f, 0.73f, 1.00f, 1.0f), "%d", CountAlive(w, KIND_MINION, TEAM_BLUE));
 
             ImGui::TableSetColumnIndex(4);
             ImGui::TextUnformatted("Red");
-            ImGui::Text("%d", CountAlive(w, KIND_MINION, TEAM_RED));
+            ImGui::TextColored(ImVec4(1.00f, 0.38f, 0.38f, 1.0f), "%d", CountAlive(w, KIND_MINION, TEAM_RED));
 
             ImGui::EndTable();
         }
+
+        ImGui::TextColored(ImVec4(0.92f, 0.94f, 0.98f, 1.0f), "Current Scenario:");
+        ImGui::Spacing();
+        ImGui::TextColored(ImVec4(0.95f, 0.78f, 0.28f, 1.0f), "%s", sandbox.currentScenario);
+
 
         ImGui::Dummy(ImVec2(0, 6));
 
@@ -493,12 +498,15 @@ void Sandbox_DrawImGui(World& w, RenderOptions& render, SandboxState& sandbox, f
             in.worldPoint = CP_Vector_Zero();
             in.targetEntity = InvalidId();
 
-            // Advance exactly one fixed simulation step while paused.
+			// Advance 1 tick of simulation, regardless of the fixedDt setting.
             Sim_Tick(w, w.cfg.fixedDt, in);
         }
 
         if (ImGui::Button("Reset World", ImVec2(full, 34)))
+        {
             Sandbox_ResetWorld(w, accum, paused, sandbox.seed);
+            sandbox.currentScenario = "Neutral";
+        }
 
         ImGui::Dummy(ImVec2(0, 4));
 
@@ -615,19 +623,34 @@ void Sandbox_DrawImGui(World& w, RenderOptions& render, SandboxState& sandbox, f
         ImGui::PushID("Scenarios");
 
         if (ImGui::Button("Neutral", ImVec2(half, 32)))
+        {
             Sandbox_LoadNeutral(w, accum, paused, sandbox.seed);
+            sandbox.currentScenario = "Neutral";
+        }
         ImGui::SameLine();
         if (ImGui::Button("Freeze", ImVec2(half, 32)))
+        {
             Sandbox_LoadFreeze(w, accum, paused, sandbox.seed);
+            sandbox.currentScenario = "Freeze";
+        }
 
         if (ImGui::Button("Slow Push", ImVec2(half, 32)))
+        {
             Sandbox_LoadSlowPush(w, accum, paused, sandbox.seed);
+            sandbox.currentScenario = "Slow Push";
+        }
         ImGui::SameLine();
         if (ImGui::Button("Shove", ImVec2(half, 32)))
+        {
             Sandbox_LoadShove(w, accum, paused, sandbox.seed);
+            sandbox.currentScenario = "Shove";
+        }
 
         if (ImGui::Button("Tower Aggro", ImVec2(half, 32)))
+        {
             Sandbox_LoadTowerAggro(w, accum, paused, sandbox.seed);
+            sandbox.currentScenario = "Tower Aggro";
+        }
 
         ImGui::PopID();
     }
