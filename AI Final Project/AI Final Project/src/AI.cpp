@@ -108,93 +108,141 @@ static CP_Vector Steer_Avoid(World& w, const Entity& self, EntityId targetId,
 }
 
 // ---------------------------------------------------------------------------
-// Minion: fixed aggro priority + 3-state FSM, then steer toward the goal.
+// Minion FSM.
+//
+// The three states are a genuine controller, not a label: `m.state` is
+// authoritative and persists between ticks. Each tick we first run the
+// transitions leaving the current state (which may hand the minion a new
+// target), then execute the behaviour that the resulting state prescribes.
+// Every distance check below belongs to exactly one transition, so it is the
+// STATE - not a fresh "closest enemy" scan every frame - that decides what a
+// minion does.
+//
+//   MARCHING   no target; walk down the lane toward the enemy base.
+//   IN_COMBAT  committed to an enemy (minion > champion > tower); close & fight.
+//   THREATENED retaliating against an enemy champion that just hit us.
+//
+// Transitions:
+//   any state --(new enemy-champion attacker)--> THREATENED
+//   MARCHING  --(enemy in detect range)-------->  IN_COMBAT
+//   IN_COMBAT --(target lost, another near)---->  IN_COMBAT (re-acquire)
+//   IN_COMBAT --(target lost, lane clear)------>  MARCHING
+//   THREATENED--(champion gone, enemy near)---->  IN_COMBAT
+//   THREATENED--(champion gone, lane clear)---->  MARCHING
 // ---------------------------------------------------------------------------
+
+// Fixed aggro priority: the closest enemy minion, then champion, then tower,
+// all within detection range. Returns null (tgtId invalid) if the lane is clear.
+static Entity* Minion_Acquire(World& w, Entity& m, EntityId& tgtId)
+{
+	const Config& cfg = w.cfg;
+	Entity* t = World_NearestEnemy(w, m, KIND_MINION, cfg.detectRange, &tgtId);
+	if (!t) t = World_NearestEnemy(w, m, KIND_CHAMPION, cfg.detectRange, &tgtId);
+	if (!t) t = World_NearestEnemy(w, m, KIND_TOWER,   cfg.detectRange, &tgtId);
+	return t;
+}
+
+// A *new* enemy-champion attacker we have not answered yet. Only champions
+// trigger retaliation - enemy minion pokes (a caster outranging our melee) must
+// not pull the wave off its front line - and each attacker fires the transition
+// once, so continuous fire doesn't thrash the target. Null if no fresh threat.
+static Entity* Minion_NewThreat(World& w, Entity& m)
+{
+	Entity* atk = World_Get(w, m.lastAttacker);
+	if (atk && atk->team != m.team && atk->kind == KIND_CHAMPION &&
+	    m.lastAttackerTimer > 0.0f && !SameId(m.lastAttacker, m.reactedAttacker))
+		return atk;
+	return nullptr;
+}
+
+// Is a held target still worth committing to? Alive, hostile, and inside
+// detect range + leash - the hysteresis that stops minions thrashing between
+// targets in a scrum.
+static bool Minion_Holds(World& w, Entity& m, Entity* t)
+{
+	return t && t->team != m.team &&
+	       VDist(m.pos, t->pos) <= w.cfg.detectRange + w.cfg.targetLeash;
+}
+
 void AI_DecideMinion(World& w, Entity& m)
 {
 	const Config& cfg = w.cfg;
 
-	Entity*  tgt   = nullptr;
-	EntityId tgtId = InvalidId();
-	FsmState state = STATE_MARCHING;
-
-	// Is the current target still worth holding? Stickiness/hysteresis, like the tower:
-	// commit to a target until it dies or leaves leash range, instead of re-picking
-	// "closest" every tick (which made minions thrash between targets mid-fight).
-	Entity* cur = World_Get(w, m.target);
-	bool holdCurrent = cur && cur->team != m.team &&
-	                   VDist(m.pos, cur->pos) <= cfg.detectRange + cfg.targetLeash;
-
-	// Priority 1 (retaliation): only an enemy *champion* attacking pulls a minion off
-	// its target - enemy minion pokes (e.g. a caster outranging our melee) must NOT, or
-	// the whole wave chases casters instead of fighting the front line. And only a *new*
-	// champion attacker re-triggers, so continuous fire doesn't thrash the target.
-	Entity* atk = World_Get(w, m.lastAttacker);
-	bool newAttacker = atk && atk->team != m.team && atk->kind == KIND_CHAMPION &&
-	                   m.lastAttackerTimer > 0.0f &&
-	                   !SameId(m.lastAttacker, m.reactedAttacker) &&
-	                   !SameId(m.lastAttacker, m.target);
-
-	if (newAttacker)
+	// --- 1. Transitions out of the current state ---------------------------
+	// A fresh enemy-champion attack pre-empts every state and forces retaliation.
+	if (Entity* threat = Minion_NewThreat(w, m))
 	{
-		tgt = atk; tgtId = m.lastAttacker;
-		state = STATE_THREATENED;
-		m.reactedAttacker = m.lastAttacker; // reacted once; won't re-trigger for this attacker
+		m.state           = STATE_THREATENED;
+		m.target          = m.lastAttacker;
+		m.reactedAttacker = m.lastAttacker; // answered once; won't re-trigger
 	}
-	else if (holdCurrent)
+	else switch (m.state)
 	{
-		tgt = cur; tgtId = m.target;
-		state = (m.lastAttackerTimer > 0.0f && SameId(m.target, m.lastAttacker))
-		        ? STATE_THREATENED : STATE_IN_COMBAT;
+	case STATE_MARCHING:
+	{
+		EntityId id;
+		if (Minion_Acquire(w, m, id)) { m.state = STATE_IN_COMBAT; m.target = id; }
+		break;
 	}
-	else
+	case STATE_IN_COMBAT:
 	{
-		// No valid target held: acquire fresh via the fixed priority list
-		// (attacking enemy champion, then closest minion, champion, tower).
-		if (atk && atk->team != m.team && atk->kind == KIND_CHAMPION && m.lastAttackerTimer > 0.0f)
+		// Hold the target while valid; else re-acquire, or fall back to marching.
+		if (!Minion_Holds(w, m, World_Get(w, m.target)))
 		{
-			tgt = atk; tgtId = m.lastAttacker; state = STATE_THREATENED;
-			m.reactedAttacker = m.lastAttacker;
+			EntityId id;
+			if (Minion_Acquire(w, m, id)) m.target = id;
+			else { m.state = STATE_MARCHING; m.target = InvalidId(); }
 		}
-		if (!tgt)
+		break;
+	}
+	case STATE_THREATENED:
+	{
+		// Stay locked on the champion until it leaves leash or memory fades,
+		// then drop to combat (enemy still near) or marching (lane clear).
+		Entity* atk = World_Get(w, m.target);
+		bool hold = atk && atk->team != m.team && m.lastAttackerTimer > 0.0f &&
+		            VDist(m.pos, atk->pos) <= cfg.detectRange + cfg.targetLeash;
+		if (!hold)
 		{
-			tgt = World_NearestEnemy(w, m, KIND_MINION, cfg.detectRange, &tgtId);
-			if (tgt) state = STATE_IN_COMBAT;
+			EntityId id;
+			if (Minion_Acquire(w, m, id)) { m.state = STATE_IN_COMBAT; m.target = id; }
+			else { m.state = STATE_MARCHING; m.target = InvalidId(); }
 		}
-		if (!tgt)
-		{
-			tgt = World_NearestEnemy(w, m, KIND_CHAMPION, cfg.detectRange, &tgtId);
-			if (tgt) state = STATE_IN_COMBAT;
-		}
-		if (!tgt)
-		{
-			tgt = World_NearestEnemy(w, m, KIND_TOWER, cfg.detectRange, &tgtId);
-			if (tgt) state = STATE_IN_COMBAT;
-		}
+		break;
+	}
 	}
 
-	m.target = tgtId;
-	m.state  = tgt ? state : STATE_MARCHING;
-
+	// --- 2. Behaviour for the resulting state ------------------------------
+	Entity*   tgt = World_Get(w, m.target);
 	CP_Vector desired, dir;
 
-	if (tgt)
+	if (m.state == STATE_MARCHING || !tgt)
 	{
-		// In combat: steer straight at the target (it's close), stopping at attack range.
-		CP_Vector goal = tgt->pos;
-		float stopRadius = m.attackRange + tgt->radius;
-		CP_Vector to = VSub(goal, m.pos);
-		dir = VNorm(to);
-		desired = Steer_Arrive(m.pos, goal, m.moveSpeed, stopRadius, cfg.arriveRadius);
+		// No target: walk straight down the lane toward the enemy base. Local
+		// avoidance + separation below handle flowing around other units.
+		m.state = STATE_MARCHING; // guard: a stale handle => genuinely no target
+		m.target = InvalidId();
+		CP_Vector goal = World_EnemyBasePoint(w, m.team);
+		dir     = VNorm(VSub(goal, m.pos));
+		desired = Steer_Arrive(m.pos, goal, m.moveSpeed, 2.0f, cfg.arriveRadius);
 	}
 	else
 	{
-		// Marching: steer straight down the lane toward the enemy base. Local
-		// avoidance + separation below handle flowing around other units.
-		m.state = STATE_MARCHING;
-		CP_Vector goal = World_EnemyBasePoint(w, m.team);
-		dir = VNorm(VSub(goal, m.pos));
-		desired = Steer_Arrive(m.pos, goal, m.moveSpeed, 2.0f, cfg.arriveRadius);
+		// IN_COMBAT / THREATENED: close on the committed target, stopping at
+		// attack range so Phase_Act can fire. Same movement, different intent.
+		float stopRadius = m.attackRange + tgt->radius;
+		dir     = VNorm(VSub(tgt->pos, m.pos));
+
+		// Once in range, plant: a minion mid-attack holds its ground and only
+		// moves again if the target leaves range. Skipping separation/avoidance
+		// here (they run below for moving minions) stops the fighting front from
+		// drifting as the scrum shoves it around.
+		if (VDist(m.pos, tgt->pos) <= stopRadius)
+		{
+			m.vel = CP_Vector_Zero();
+			return;
+		}
+		desired = Steer_Arrive(m.pos, tgt->pos, m.moveSpeed, stopRadius, cfg.arriveRadius);
 	}
 
 	// Local avoidance (only while actually moving, so settled attackers don't jitter)

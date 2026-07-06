@@ -47,7 +47,7 @@ Config Config_Default()
 	c.attackerMemory  = 3.0f;
 
 	// hp, dmg, range, cooldown, speed, radius  (sizes/ranges scaled up to read big)
-	c.meleeHp  = 120.0f; c.meleeDmg  = 12.0f; c.meleeRange  = 20.0f;  c.meleeCooldown  = 1.0f; c.meleeSpeed  = 80.0f; c.meleeRadius  = 16.0f;
+	c.meleeHp  = 120.0f; c.meleeDmg  = 12.0f; c.meleeRange  = 40.0f;  c.meleeCooldown  = 1.0f; c.meleeSpeed  = 80.0f; c.meleeRadius  = 16.0f;
 	c.casterHp = 60.0f;  c.casterDmg = 18.0f; c.casterRange = 175.0f; c.casterCooldown = 1.5f; c.casterSpeed = 80.0f; c.casterRadius = 14.0f;
 	c.cannonHp = 300.0f; c.cannonDmg = 40.0f; c.cannonRange = 200.0f; c.cannonCooldown = 2.5f; c.cannonSpeed = 72.0f; c.cannonRadius = 24.0f;
 
