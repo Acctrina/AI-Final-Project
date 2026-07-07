@@ -36,9 +36,9 @@ struct Entity
 	MinionType minionType;
 	FsmState   state;
 	float      moveSpeed;
-	EntityId   lastAttacker;
-	float      lastAttackerTimer; // seconds of "recently attacked" memory left
-	EntityId   reactedAttacker;   // attacker already retaliated against (avoids re-triggering)
+	EntityId   champAggressor;  // enemy champion that drew this minion's aggro, else invalid
+	float      champAggroTimer; // seconds of champion-aggro left; refreshed only by a champion
+	                            // hit, so ordinary minion combat can't keep the lock alive
 
 	// Tower
 	float      championTriggerTimer; // reserved: enables tower-aggro manipulation

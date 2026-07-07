@@ -39,6 +39,9 @@
     <ClCompile Include="src\Renderer.cpp">
       <Filter>Simulation</Filter>
     </ClCompile>
+    <ClCompile Include="src\Analysis.cpp">
+      <Filter>Simulation</Filter>
+    </ClCompile>
     <ClCompile Include="src\Sandbox.cpp">
       <Filter>Simulation</Filter>
     </ClCompile>
@@ -123,6 +126,9 @@
       <Filter>Simulation</Filter>
     </ClInclude>
     <ClInclude Include="src\Renderer.h">
+      <Filter>Simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Analysis.h">
       <Filter>Simulation</Filter>
     </ClInclude>
     <ClInclude Include="src\Sandbox.h">

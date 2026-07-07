@@ -115,8 +115,8 @@ static Entity MakeScenarioMinion(const Config& c, Team team, MinionType type, CP
     e.state = STATE_MARCHING;
     e.cooldownTimer = 0.0f;
     e.target = InvalidId();
-    e.lastAttacker = InvalidId();
-    e.reactedAttacker = InvalidId();
+    e.champAggressor = InvalidId();
+    e.champAggroTimer = 0.0f;
     e.source = InvalidId();
     e.projSpeed = c.projSpeed;
 
@@ -548,6 +548,8 @@ void Sandbox_DrawImGui(World& w, RenderOptions& render, SandboxState& sandbox, f
     Sandbox_DrawSectionHeader("Rendering");
     ImGui::Checkbox("Show aggro lines", &render.showAggroLines);
     ImGui::Checkbox("Show ranges", &render.showRanges);
+    ImGui::Checkbox("Show influence map", &render.showInfluence);
+    ImGui::Checkbox("Show equilibrium", &render.showEquilibrium);
 
     // ------------------------------------------------------------------------
     // Wave Control
@@ -606,7 +608,8 @@ void Sandbox_DrawImGui(World& w, RenderOptions& render, SandboxState& sandbox, f
         {
             Sandbox_SliderFloat("Detect range", "##DetectRange", &w.cfg.detectRange, 80.0f, 400.0f, "%.1f");
             Sandbox_SliderFloat("Target leash", "##TargetLeash", &w.cfg.targetLeash, 0.0f, 200.0f, "%.1f");
-            Sandbox_SliderFloat("Attacker memory", "##AttackerMemory", &w.cfg.attackerMemory, 0.0f, 8.0f, "%.2f s");
+            Sandbox_SliderFloat("Champion aggro time", "##ChampionAggroTime", &w.cfg.championAggroTime, 0.0f, 8.0f, "%.2f s");
+            Sandbox_SliderFloat("Champion aggro hold", "##ChampionAggroHold", &w.cfg.championAggroHold, 0.0f, 3.0f, "%.2f s");
             Sandbox_SliderFloat("Arrive radius", "##ArriveRadius", &w.cfg.arriveRadius, 5.0f, 120.0f, "%.1f");
             Sandbox_SliderFloat("Separation range", "##SeparationRange", &w.cfg.separationRange, 0.0f, 120.0f, "%.1f");
             Sandbox_SliderFloat("Separation strength", "##SeparationStrength", &w.cfg.separationStrength, 0.0f, 120.0f, "%.1f");

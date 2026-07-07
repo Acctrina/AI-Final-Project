@@ -1,6 +1,7 @@
 #include "Renderer.h"
 
 #include <cstdio>
+#include <cmath>
 
 // All CProcessing drawing lives here. The renderer only reads the World; it must
 // never change simulation state. Debug overlays make the AI's decisions visible:
@@ -51,7 +52,7 @@ static void DrawRing(CP_Vector c, float radius, CP_Color col)
 	CP_Graphics_DrawCircle(c.x, c.y, radius * 2.0f); // CProcessing takes a diameter
 }
 
-void Render_World(World& w, const RenderOptions& opt)
+void Render_World(World& w, const AnalysisState& analysis, const RenderOptions& opt)
 {
 	CP_Settings_RectMode(CP_POSITION_CORNER);
 
@@ -77,6 +78,35 @@ void Render_World(World& w, const RenderOptions& opt)
 	CP_Settings_Stroke(CP_Color_Create(52, 57, 64, 255));
 	CP_Settings_StrokeWeight(2.0f);
 	CP_Graphics_DrawLine(w.lane.blueBase.x, w.lane.blueBase.y, w.lane.redBase.x, w.lane.redBase.y);
+
+	// Influence heatmap: one tinted slice per lane column, blue where blue presence
+	// dominates and red where red does, opacity tracking the margin. This is the
+	// analysis layer's raw signal - the equilibrium marker below is just where it
+	// crosses zero.
+	if (opt.showInfluence && analysis.cols > 0)
+	{
+		CP_Settings_NoStroke();
+		for (int col = 0; col < analysis.cols; ++col)
+		{
+			float net = analysis.netInfluence[col];
+			float mag = std::fabs(net) / analysis.maxAbsInfluence; // 0..1
+			if (mag < 0.02f)
+				continue;
+			float t0 = col / (float)analysis.cols;
+			float t1 = (col + 1) / (float)analysis.cols;
+			CP_Vector q0 = Lane_PointAt(w.lane, t0);
+			CP_Vector q1 = Lane_PointAt(w.lane, t1);
+			CP_Vector s0 = VAdd(q0, VScale(perp,  half));
+			CP_Vector s1 = VAdd(q0, VScale(perp, -half));
+			CP_Vector s2 = VAdd(q1, VScale(perp, -half));
+			CP_Vector s3 = VAdd(q1, VScale(perp,  half));
+			unsigned char al = (unsigned char)(mag * 120.0f);
+			CP_Color col4 = (net >= 0.0f) ? CP_Color_Create(70, 130, 220, al)
+			                              : CP_Color_Create(220, 80, 70, al);
+			CP_Settings_Fill(col4);
+			CP_Graphics_DrawQuad(s0.x, s0.y, s1.x, s1.y, s2.x, s2.y, s3.x, s3.y);
+		}
+	}
 
 	// Nexuses at the lane ends.
 	CP_Settings_NoStroke();
@@ -194,6 +224,67 @@ void Render_World(World& w, const RenderOptions& opt)
 
 	CP_Settings_TextSize(15.0f);
 	CP_Settings_Fill(CP_Color_Create(170, 170, 170, 255));
-	CP_Font_DrawText("Right-click: move / attack     [Space] pause   [.] step   [1] aggro lines   [2] ranges   Q quit",
+	CP_Font_DrawText("Right-click: move / attack   [Space] pause  [.] step  [1] aggro  [2] ranges  [3] influence  [4] equilibrium  Q quit",
 	                 18.0f, (float)w.cfg.windowHeight - 22.0f);
+
+	// --- Analysis overlays: equilibrium marker + recognised-technique banner ----
+	// The equilibrium is where the influence field crosses zero (the wave's meeting
+	// point); the short tick shows which way it is drifting - i.e. who is pushing.
+	if (opt.showEquilibrium && analysis.equilibriumValid)
+	{
+		CP_Vector pe  = Lane_PointAt(w.lane, analysis.equilibriumT);
+		CP_Vector top = VAdd(pe, VScale(perp,  half));
+		CP_Vector bot = VAdd(pe, VScale(perp, -half));
+
+		CP_Settings_Stroke(CP_Color_Create(255, 240, 120, 220));
+		CP_Settings_StrokeWeight(3.0f);
+		CP_Graphics_DrawLine(top.x, top.y, bot.x, bot.y);
+
+		// Drift tick along the lane axis: length grows with the push speed.
+		if (std::fabs(analysis.equilibriumVel) > 0.0005f)
+		{
+			CP_Vector ld  = Lane_Dir(w.lane);
+			float     sgn = analysis.equilibriumVel > 0.0f ? 1.0f : -1.0f;
+			float     len = 30.0f + std::fabs(analysis.equilibriumVel) * 260.0f;
+			CP_Vector tip = VAdd(pe, VScale(ld, sgn * len));
+			CP_Graphics_DrawLine(pe.x, pe.y, tip.x, tip.y);
+		}
+
+		CP_Settings_NoStroke();
+		CP_Settings_Fill(CP_Color_Create(255, 240, 120, 235));
+		CP_Graphics_DrawCircle(pe.x, pe.y, 13.0f);
+
+		CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
+		CP_Settings_TextSize(13.0f);
+		CP_Settings_Fill(CP_Color_Create(255, 240, 120, 255));
+		CP_Font_DrawText("EQUILIBRIUM", top.x, top.y - 12.0f);
+	}
+
+	// Technique banner: shown whenever a detector has fired recently, fading out over
+	// its lifetime. This is the thesis on screen - a simple rule set producing a named,
+	// skill-expressive play.
+	if (analysis.banner.ttl > 0.0f && analysis.banner.tech != TECH_NONE)
+	{
+		float a01 = analysis.banner.ttl / w.cfg.bannerTtl;
+		if (a01 > 1.0f) a01 = 1.0f;
+		if (a01 < 0.0f) a01 = 0.0f;
+		unsigned char al = (unsigned char)(a01 * 255.0f);
+		float cx = w.cfg.windowWidth * 0.5f;
+
+		CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
+		CP_Settings_Fill(CP_Color_Create(245, 245, 250, al));
+		CP_Settings_TextSize(46.0f);
+		CP_Font_DrawText(Technique_Name(analysis.banner.tech), cx, 92.0f);
+
+		CP_Color who = (analysis.banner.byTeam == TEAM_BLUE)
+		             ? CP_Color_Create(120, 180, 255, al)
+		             : CP_Color_Create(255, 120, 110, al);
+		CP_Settings_Fill(who);
+		CP_Settings_TextSize(18.0f);
+		CP_Font_DrawText(analysis.banner.byTeam == TEAM_BLUE ? "BLUE executed" : "RED executed",
+		                 cx, 126.0f);
+	}
+
+	// Leave text alignment as the HUD expects it for the next frame.
+	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_LEFT, CP_TEXT_ALIGN_V_BASELINE);
 }

@@ -12,6 +12,7 @@
 
 #include "src/Sim.h"
 #include "src/Renderer.h"
+#include "src/Analysis.h"
 #include "src/Sandbox.h"
 
 // Provided by imgui_impl_win32.cpp; forward-declared here as the backend examples do.
@@ -19,11 +20,12 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg
 
 // Lane simulation plus the rendering/debug toggles driven from the keyboard.
 static World         g_world;
-static RenderOptions g_render = { true, false, false };
+static RenderOptions g_render = { true, false, false, true, true };
 static bool          g_paused = false;
 static float         g_accum  = 0.0f;
 
 static SandboxState  g_sandbox;
+static AnalysisState g_analysis; // read-only observer: influence field + technique detectors
 
 // CProcessing owns the GLFW window and its message loop, and only exposes the HWND.
 // We subclass the window procedure so ImGui sees input first, then chain to GLFW's proc.
@@ -154,6 +156,8 @@ void game_update(void)
 	if (CP_Input_KeyTriggered(KEY_SPACE)) g_paused = !g_paused;
 	if (CP_Input_KeyTriggered(KEY_1))     g_render.showAggroLines = !g_render.showAggroLines;
 	if (CP_Input_KeyTriggered(KEY_2))     g_render.showRanges = !g_render.showRanges;
+	if (CP_Input_KeyTriggered(KEY_3))     g_render.showInfluence = !g_render.showInfluence;
+	if (CP_Input_KeyTriggered(KEY_4))     g_render.showEquilibrium = !g_render.showEquilibrium;
 	bool step = allowKeyboardToGame && CP_Input_KeyTriggered(KEY_PERIOD) || CP_Input_KeyTriggered(KEY_RIGHT);
 
 	// Fixed-timestep advance: the sim only ever steps by cfg.fixedDt, so it stays
@@ -162,6 +166,7 @@ void game_update(void)
 	if (dt > g_world.cfg.maxFrameTime)
 		dt = g_world.cfg.maxFrameTime;
 
+	int steps = 0; // sim sub-steps taken this frame, to advance the analysis on sim time
 	if (!g_paused)
 	{
 		g_accum += dt;
@@ -170,15 +175,21 @@ void game_update(void)
 			Sim_Tick(g_world, g_world.cfg.fixedDt, in);
 			in.issued = false; // apply the click on the first sub-step only
 			g_accum -= g_world.cfg.fixedDt;
+			++steps;
 		}
 	}
 	else if (step)
 	{
 		Sim_Tick(g_world, g_world.cfg.fixedDt, in);
+		++steps;
 	}
 
+	// Analysis observes the world after it has stepped. Passing sim-elapsed (0 while
+	// paused) keeps its detectors pause-aware and frame-rate independent.
+	Analysis_Update(g_world, g_analysis, steps * g_world.cfg.fixedDt);
+
 	g_render.paused = g_paused;
-	Render_World(g_world, g_render);
+	Render_World(g_world, g_analysis, g_render);
 
 	if (allowKeyboardToGame && CP_Input_KeyDown(KEY_Q))
 		CP_Engine_Terminate();

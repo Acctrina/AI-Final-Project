@@ -162,8 +162,16 @@ struct Config
 	// Extra range past detectRange before a minion drops a target it already committed
 	// to (hysteresis, so it holds a target instead of re-picking "closest" every tick).
 	float targetLeash;
-	// How long a minion remembers who last hit it (feeds the "threatened" rule).
-	float attackerMemory;
+	// How long a minion stays aggro'd on an enemy champion after that champion's last
+	// hit. Only champion hits refresh it, so the minion returns to the enemy wave this
+	// many seconds after you stop attacking it (feeds the "threatened" rule).
+	float championAggroTime;
+	// Grace window after a champion hit during which its aggro is protected. An enemy
+	// minion hitting the same minion can only steal aggro back to the wave once this long
+	// has passed since the champion's last hit - so continuous attacking (a dive) holds
+	// aggro, but the moment you disengage a minion attacker reclaims the target. Keep it
+	// >= the champion's attack cooldown.
+	float championAggroHold;
 
 	// Tower
 	float towerHp, towerDmg, towerRange, towerCooldown, towerRadius;
@@ -173,6 +181,29 @@ struct Config
 
 	// Projectiles (committed, homing shots for ranged attackers)
 	float projSpeed, projRadius;
+
+	// --- Analysis / emergence layer --------------------------------------------
+	// A read-only observer samples unit presence into columns along the lane, finds
+	// the wave-equilibrium point (where the two sides balance), and names emergent
+	// techniques from how that point moves. None of these values affect the sim.
+	int   influenceCols;      // lane sampling resolution (columns from blue to red base)
+	float influenceSpread;    // splat kernel half-width, in lane fraction (0..1)
+	float influenceMinionW;   // per-unit presence weights
+	float influenceChampW;
+	float influenceTowerW;
+
+	float equilVelSmoothing;  // low-pass factor (0..1) on the equilibrium velocity
+	float freezeVelEps;       // |equil vel| below this counts as "held" (lane frac/sec)
+	float freezeHoldTime;     // seconds the front must stay held before "freeze" fires
+	float slowPushVel;        // |vel| up to here (but above freeze) reads as a slow push
+	float fastPushVel;        // |vel| at/above here reads as a fast push / shove
+	float pushHoldTime;       // seconds a push must persist before it is announced
+
+	float blockRadius;        // champion-to-enemy-minion distance counted as a block
+	int   blockMinCount;      // enemy minions stalled by the champion to call it a block
+
+	float bannerTtl;          // seconds a recognised-technique banner stays on screen
+	float techCooldown;       // per-technique re-fire cooldown so banners don't spam
 };
 
 Config Config_Default();

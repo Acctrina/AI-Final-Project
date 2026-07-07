@@ -22,8 +22,8 @@ Config Config_Default()
 	c.blueBase    = V(c.windowWidth * 0.09f, c.windowHeight * 0.85f);
 	c.redBase     = V(c.windowWidth * 0.91f, c.windowHeight * 0.15f);
 	c.laneWidth   = 450.f;
-	c.blueTowerT  = 0.30f;
-	c.redTowerT   = 0.70f;
+	c.blueTowerT  = 0.20f;
+	c.redTowerT   = 0.80f;
 	c.towerOffset = c.laneWidth * 0.22f; // push towers to one side of the lane axis
 	c.champSpawnT = 0.15f;
 
@@ -36,15 +36,16 @@ Config Config_Default()
 	// Separation keeps spacing; avoidance routes minions around blockers ahead so
 	// waves flow past each other instead of shoving. The hard collision pass
 	// (Phase_Collide) is the last-resort backstop against overlap.
-	c.separationRange    = 42.0f;
-	c.separationStrength = 26.0f;
+	c.separationRange    = 20.0f;
+	c.separationStrength = 10.0f;
 	c.arriveRadius       = 60.0f;
 	c.avoidLookahead     = 95.0f;
 	c.avoidStrength      = 70.0f;
 
 	c.detectRange     = 235.0f;
 	c.targetLeash     = 60.0f;
-	c.attackerMemory  = 3.0f;
+	c.championAggroTime = 2.5f;
+	c.championAggroHold = 0.8f; // > champCooldown (0.6) so a dive holds aggro
 
 	// hp, dmg, range, cooldown, speed, radius  (sizes/ranges scaled up to read big)
 	c.meleeHp  = 120.0f; c.meleeDmg  = 12.0f; c.meleeRange  = 40.0f;  c.meleeCooldown  = 1.0f; c.meleeSpeed  = 80.0f; c.meleeRadius  = 16.0f;
@@ -56,6 +57,29 @@ Config Config_Default()
 	c.champHp = 600.0f; c.champDmg = 55.0f; c.champRange = 200.0f; c.champCooldown = 0.6f; c.champSpeed = 130.0f; c.champRadius = 26.0f;
 
 	c.projSpeed = 470.0f; c.projRadius = 9.0f;
+
+	// Analysis / emergence layer. Velocities are in lane-fractions per second, so
+	// they are independent of the lane's pixel length. These thresholds are a first
+	// pass and are the main thing the tuning stage will adjust.
+	c.influenceCols     = 64;
+	c.influenceSpread   = 0.05f;
+	c.influenceMinionW  = 1.0f;
+	c.influenceChampW   = 0.0f;  // champion excluded: equilibrium measures where the WAVES
+	                             // meet, not champion presence (raise for a map-pressure view)
+	c.influenceTowerW   = 4.0f;
+
+	c.equilVelSmoothing = 0.08f;  // heavy smoothing: the front's drift, not per-tick jitter
+	c.freezeVelEps      = 0.008f;
+	c.freezeHoldTime    = 2.5f;
+	c.slowPushVel       = 0.045f;
+	c.fastPushVel       = 0.11f;
+	c.pushHoldTime      = 1.2f;
+
+	c.blockRadius       = 70.0f;
+	c.blockMinCount     = 2;
+
+	c.bannerTtl         = 2.6f;
+	c.techCooldown      = 4.0f;
 
 	return c;
 }
@@ -178,11 +202,11 @@ static Entity MakeMinion(const Config& c, Team team, MinionType type, CP_Vector 
 	e.minionType   = type;
 	e.state        = STATE_MARCHING;
 	e.cooldownTimer= 0.0f;
-	e.target       = InvalidId();
-	e.lastAttacker = InvalidId();
-	e.reactedAttacker = InvalidId();
-	e.source       = InvalidId();
-	e.projSpeed    = c.projSpeed;
+	e.target        = InvalidId();
+	e.champAggressor  = InvalidId();
+	e.champAggroTimer = 0.0f;
+	e.source        = InvalidId();
+	e.projSpeed     = c.projSpeed;
 
 	switch (type)
 	{
@@ -218,7 +242,7 @@ static Entity MakeTower(const Config& c, Team team, CP_Vector pos)
 	e.cooldownTimer = 0.0f;
 	e.radius = c.towerRadius;
 	e.target = InvalidId();
-	e.lastAttacker = InvalidId();
+	e.champAggressor = InvalidId();
 	e.source = InvalidId();
 	e.projSpeed = c.projSpeed;
 	return e;
@@ -241,7 +265,7 @@ static Entity MakeChampion(const Config& c, Team team, CP_Vector pos)
 	e.radius = c.champRadius;
 	e.state = STATE_MARCHING;
 	e.target = InvalidId();
-	e.lastAttacker = InvalidId();
+	e.champAggressor = InvalidId();
 	e.source = InvalidId();
 	e.projSpeed = c.projSpeed;
 	return e;
@@ -348,11 +372,11 @@ static void Phase_Sense(World& w, float dt)
 			continue;
 		if (e.cooldownTimer > 0.0f)       e.cooldownTimer -= dt;
 		if (e.championTriggerTimer > 0.0f) e.championTriggerTimer -= dt;
-		if (e.lastAttackerTimer > 0.0f)
+		if (e.champAggroTimer > 0.0f)
 		{
-			e.lastAttackerTimer -= dt;
-			if (e.lastAttackerTimer <= 0.0f)
-				e.lastAttacker = InvalidId();
+			e.champAggroTimer -= dt;
+			if (e.champAggroTimer <= 0.0f)
+				e.champAggressor = InvalidId(); // aggro lapsed: minion returns to the wave
 		}
 	}
 }
@@ -392,8 +416,28 @@ struct PendingShot
 static void Damage(World& w, Entity& tgt, float dmg, EntityId src)
 {
 	tgt.hp -= dmg;
-	tgt.lastAttacker      = src;
-	tgt.lastAttackerTimer = w.cfg.attackerMemory;
+
+	// Champion aggro. A hit from an enemy champion draws (and refreshes) a minion's aggro
+	// onto it. A hit from an enemy minion instead STEALS that aggro back to the wave -
+	// but only once the champion has disengaged (its last hit is older than the grace
+	// window), so continuous attacking during a dive still holds aggro. Ordinary minion
+	// combat can't otherwise keep the champion-lock alive. (Minion-vs-minion target
+	// stickiness lives separately, in the AI.)
+	Entity* s = World_Get(w, src);
+	if (s && s->team != tgt.team)
+	{
+		if (s->kind == KIND_CHAMPION)
+		{
+			tgt.champAggressor  = src;
+			tgt.champAggroTimer = w.cfg.championAggroTime;
+		}
+		else if (tgt.kind == KIND_MINION && tgt.champAggroTimer > 0.0f &&
+		         (w.cfg.championAggroTime - tgt.champAggroTimer) >= w.cfg.championAggroHold)
+		{
+			tgt.champAggroTimer = 0.0f;       // champion has left; this minion attacker
+			tgt.champAggressor  = InvalidId(); // reclaims the target (AI re-acquires it)
+		}
+	}
 }
 
 // ---------------------------------------------------------------------------

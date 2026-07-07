@@ -64,6 +64,14 @@ static CP_Vector Steer_Avoid(World& w, const Entity& self, EntityId targetId,
 		if (SameId(o.id, targetId))
 			continue; // never dodge the unit we're trying to reach
 
+		// Champions are deliberately NOT steered around. A minion walks straight into a
+		// champion body and is stopped by the hard collision pass (the champion is heavy,
+		// so it barely yields). That is what makes body-blocking work: stand in your own
+		// wave's path to delay it, or in the enemy wave's path to stall it. The block is
+		// emergent - it falls out of collision, not a special rule.
+		if (o.kind == KIND_CHAMPION)
+			continue;
+
 		// A teammate leading in roughly the same direction is a column to follow, not
 		// an obstacle to pass - skip it so minions stay single-file instead of fanning
 		// out. Only stopped or cross-moving teammates get routed around.
@@ -142,16 +150,19 @@ static Entity* Minion_Acquire(World& w, Entity& m, EntityId& tgtId)
 	return t;
 }
 
-// A *new* enemy-champion attacker we have not answered yet. Only champions
-// trigger retaliation - enemy minion pokes (a caster outranging our melee) must
-// not pull the wave off its front line - and each attacker fires the transition
-// once, so continuous fire doesn't thrash the target. Null if no fresh threat.
-static Entity* Minion_NewThreat(World& w, Entity& m)
+// The enemy champion currently holding this minion's aggro, if any. A champion draws
+// aggro by hitting the minion (see Damage); the aggro lasts championAggroTime and is
+// refreshed only by further champion hits - so once the champion stops attacking, the
+// timer lapses and the minion returns to the wave. Only champions pull a minion off its
+// front line; enemy minion pokes never touch this. Null if no live champion threat.
+static Entity* Minion_ChampionThreat(World& w, Entity& m)
 {
-	Entity* atk = World_Get(w, m.lastAttacker);
-	if (atk && atk->team != m.team && atk->kind == KIND_CHAMPION &&
-	    m.lastAttackerTimer > 0.0f && !SameId(m.lastAttacker, m.reactedAttacker))
-		return atk;
+	if (m.champAggroTimer <= 0.0f)
+		return nullptr;
+	Entity* c = World_Get(w, m.champAggressor);
+	if (c && c->team != m.team &&
+	    VDist(m.pos, c->pos) <= w.cfg.detectRange + w.cfg.targetLeash)
+		return c;
 	return nullptr;
 }
 
@@ -169,12 +180,13 @@ void AI_DecideMinion(World& w, Entity& m)
 	const Config& cfg = w.cfg;
 
 	// --- 1. Transitions out of the current state ---------------------------
-	// A fresh enemy-champion attack pre-empts every state and forces retaliation.
-	if (Entity* threat = Minion_NewThreat(w, m))
+	// A live enemy-champion threat pre-empts every state and forces retaliation. The
+	// aggro lapses on its own timer (Damage/Phase_Sense), so a minion held here returns
+	// to the wave once the champion stops hitting it - no explicit "give up" needed.
+	if (Minion_ChampionThreat(w, m))
 	{
-		m.state           = STATE_THREATENED;
-		m.target          = m.lastAttacker;
-		m.reactedAttacker = m.lastAttacker; // answered once; won't re-trigger
+		m.state  = STATE_THREATENED;
+		m.target = m.champAggressor;
 	}
 	else switch (m.state)
 	{
@@ -186,8 +198,22 @@ void AI_DecideMinion(World& w, Entity& m)
 	}
 	case STATE_IN_COMBAT:
 	{
-		// Hold the target while valid; else re-acquire, or fall back to marching.
-		if (!Minion_Holds(w, m, World_Get(w, m.target)))
+		Entity* cur = World_Get(w, m.target);
+
+		// A champion target is NOT sticky. Minions prioritise the enemy wave, so a
+		// champion that merely walks into range is dropped the moment an enemy minion is
+		// available - re-acquiring every tick (minion > champion > tower) does exactly
+		// that, and also releases the champion once it leaves detect range (no leash).
+		// A champion that ATTACKS still pulls the minion via the THREATENED path above.
+		if (cur && cur->kind == KIND_CHAMPION)
+		{
+			EntityId id;
+			if (Minion_Acquire(w, m, id)) m.target = id;
+			else { m.state = STATE_MARCHING; m.target = InvalidId(); }
+		}
+		// Minion / tower targets stay sticky: hold until dead or out of leash, so the
+		// wave doesn't thrash between targets mid-scrum.
+		else if (!Minion_Holds(w, m, cur))
 		{
 			EntityId id;
 			if (Minion_Acquire(w, m, id)) m.target = id;
@@ -197,17 +223,11 @@ void AI_DecideMinion(World& w, Entity& m)
 	}
 	case STATE_THREATENED:
 	{
-		// Stay locked on the champion until it leaves leash or memory fades,
-		// then drop to combat (enemy still near) or marching (lane clear).
-		Entity* atk = World_Get(w, m.target);
-		bool hold = atk && atk->team != m.team && m.lastAttackerTimer > 0.0f &&
-		            VDist(m.pos, atk->pos) <= cfg.detectRange + cfg.targetLeash;
-		if (!hold)
-		{
-			EntityId id;
-			if (Minion_Acquire(w, m, id)) { m.state = STATE_IN_COMBAT; m.target = id; }
-			else { m.state = STATE_MARCHING; m.target = InvalidId(); }
-		}
+		// Reached here only when the champion aggro has just lapsed (the pre-empt above
+		// was not taken): drop to combat if an enemy is near, else back to marching.
+		EntityId id;
+		if (Minion_Acquire(w, m, id)) { m.state = STATE_IN_COMBAT; m.target = id; }
+		else { m.state = STATE_MARCHING; m.target = InvalidId(); }
 		break;
 	}
 	}
