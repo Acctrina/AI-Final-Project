@@ -39,6 +39,9 @@
     <ClCompile Include="src\Renderer.cpp">
       <Filter>Simulation</Filter>
     </ClCompile>
+    <ClCompile Include="src\Sandbox.cpp">
+      <Filter>Simulation</Filter>
+    </ClCompile>
     <ClCompile Include="..\Extern\imgui\imgui.cpp">
       <Filter>ImGui</Filter>
     </ClCompile>
@@ -120,6 +123,9 @@
       <Filter>Simulation</Filter>
     </ClInclude>
     <ClInclude Include="src\Renderer.h">
+      <Filter>Simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sandbox.h">
       <Filter>Simulation</Filter>
     </ClInclude>
   </ItemGroup>
