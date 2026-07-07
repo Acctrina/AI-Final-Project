@@ -12,6 +12,7 @@
 
 #include "src/Sim.h"
 #include "src/Renderer.h"
+#include "src/Sandbox.h"
 
 // Provided by imgui_impl_win32.cpp; forward-declared here as the backend examples do.
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -21,6 +22,8 @@ static World         g_world;
 static RenderOptions g_render = { true, false, false };
 static bool          g_paused = false;
 static float         g_accum  = 0.0f;
+
+static SandboxState  g_sandbox;
 
 // CProcessing owns the GLFW window and its message loop, and only exposes the HWND.
 // We subclass the window procedure so ImGui sees input first, then chain to GLFW's proc.
@@ -48,8 +51,8 @@ static void imgui_render_frame(void)
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 
-	// --- UI goes here; demo window for now to confirm the integration works ---
-	ImGui::ShowDemoWindow();
+	// Sandbox UI
+	Sandbox_DrawImGui(g_world, g_render, g_sandbox, g_accum, g_paused);
 
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -71,8 +74,8 @@ static void imgui_init(void)
 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
+	Sandbox_ApplyImGuiTheme();
 	ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-	ImGui::StyleColorsDark();
 
 	// Intercept messages ahead of GLFW; keep the original proc to chain to.
 	s_originalWndProc = reinterpret_cast<WNDPROC>(
@@ -127,13 +130,19 @@ void game_init(void)
 
 void game_update(void)
 {
+	// Input Gating so that clicks on ImGui Windows does not leak into the game.
+	ImGuiIO& io = ImGui::GetIO();
+	const bool allowMouseToGame = !io.WantCaptureMouse;
+	const bool allowKeyboardToGame = !io.WantCaptureKeyboard;
+
+
 	// Champion order for this frame: a right-click either targets the enemy under the
 	// cursor (attack-move) or the ground point (A* move). Consumed once, on the click.
 	SimInput in;
 	in.issued       = false;
 	in.worldPoint   = CP_Vector_Zero();
 	in.targetEntity = InvalidId();
-	if (CP_Input_MouseTriggered(MOUSE_BUTTON_RIGHT))
+	if (allowMouseToGame && CP_Input_MouseTriggered(MOUSE_BUTTON_RIGHT))
 	{
 		CP_Vector cursor = CP_Vector_Set(CP_Input_GetMouseX(), CP_Input_GetMouseY());
 		in.issued       = true;
@@ -145,7 +154,7 @@ void game_update(void)
 	if (CP_Input_KeyTriggered(KEY_SPACE)) g_paused = !g_paused;
 	if (CP_Input_KeyTriggered(KEY_1))     g_render.showAggroLines = !g_render.showAggroLines;
 	if (CP_Input_KeyTriggered(KEY_2))     g_render.showRanges = !g_render.showRanges;
-	bool step = CP_Input_KeyTriggered(KEY_PERIOD) || CP_Input_KeyTriggered(KEY_RIGHT);
+	bool step = allowKeyboardToGame && CP_Input_KeyTriggered(KEY_PERIOD) || CP_Input_KeyTriggered(KEY_RIGHT);
 
 	// Fixed-timestep advance: the sim only ever steps by cfg.fixedDt, so it stays
 	// deterministic and reproducible regardless of the real frame rate.
@@ -171,7 +180,7 @@ void game_update(void)
 	g_render.paused = g_paused;
 	Render_World(g_world, g_render);
 
-	if (CP_Input_KeyDown(KEY_Q))
+	if (allowKeyboardToGame && CP_Input_KeyDown(KEY_Q))
 		CP_Engine_Terminate();
 }
 
