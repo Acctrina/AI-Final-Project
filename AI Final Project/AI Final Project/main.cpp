@@ -126,6 +126,8 @@ void game_init(void)
 	CP_System_SetWindowSize(g_world.cfg.windowWidth, g_world.cfg.windowHeight);
 	CP_System_SetFrameRate(60.0f);
 
+	CP_Font_Load("Assets/ShareTech-Regular.ttf");
+
 	// Init ImGui after the final window size is set so we grab the current HWND.
 	imgui_init();
 }
