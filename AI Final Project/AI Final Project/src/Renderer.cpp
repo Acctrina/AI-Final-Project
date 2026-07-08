@@ -14,7 +14,7 @@ static CP_Color TeamFill(Team team)
 	return CP_Color_Create(160, 160, 160, 255);
 }
 
-// FSM state -> outline colour, so a glance reads what every minion is "thinking".
+// FSM state -> outline colour.
 static CP_Color StateStroke(FsmState s)
 {
 	switch (s)
@@ -79,10 +79,8 @@ void Render_World(World& w, const AnalysisState& analysis, const RenderOptions& 
 	CP_Settings_StrokeWeight(2.0f);
 	CP_Graphics_DrawLine(w.lane.blueBase.x, w.lane.blueBase.y, w.lane.redBase.x, w.lane.redBase.y);
 
-	// Influence heatmap: one tinted slice per lane column, blue where blue presence
-	// dominates and red where red does, opacity tracking the margin. This is the
-	// analysis layer's raw signal - the equilibrium marker below is just where it
-	// crosses zero.
+	// Influence heatmap: one tinted slice per column, coloured by whichever side
+	// dominates it, with opacity tracking the margin.
 	if (opt.showInfluence && analysis.cols > 0)
 	{
 		CP_Settings_NoStroke();
@@ -227,9 +225,9 @@ void Render_World(World& w, const AnalysisState& analysis, const RenderOptions& 
 	CP_Font_DrawText("Right-click: move / attack   [Space] pause  [.] step  [1] aggro  [2] ranges  [3] influence  [4] equilibrium  Q quit",
 	                 18.0f, (float)w.cfg.windowHeight - 22.0f);
 
-	// --- Analysis overlays: equilibrium marker + recognised-technique banner ----
-	// The equilibrium is where the influence field crosses zero (the wave's meeting
-	// point); the short tick shows which way it is drifting - i.e. who is pushing.
+	// --- Analysis overlays: equilibrium marker + technique banner ---------------
+	// The equilibrium is where the influence field crosses zero; the short tick shows
+	// which way it is drifting.
 	if (opt.showEquilibrium && analysis.equilibriumValid)
 	{
 		CP_Vector pe  = Lane_PointAt(w.lane, analysis.equilibriumT);
@@ -260,9 +258,7 @@ void Render_World(World& w, const AnalysisState& analysis, const RenderOptions& 
 		CP_Font_DrawText("EQUILIBRIUM", top.x, top.y - 12.0f);
 	}
 
-	// Technique banner: shown whenever a detector has fired recently, fading out over
-	// its lifetime. This is the thesis on screen - a simple rule set producing a named,
-	// skill-expressive play.
+	// Technique banner: shown while a detector's event is active, fading over its lifetime.
 	if (analysis.banner.ttl > 0.0f && analysis.banner.tech != TECH_NONE)
 	{
 		float a01 = analysis.banner.ttl / w.cfg.bannerTtl;

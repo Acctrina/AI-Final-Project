@@ -1,14 +1,11 @@
 #pragma once
 
-// The analysis / emergence layer: a read-only observer over the World. It never
-// mutates the sim, so it cannot change the outcome of a run - it only measures it.
+// The analysis / emergence layer: a read-only observer over the World. It never mutates
+// the sim, so it cannot change the outcome of a run.
 //
 // Each update it (1) samples unit presence into columns along the lane to build an
-// influence field, (2) locates the wave-equilibrium point where the two sides
-// balance, and (3) runs a set of detectors that RECOGNISE emergent player
-// techniques from that state. The techniques are not features we coded into the
-// game; they fall out of the minion rules, and this layer merely names them when
-// it sees their signature - which is the whole thesis made visible.
+// influence field, (2) locates the wave-equilibrium point where the two sides balance,
+// and (3) runs detectors that name emergent techniques from that state.
 
 #include <vector>
 #include "Sim.h"

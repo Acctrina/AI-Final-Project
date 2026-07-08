@@ -8,9 +8,8 @@
 #include "Config.h"
 #include "Nav.h"
 
-// One flat struct for every kind of thing in the lane. Fields not relevant to a
-// given kind simply go unused; this keeps entities trivial to inspect and, later,
-// to snapshot for scenarios. Behaviour is decided by free functions, not methods.
+// One flat struct for every kind of thing in the lane. Fields not relevant to a given
+// kind simply go unused. Behaviour is decided by free functions, not methods.
 struct Entity
 {
 	EntityId   id;
@@ -49,9 +48,8 @@ struct Entity
 	float      projSpeed;
 };
 
-// A lane is the geometry everything lives on: a straight segment between the two
-// bases plus a band width. All along-lane / cross-lane math goes through these
-// helpers, so the segment could become a curved path later without touching callers.
+// A lane is the geometry everything lives on: a straight segment between the two bases
+// plus a band width. All along-lane / cross-lane math goes through these helpers.
 struct Lane
 {
 	CP_Vector blueBase;

@@ -4,9 +4,7 @@
 #include <vector>
 
 // ---------------------------------------------------------------------------
-// Read-only observer. Nothing in this file writes to the World; it only samples
-// it. Keeping the measurement out of the sim means analysis can never perturb a
-// run's outcome, and the influence field / detectors can be toggled freely.
+// Read-only observer: samples the World, never writes to it.
 // ---------------------------------------------------------------------------
 
 const char* Technique_Name(Technique t)
@@ -22,8 +20,7 @@ const char* Technique_Name(Technique t)
 	}
 }
 
-// How loud each technique is: a more deliberate/specific play wins the banner if
-// several fire on the same frame.
+// Banner priority when several techniques fire on the same frame.
 static int Technique_Priority(Technique t)
 {
 	switch (t)
@@ -117,8 +114,8 @@ static void BuildInfluence(const World& w, AnalysisState& a)
 // 2. Equilibrium point: the lane boundary that best sorts blue-controlled space
 //    to the left and red-controlled space to the right. We pick the split that
 //    minimises "misplaced" mass (red left of it + blue right of it). As blue's
-//    presence extends toward the red base the boundary slides right, so the
-//    equilibrium's drift is exactly the push/pull the player feels.
+//    presence extends toward the red base the boundary slides right, so its drift
+//    tracks who is pushing.
 // ---------------------------------------------------------------------------
 static void FindEquilibrium(const World& w, AnalysisState& a)
 {
@@ -130,17 +127,10 @@ static void FindEquilibrium(const World& w, AnalysisState& a)
 	if (!a.equilibriumValid)
 		return;
 
-	// Boundary b lies just after column b (b = -1 => everything on the red side).
-	// score(b) = red mass at/left of b + blue mass right of b. We minimise it.
-	// The boundary's world position after column b is (b+1)/cols.
-	//
-	// Two passes: first find the best score, then take the MIDPOINT of the plateau of
-	// boundaries that tie for it. This matters when the lane centre is empty (only the
-	// towers exist at the start): every split through the empty middle has zero
-	// misplaced mass, so they all tie, and picking the first would park the marker at
-	// the left edge of that gap - on the blue side - instead of dead centre. Once the
-	// waves actually meet, the tie collapses to the real crossing, so combat is
-	// unaffected.
+	// Boundary b lies just after column b (b = -1 => everything on the red side), at world
+	// position (b+1)/cols. score(b) = red mass at/left of b + blue mass right of b; we
+	// minimise it. When the lane centre is empty every split there ties, so we take the
+	// midpoint of the tied range rather than the first (which would sit at the gap's edge).
 	// Pass 1: find the best (minimum) score, boundary b = -1 (all red side) included.
 	float prefixRed = 0.0f, prefixBlue = 0.0f;
 	float bestScore = totalBlue; // b = -1: all blue counts as "on the red side"

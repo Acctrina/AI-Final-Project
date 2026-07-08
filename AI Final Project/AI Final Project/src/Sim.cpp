@@ -67,14 +67,13 @@ Config Config_Default()
 
 	c.projSpeed = 470.0f; c.projRadius = 9.0f;
 
-	// Analysis / emergence layer. Velocities are in lane-fractions per second, so
-	// they are independent of the lane's pixel length. These thresholds are a first
-	// pass and are the main thing the tuning stage will adjust.
+	// Analysis / emergence layer. Velocities are in lane-fractions per second, so they are
+	// independent of the lane's pixel length.
 	c.influenceCols     = 64;
 	c.influenceSpread   = 0.05f;
 	c.influenceMinionW  = 1.0f;
-	c.influenceChampW   = 0.0f;  // champion excluded: equilibrium measures where the WAVES
-	                             // meet, not champion presence (raise for a map-pressure view)
+	c.influenceChampW   = 0.0f;  // champions excluded so the equilibrium tracks where the
+	                             // waves meet (raise for a map-pressure view)
 	c.influenceTowerW   = 4.0f;
 
 	c.equilVelSmoothing = 0.08f;  // heavy smoothing: the front's drift, not per-tick jitter
@@ -445,12 +444,8 @@ static void Damage(World& w, Entity& tgt, float dmg, EntityId src)
 {
 	tgt.hp -= dmg;
 
-	// Champion aggro. A hit from an enemy champion draws (and refreshes) a minion's aggro
-	// onto it. A hit from an enemy minion instead STEALS that aggro back to the wave -
-	// but only once the champion has disengaged (its last hit is older than the grace
-	// window), so continuous attacking during a dive still holds aggro. Ordinary minion
-	// combat can't otherwise keep the champion-lock alive. (Minion-vs-minion target
-	// stickiness lives separately, in the AI.)
+	// Champion aggro: a champion hit draws a minion's aggro; an enemy-minion hit steals it
+	// back to the wave, but only after the champion's grace window (so a dive still holds).
 	Entity* s = World_Get(w, src);
 	if (s && s->team != tgt.team)
 	{
@@ -462,9 +457,8 @@ static void Damage(World& w, Entity& tgt, float dmg, EntityId src)
 		}
 		else if (s->kind == KIND_CHAMPION && tgt.kind == KIND_CHAMPION)
 		{
-			// Defend-your-champion (minion rule #1): striking an enemy champion pulls its
-			// nearby allied minions onto the attacker. Same aggro channel as a direct hit,
-			// so they release on the championAggroTime decay once you disengage.
+			// Defend-your-champion: striking an enemy champion pulls its nearby allied
+			// minions onto the attacker, on the same aggro channel as a direct hit.
 			for (size_t i = 0; i < w.ents.size(); ++i)
 			{
 				Entity& m = w.ents[i];
@@ -477,9 +471,8 @@ static void Damage(World& w, Entity& tgt, float dmg, EntityId src)
 				}
 			}
 
-			// Tower-aggro manipulation: any allied tower whose range the ATTACKER is
-			// standing in locks onto it (honoured in AI_DecideTower). This is the dive
-			// tax - poke an enemy champion under tower and the tower turns on you.
+			// Tower aggro: any allied tower whose range the attacker is standing in locks
+			// onto it (honoured in AI_DecideTower).
 			for (size_t i = 0; i < w.ents.size(); ++i)
 			{
 				Entity& tw = w.ents[i];

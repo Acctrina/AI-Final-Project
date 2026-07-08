@@ -31,7 +31,7 @@ enum MinionType
 	MINION_CANNON
 };
 
-// Intentionally three states; every behaviour below has to fall out of these.
+// The minion FSM's three states.
 enum FsmState
 {
 	STATE_MARCHING,
@@ -39,14 +39,12 @@ enum FsmState
 	STATE_THREATENED
 };
 
-// How the enemy (red) champion is driven. The player champion is always mouse-driven;
-// this only selects the brain for the AI-controlled side. Selectable at runtime so the
-// same build can show a lane bully, a passive target dummy, or a zone defender.
+// Brain for the AI-controlled enemy champion (the player champion is mouse-driven).
 enum EnemyChampMode
 {
 	ENEMY_CHAMP_LANE_PUSHER, // marches with its wave, engages, retreats when low
-	ENEMY_CHAMP_DUMMY,       // stands near its tower, only swings at whatever is in range
-	ENEMY_CHAMP_HOLDER       // defends a bubble around its spawn, returns when the zone clears
+	ENEMY_CHAMP_DUMMY,       // holds near its tower, only swings at what is in range
+	ENEMY_CHAMP_HOLDER       // defends a bubble around its spawn, returns when it clears
 };
 
 // --- Entity handles ------------------------------------------------------------
@@ -96,8 +94,8 @@ inline CP_Vector VLimit(CP_Vector a, float maxLen)
 }
 
 // --- Deterministic RNG ---------------------------------------------------------
-// Our own seedable xorshift, kept per-World, so scenarios replay identically. We
-// deliberately do NOT use CProcessing's global RNG (shared mutable state).
+// Our own seedable xorshift, kept per-World, so scenarios replay identically - not
+// CProcessing's global RNG, which is shared mutable state.
 
 struct Rng
 {
@@ -174,36 +172,29 @@ struct Config
 	// Extra range past detectRange before a minion drops a target it already committed
 	// to (hysteresis, so it holds a target instead of re-picking "closest" every tick).
 	float targetLeash;
-	// How long a minion stays aggro'd on an enemy champion after that champion's last
-	// hit. Only champion hits refresh it, so the minion returns to the enemy wave this
-	// many seconds after you stop attacking it (feeds the "threatened" rule).
+	// Seconds a minion stays aggro'd on an enemy champion after its last hit; only champion
+	// hits refresh it, so the minion returns to the wave once you stop attacking.
 	float championAggroTime;
-	// Grace window after a champion hit during which its aggro is protected. An enemy
-	// minion hitting the same minion can only steal aggro back to the wave once this long
-	// has passed since the champion's last hit - so continuous attacking (a dive) holds
-	// aggro, but the moment you disengage a minion attacker reclaims the target. Keep it
-	// >= the champion's attack cooldown.
+	// Grace window after a champion hit before an enemy minion can steal the aggro back to
+	// the wave. Keep it >= the champion's attack cooldown so a dive holds aggro.
 	float championAggroHold;
 
 	// Tower
 	float towerHp, towerDmg, towerRange, towerCooldown, towerRadius;
-	// Tower-aggro manipulation: attacking an enemy champion inside its tower's range
-	// makes that tower drop the minion it was hitting and lock onto you for this long
-	// (refreshed by each hit). Disengage or leave range and it reverts to minions.
+	// Seconds a tower stays locked on a champion that attacked an allied champion in range
+	// (refreshed per hit); it reverts to minions once the champion leaves or the timer ends.
 	float towerChampAggroTime;
 
 	// Champion (player)
 	float champHp, champDmg, champRange, champCooldown, champSpeed, champRadius;
 
-	// Enemy (red) champion. Shares the champion stat block above; these only govern
-	// where it lives and how its AI decides.
-	int   enemyChampMode;          // one of EnemyChampMode (integer knob, tweakable live)
-	float redChampSpawnT;          // spawn/anchor position along the lane (near red base)
+	// Enemy (red) champion: shares the champion stats above; these govern only where it
+	// spawns and how it decides.
+	int   enemyChampMode;          // one of EnemyChampMode
+	float redChampSpawnT;          // spawn/anchor position along the lane, near red base
 	float enemyChampRetreatHpFrac; // lane-pusher falls back to its tower below this hp fraction
-	// "Defend your champion" aggro: when a champion damages an enemy champion, that
-	// champion's allied minions within this radius switch their aggro onto the attacker
-	// (League minion rule #1). They release on the normal championAggroTime decay, so
-	// they drift back to the wave once you stop hitting their champion.
+	// When a champion damages an enemy champion, that champion's allied minions within this
+	// radius switch aggro onto the attacker (released on championAggroTime).
 	float defendRadius;
 
 	// Projectiles (committed, homing shots for ranged attackers)

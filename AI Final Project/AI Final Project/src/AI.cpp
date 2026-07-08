@@ -39,10 +39,8 @@ static CP_Vector Steer_Separation(World& w, const Entity& self, float range, flo
 }
 
 // Route around whatever is directly ahead instead of shoving through it: any unit
-// (friend or foe) except the one we're actually trying to reach. Also reports a
-// brake factor (0..1) so the caller can slow down when a blocker is close and
-// head-on, letting the minion slip around rather than ram. This is what makes waves
-// flow past each other like a real MOBA lane instead of a jittering pile.
+// (friend or foe) except the one we're actually trying to reach. Also reports a brake
+// factor (0..1) so the caller can slow down when a blocker is close and head-on.
 static CP_Vector Steer_Avoid(World& w, const Entity& self, EntityId targetId,
                              CP_Vector dir, float lookahead, float strength, float& brake)
 {
@@ -64,11 +62,8 @@ static CP_Vector Steer_Avoid(World& w, const Entity& self, EntityId targetId,
 		if (SameId(o.id, targetId))
 			continue; // never dodge the unit we're trying to reach
 
-		// Champions are deliberately NOT steered around. A minion walks straight into a
-		// champion body and is stopped by the hard collision pass (the champion is heavy,
-		// so it barely yields). That is what makes body-blocking work: stand in your own
-		// wave's path to delay it, or in the enemy wave's path to stall it. The block is
-		// emergent - it falls out of collision, not a special rule.
+		// Minions don't steer around champions - they walk into the champion body and
+		// are stopped by the hard collision pass, which is what lets a champion body-block.
 		if (o.kind == KIND_CHAMPION)
 			continue;
 
@@ -118,13 +113,9 @@ static CP_Vector Steer_Avoid(World& w, const Entity& self, EntityId targetId,
 // ---------------------------------------------------------------------------
 // Minion FSM.
 //
-// The three states are a genuine controller, not a label: `m.state` is
-// authoritative and persists between ticks. Each tick we first run the
-// transitions leaving the current state (which may hand the minion a new
-// target), then execute the behaviour that the resulting state prescribes.
-// Every distance check below belongs to exactly one transition, so it is the
-// STATE - not a fresh "closest enemy" scan every frame - that decides what a
-// minion does.
+// m.state is authoritative and persists between ticks. Each tick runs the transitions
+// out of the current state (which may assign a new target), then executes the behaviour
+// for the resulting state.
 //
 //   MARCHING   no target; walk down the lane toward the enemy base.
 //   IN_COMBAT  committed to an enemy (minion > champion > tower); close & fight.
@@ -150,11 +141,9 @@ static Entity* Minion_Acquire(World& w, Entity& m, EntityId& tgtId)
 	return t;
 }
 
-// The enemy champion currently holding this minion's aggro, if any. A champion draws
-// aggro by hitting the minion (see Damage); the aggro lasts championAggroTime and is
-// refreshed only by further champion hits - so once the champion stops attacking, the
-// timer lapses and the minion returns to the wave. Only champions pull a minion off its
-// front line; enemy minion pokes never touch this. Null if no live champion threat.
+// The enemy champion currently holding this minion's aggro, or null. Aggro is set by a
+// champion hit (see Damage) and decays over championAggroTime, so the minion returns to
+// the wave once the champion stops attacking.
 static Entity* Minion_ChampionThreat(World& w, Entity& m)
 {
 	if (m.champAggroTimer <= 0.0f)
@@ -180,9 +169,8 @@ void AI_DecideMinion(World& w, Entity& m)
 	const Config& cfg = w.cfg;
 
 	// --- 1. Transitions out of the current state ---------------------------
-	// A live enemy-champion threat pre-empts every state and forces retaliation. The
-	// aggro lapses on its own timer (Damage/Phase_Sense), so a minion held here returns
-	// to the wave once the champion stops hitting it - no explicit "give up" needed.
+	// A live champion threat pre-empts every state; it lapses on its own timer, so the
+	// minion returns to the wave once the champion stops hitting it.
 	if (Minion_ChampionThreat(w, m))
 	{
 		m.state  = STATE_THREATENED;
@@ -200,11 +188,9 @@ void AI_DecideMinion(World& w, Entity& m)
 	{
 		Entity* cur = World_Get(w, m.target);
 
-		// A champion target is NOT sticky. Minions prioritise the enemy wave, so a
-		// champion that merely walks into range is dropped the moment an enemy minion is
-		// available - re-acquiring every tick (minion > champion > tower) does exactly
-		// that, and also releases the champion once it leaves detect range (no leash).
-		// A champion that ATTACKS still pulls the minion via the THREATENED path above.
+		// A champion target isn't sticky: re-acquire every tick so an available enemy
+		// minion is preferred, and the champion is dropped once it leaves detect range.
+		// A champion that attacks still pulls the minion via the THREATENED path above.
 		if (cur && cur->kind == KIND_CHAMPION)
 		{
 			EntityId id;
@@ -278,15 +264,14 @@ void AI_DecideMinion(World& w, Entity& m)
 
 // ---------------------------------------------------------------------------
 // Tower: lock a target and hold it until dead or out of range; minions first,
-// champion only when no minion is available (the seed of aggro manipulation).
+// champion only when no minion is available.
 // ---------------------------------------------------------------------------
 void AI_DecideTower(World& w, Entity& t)
 {
 	t.vel = CP_Vector_Zero();
 
-	// Tower-aggro manipulation: while the trigger is live (a champion attacked an allied
-	// champion in range - see Damage), stay locked on that champion, ignoring minions,
-	// until it dies or leaves range. Then drop the lock and resume normal targeting.
+	// While the trigger is live (a champion attacked an allied champion in range), stay
+	// locked on that champion until it dies or leaves range, then resume normal targeting.
 	if (t.championTriggerTimer > 0.0f)
 	{
 		Entity* c = World_Get(w, t.target);
@@ -370,11 +355,9 @@ void AI_DecideChampion(World& w, Entity& c, const SimInput& input)
 }
 
 // ---------------------------------------------------------------------------
-// Enemy champion: autonomous. Same fixed aggro priority as a minion (enemy
-// minion > champion > tower), but wrapped in one of three postures chosen by
-// cfg.enemyChampMode - a lane bully, a stationary dummy, or a zone defender.
-// It never gets the player's mouse orders or A* pathing; it just arrives at
-// its chosen point and lets Phase_Act fire when a target is in range.
+// Enemy champion: autonomous. Same aggro priority as a minion (minion > champion >
+// tower), wrapped in one of three postures (cfg.enemyChampMode). No mouse orders or
+// pathing - it arrives at its chosen point and Phase_Act fires when a target is in range.
 // ---------------------------------------------------------------------------
 
 // Nearest enemy within a range, minion > champion > tower (mirrors Minion_Acquire).
