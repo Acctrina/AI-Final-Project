@@ -15,3 +15,6 @@ void AI_DecideTower(World& w, Entity& t);
 
 // Champion: driven by player input rather than autonomy.
 void AI_DecideChampion(World& w, Entity& c, const SimInput& input);
+
+// Enemy champion: autonomous, one of three brains selected by cfg.enemyChampMode.
+void AI_DecideEnemyChampion(World& w, Entity& c);

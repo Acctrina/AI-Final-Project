@@ -25,7 +25,8 @@ Config Config_Default()
 	c.blueTowerT  = 0.20f;
 	c.redTowerT   = 0.80f;
 	c.towerOffset = c.laneWidth * 0.22f; // push towers to one side of the lane axis
-	c.champSpawnT = 0.15f;
+	c.champSpawnT = 0.35f;
+	c.champSpawnOffset = c.laneWidth * 0.28f; // flank the lane so spawns clear the wave
 
 	c.waveInterval      = 15.0f;
 	c.spawnSpacing      = 0.65f; // time between spawns; also sets the column spacing
@@ -53,8 +54,16 @@ Config Config_Default()
 	c.cannonHp = 300.0f; c.cannonDmg = 40.0f; c.cannonRange = 200.0f; c.cannonCooldown = 2.5f; c.cannonSpeed = 72.0f; c.cannonRadius = 24.0f;
 
 	c.towerHp = 1500.0f; c.towerDmg = 90.0f; c.towerRange = 270.0f; c.towerCooldown = 1.1f; c.towerRadius = 40.0f;
+	c.towerChampAggroTime = 2.0f; // tower stays on a diving champion this long after each hit
 
 	c.champHp = 600.0f; c.champDmg = 55.0f; c.champRange = 200.0f; c.champCooldown = 0.6f; c.champSpeed = 130.0f; c.champRadius = 26.0f;
+
+	// Enemy champion. Defaults to a stationary dummy - a still target to attack while
+	// showing the defend/tower-aggro rules, without roaming and skewing the demos.
+	c.enemyChampMode          = ENEMY_CHAMP_DUMMY;
+	c.redChampSpawnT          = 0.65f; // mirror of champSpawnT on the red side
+	c.enemyChampRetreatHpFrac = 0.30f;
+	c.defendRadius            = 220.0f;
 
 	c.projSpeed = 470.0f; c.projRadius = 9.0f;
 
@@ -271,6 +280,20 @@ static Entity MakeChampion(const Config& c, Team team, CP_Vector pos)
 	return e;
 }
 
+// Champion spawn/respawn point: on the lane at the team's spawn parameter, but shifted
+// perpendicular so a champion never stands on the axis blocking its own wave. Blue flanks
+// one side, red the other (matching the tower layout).
+static CP_Vector ChampSpawnPos(const World& w, Team team)
+{
+	float     t    = (team == TEAM_BLUE) ? w.cfg.champSpawnT : w.cfg.redChampSpawnT;
+	CP_Vector base = Lane_PointAt(w.lane, t);
+	CP_Vector dir  = Lane_Dir(w.lane);
+	CP_Vector perp = V(-dir.y, dir.x);
+	if (perp.y < 0.0f) perp = VScale(perp, -1.0f); // point "down" (+y), as in World_Init
+	float off = (team == TEAM_BLUE) ? -w.cfg.champSpawnOffset : w.cfg.champSpawnOffset;
+	return VAdd(base, VScale(perp, off));
+}
+
 // ---------------------------------------------------------------------------
 // World lifecycle.
 // ---------------------------------------------------------------------------
@@ -297,7 +320,8 @@ void World_Init(World& w, uint32_t seed)
 	CP_Vector redOff  = VScale(perp,  w.cfg.towerOffset); // down
 	w.blueTower = World_Spawn(w, MakeTower(w.cfg, TEAM_BLUE, VAdd(Lane_PointAt(w.lane, w.cfg.blueTowerT), blueOff)));
 	w.redTower  = World_Spawn(w, MakeTower(w.cfg, TEAM_RED,  VAdd(Lane_PointAt(w.lane, w.cfg.redTowerT), redOff)));
-	w.champion  = World_Spawn(w, MakeChampion(w.cfg, TEAM_BLUE, Lane_PointAt(w.lane, w.cfg.champSpawnT)));
+	w.champion  = World_Spawn(w, MakeChampion(w.cfg, TEAM_BLUE, ChampSpawnPos(w, TEAM_BLUE)));
+	w.enemyChampion = World_Spawn(w, MakeChampion(w.cfg, TEAM_RED, ChampSpawnPos(w, TEAM_RED)));
 
 	for (int t = 0; t < 2; ++t)
 	{
@@ -395,7 +419,11 @@ static void Phase_Decide(World& w, const SimInput& input)
 		{
 		case KIND_MINION:   AI_DecideMinion(w, e); break;
 		case KIND_TOWER:    AI_DecideTower(w, e); break;
-		case KIND_CHAMPION: AI_DecideChampion(w, e, input); break;
+		case KIND_CHAMPION:
+			// The one mouse-driven player champion versus the autonomous enemy champion.
+			if (SameId(e.id, w.champion)) AI_DecideChampion(w, e, input);
+			else                          AI_DecideEnemyChampion(w, e);
+			break;
 		default: break; // projectiles are handled in resolve
 		}
 	}
@@ -426,10 +454,43 @@ static void Damage(World& w, Entity& tgt, float dmg, EntityId src)
 	Entity* s = World_Get(w, src);
 	if (s && s->team != tgt.team)
 	{
-		if (s->kind == KIND_CHAMPION)
+		if (s->kind == KIND_CHAMPION && tgt.kind == KIND_MINION)
 		{
+			// Direct hit: this minion retaliates against the champion that struck it.
 			tgt.champAggressor  = src;
 			tgt.champAggroTimer = w.cfg.championAggroTime;
+		}
+		else if (s->kind == KIND_CHAMPION && tgt.kind == KIND_CHAMPION)
+		{
+			// Defend-your-champion (minion rule #1): striking an enemy champion pulls its
+			// nearby allied minions onto the attacker. Same aggro channel as a direct hit,
+			// so they release on the championAggroTime decay once you disengage.
+			for (size_t i = 0; i < w.ents.size(); ++i)
+			{
+				Entity& m = w.ents[i];
+				if (!m.alive || m.kind != KIND_MINION || m.team != tgt.team)
+					continue;
+				if (VDist(m.pos, tgt.pos) <= w.cfg.defendRadius)
+				{
+					m.champAggressor  = src;
+					m.champAggroTimer = w.cfg.championAggroTime;
+				}
+			}
+
+			// Tower-aggro manipulation: any allied tower whose range the ATTACKER is
+			// standing in locks onto it (honoured in AI_DecideTower). This is the dive
+			// tax - poke an enemy champion under tower and the tower turns on you.
+			for (size_t i = 0; i < w.ents.size(); ++i)
+			{
+				Entity& tw = w.ents[i];
+				if (!tw.alive || tw.kind != KIND_TOWER || tw.team != tgt.team)
+					continue;
+				if (VDist(tw.pos, s->pos) <= tw.attackRange + s->radius)
+				{
+					tw.championTriggerTimer = w.cfg.towerChampAggroTime;
+					tw.target               = src;
+				}
+			}
 		}
 		else if (tgt.kind == KIND_MINION && tgt.champAggroTimer > 0.0f &&
 		         (w.cfg.championAggroTime - tgt.champAggroTimer) >= w.cfg.championAggroHold)
@@ -542,8 +603,9 @@ static void Phase_Resolve(World& w, float dt)
 
 		if (e.kind == KIND_CHAMPION)
 		{
+			// Respawn on your own side, off the axis (player at the blue anchor, enemy at red).
 			e.hp = e.maxHp;
-			e.pos = Lane_PointAt(w.lane, w.cfg.champSpawnT);
+			e.pos = ChampSpawnPos(w, e.team);
 			e.target = InvalidId();
 			e.cooldownTimer = 1.0f;
 			continue;

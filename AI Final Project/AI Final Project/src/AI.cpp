@@ -284,6 +284,18 @@ void AI_DecideTower(World& w, Entity& t)
 {
 	t.vel = CP_Vector_Zero();
 
+	// Tower-aggro manipulation: while the trigger is live (a champion attacked an allied
+	// champion in range - see Damage), stay locked on that champion, ignoring minions,
+	// until it dies or leaves range. Then drop the lock and resume normal targeting.
+	if (t.championTriggerTimer > 0.0f)
+	{
+		Entity* c = World_Get(w, t.target);
+		if (c && c->kind == KIND_CHAMPION && c->team != t.team &&
+		    VDist(t.pos, c->pos) <= t.attackRange + c->radius)
+			return; // hold the diving champion
+		t.championTriggerTimer = 0.0f; // champion gone or out of range: release
+	}
+
 	Entity* cur = World_Get(w, t.target);
 	bool keep = cur && cur->team != t.team &&
 	            VDist(t.pos, cur->pos) <= t.attackRange + cur->radius;
@@ -355,4 +367,102 @@ void AI_DecideChampion(World& w, Entity& c, const SimInput& input)
 
 	c.vel   = VLimit(desired, c.moveSpeed);
 	c.state = STATE_MARCHING;
+}
+
+// ---------------------------------------------------------------------------
+// Enemy champion: autonomous. Same fixed aggro priority as a minion (enemy
+// minion > champion > tower), but wrapped in one of three postures chosen by
+// cfg.enemyChampMode - a lane bully, a stationary dummy, or a zone defender.
+// It never gets the player's mouse orders or A* pathing; it just arrives at
+// its chosen point and lets Phase_Act fire when a target is in range.
+// ---------------------------------------------------------------------------
+
+// Nearest enemy within a range, minion > champion > tower (mirrors Minion_Acquire).
+static Entity* Champ_Acquire(World& w, const Entity& c, float range, EntityId& tgtId)
+{
+	Entity* t = World_NearestEnemy(w, c, KIND_MINION, range, &tgtId);
+	if (!t) t = World_NearestEnemy(w, c, KIND_CHAMPION, range, &tgtId);
+	if (!t) t = World_NearestEnemy(w, c, KIND_TOWER,   range, &tgtId);
+	return t;
+}
+
+void AI_DecideEnemyChampion(World& w, Entity& c)
+{
+	const Config& cfg = w.cfg;
+
+	c.vel    = CP_Vector_Zero();
+	c.target = InvalidId();
+	c.state  = STATE_MARCHING;
+
+	// Anchor (spawn/hold point) and home tower are on the champion's own side; the
+	// lane goal is the enemy base it pushes toward.
+	float     anchorT  = (c.team == TEAM_BLUE) ? cfg.champSpawnT : cfg.redChampSpawnT;
+	CP_Vector anchor   = Lane_PointAt(w.lane, anchorT);
+	CP_Vector laneGoal = World_EnemyBasePoint(w, c.team);
+	Entity*   home     = World_Get(w, (c.team == TEAM_BLUE) ? w.blueTower : w.redTower);
+	CP_Vector fallback = home ? home->pos : anchor;
+
+	EntityId  tid;
+	Entity*   tgt = Champ_Acquire(w, c, cfg.detectRange, tid);
+	CP_Vector desired = CP_Vector_Zero();
+
+	switch (cfg.enemyChampMode)
+	{
+	case ENEMY_CHAMP_DUMMY:
+	{
+		// Never moves. Swings only at whatever has already wandered into attack range.
+		if (tgt && VDist(c.pos, tgt->pos) <= c.attackRange + tgt->radius)
+		{
+			c.target = tid;
+			c.state  = STATE_IN_COMBAT;
+		}
+		break;
+	}
+
+	case ENEMY_CHAMP_HOLDER:
+	{
+		// Defends a bubble around the anchor: engages enemies inside it (chasing only
+		// within the zone), and walks home the moment the zone is clear.
+		if (tgt && VDist(anchor, tgt->pos) <= cfg.detectRange)
+		{
+			float stop = c.attackRange + tgt->radius;
+			desired = Steer_Arrive(c.pos, tgt->pos, c.moveSpeed, stop, cfg.arriveRadius);
+			if (VDist(c.pos, tgt->pos) <= stop)
+				c.target = tid;
+			c.state = STATE_IN_COMBAT;
+		}
+		else
+		{
+			desired = Steer_Arrive(c.pos, anchor, c.moveSpeed, 2.0f, cfg.arriveRadius);
+		}
+		break;
+	}
+
+	case ENEMY_CHAMP_LANE_PUSHER:
+	default:
+	{
+		if (c.hp <= c.maxHp * cfg.enemyChampRetreatHpFrac)
+		{
+			// Low: fall back toward the home tower rather than feed.
+			desired = Steer_Arrive(c.pos, fallback, c.moveSpeed, 2.0f, cfg.arriveRadius);
+			c.state = STATE_THREATENED;
+		}
+		else if (tgt)
+		{
+			float stop = c.attackRange + tgt->radius;
+			desired = Steer_Arrive(c.pos, tgt->pos, c.moveSpeed, stop, cfg.arriveRadius);
+			if (VDist(c.pos, tgt->pos) <= stop)
+				c.target = tid;
+			c.state = STATE_IN_COMBAT;
+		}
+		else
+		{
+			// Lane clear: march with the wave toward the enemy base.
+			desired = Steer_Arrive(c.pos, laneGoal, c.moveSpeed, 2.0f, cfg.arriveRadius);
+		}
+		break;
+	}
+	}
+
+	c.vel = VLimit(desired, c.moveSpeed);
 }

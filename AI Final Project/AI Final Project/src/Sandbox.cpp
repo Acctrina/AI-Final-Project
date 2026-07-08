@@ -615,6 +615,16 @@ void Sandbox_DrawImGui(World& w, RenderOptions& render, SandboxState& sandbox, f
             Sandbox_SliderFloat("Separation strength", "##SeparationStrength", &w.cfg.separationStrength, 0.0f, 120.0f, "%.1f");
             Sandbox_SliderFloat("Avoid lookahead", "##AvoidLookahead", &w.cfg.avoidLookahead, 10.0f, 200.0f, "%.1f");
             Sandbox_SliderFloat("Avoid strength", "##AvoidStrength", &w.cfg.avoidStrength, 0.0f, 160.0f, "%.1f");
+
+            // Enemy (red) champion brain + the "defend your champion" aggro rule.
+            Sandbox_PropertyLabel("Enemy champ AI");
+            {
+                const char* modes[] = { "Lane pusher", "Dummy", "Holder" };
+                ImGui::Combo("##EnemyChampMode", &w.cfg.enemyChampMode, modes, IM_ARRAYSIZE(modes));
+            }
+            Sandbox_SliderFloat("Defend radius", "##DefendRadius", &w.cfg.defendRadius, 0.0f, 400.0f, "%.1f");
+            Sandbox_SliderFloat("Enemy retreat HP", "##EnemyRetreatHp", &w.cfg.enemyChampRetreatHpFrac, 0.0f, 1.0f, "%.2f");
+            Sandbox_SliderFloat("Tower aggro time", "##TowerChampAggro", &w.cfg.towerChampAggroTime, 0.0f, 6.0f, "%.2f s");
             Sandbox_EndPropertyTable();
         }
 

@@ -41,7 +41,8 @@ struct Entity
 	                            // hit, so ordinary minion combat can't keep the lock alive
 
 	// Tower
-	float      championTriggerTimer; // reserved: enables tower-aggro manipulation
+	float      championTriggerTimer; // >0 while locked onto a champion that attacked an
+	                                 // allied champion in range (tower-aggro manipulation)
 
 	// Projectile
 	EntityId   source;
@@ -129,7 +130,8 @@ struct World
 
 	EntityId  blueTower;
 	EntityId  redTower;
-	EntityId  champion; // blue-side player
+	EntityId  champion;      // blue-side player
+	EntityId  enemyChampion; // red-side, AI-driven (see EnemyChampMode)
 
 	// Champion mouse-command state (persists between orders).
 	EntityId               champOrder;    // enemy to attack-move to, else invalid
