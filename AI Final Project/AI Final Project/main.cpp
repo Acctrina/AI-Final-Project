@@ -1,6 +1,7 @@
 #define NOMINMAX
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
+#include <fstream>
 
 #include "cprocessing.h"
 
@@ -68,6 +69,19 @@ static BOOL WINAPI HookedSwapBuffers(HDC hdc)
 	return s_originalSwapBuffers(hdc);
 }
 
+static void imgui_ini_check(void) {
+	std::ifstream ifs("imgui.ini");
+
+	// If the file failed to open, it means there is no imgui.ini
+	if (!ifs) {
+		// Create the imgui ini
+		std::ofstream ofs("imgui.ini", std::ios_base::binary | std::ios_base::out);
+		// and then copy from assets
+		ifs.open("Assets\\imgui.ini", std::ios_base::binary | std::ios_base::in);
+		ofs << ifs.rdbuf();
+	}
+}
+
 static void imgui_init(void)
 {
 	s_windowHandle = CP_System_GetWindowHandle();
@@ -127,6 +141,9 @@ void game_init(void)
 	CP_System_SetFrameRate(60.0f);
 
 	CP_Font_Load("Assets/ShareTech-Regular.ttf");
+
+	// Check if there is already an imgui.ini saved up
+	imgui_ini_check();
 
 	// Init ImGui after the final window size is set so we grab the current HWND.
 	imgui_init();
