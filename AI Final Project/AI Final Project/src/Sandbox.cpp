@@ -532,6 +532,46 @@ void Sandbox_DrawImGui(World& w, RenderOptions& render, SandboxState& sandbox, f
             sandbox.currentScenario = "Neutral";
         }
 
+        // ------------------------------------------------------------------------
+        // Scenarios
+        // ------------------------------------------------------------------------
+        if (Sandbox_BeginCard("Scenarios"))
+        {
+            ImGui::PushID("Scenarios");
+
+            if (ImGui::Button("Neutral", ImVec2(half, 32)))
+            {
+                Sandbox_LoadNeutral(w, accum, paused, sandbox.seed);
+                sandbox.currentScenario = "Neutral";
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Freeze", ImVec2(half, 32)))
+            {
+                Sandbox_LoadFreeze(w, accum, paused, sandbox.seed);
+                sandbox.currentScenario = "Freeze";
+            }
+
+            if (ImGui::Button("Slow Push", ImVec2(half, 32)))
+            {
+                Sandbox_LoadSlowPush(w, accum, paused, sandbox.seed);
+                sandbox.currentScenario = "Slow Push";
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Shove", ImVec2(half, 32)))
+            {
+                Sandbox_LoadShove(w, accum, paused, sandbox.seed);
+                sandbox.currentScenario = "Shove";
+            }
+
+            if (ImGui::Button("Tower Aggro", ImVec2(half, 32)))
+            {
+                Sandbox_LoadTowerAggro(w, accum, paused, sandbox.seed);
+                sandbox.currentScenario = "Tower Aggro";
+            }
+
+            ImGui::PopID();
+        }
+
         ImGui::Dummy(ImVec2(0, 4));
 
         if (Sandbox_BeginPropertyTable("HeaderProps"))
@@ -652,44 +692,39 @@ void Sandbox_DrawImGui(World& w, RenderOptions& render, SandboxState& sandbox, f
         ImGui::PopID();
     }
 
-    // ------------------------------------------------------------------------
-    // Scenarios
-    // ------------------------------------------------------------------------
-    if (Sandbox_BeginCard("Scenarios"))
+    ImGui::End();
+
+    ImGui::SetNextWindowSize(ImVec2(480, 320), ImGuiCond_FirstUseEver);
+    ImGui::SetNextWindowPos(ImVec2(1100, 570), ImGuiCond_FirstUseEver);
+
+    if (!ImGui::Begin("Tooltips", nullptr, ImGuiWindowFlags_NoCollapse))
     {
-        ImGui::PushID("Scenarios");
+        ImGui::End();
+        return;
+    }
 
-        if (ImGui::Button("Neutral", ImVec2(half, 32)))
-        {
-            Sandbox_LoadNeutral(w, accum, paused, sandbox.seed);
-            sandbox.currentScenario = "Neutral";
-        }
-        ImGui::SameLine();
-        if (ImGui::Button("Freeze", ImVec2(half, 32)))
-        {
-            Sandbox_LoadFreeze(w, accum, paused, sandbox.seed);
-            sandbox.currentScenario = "Freeze";
-        }
+    if (sandbox.currentScenario == "Neutral") {
+        ImGui::Text("Try and get as many last hits as possible!");
+    }
+    else if (sandbox.currentScenario == "Freeze") {
+        ImGui::Text("Wave freezing refers to a stable lane state in which opposing \nminion waves meet at approximately the same time.");
+        ImGui::Text("It is done to maintain a favorable lane position, \nfor example near your tower.");
+        ImGui::Text("It is accomplished by mirroring what the opponent is doing, \ndealing equal damage to their minion as they do to yours");
+    }
+    else if (sandbox.currentScenario == "Slow Push") {
+        ImGui::Text("Slow push refers to building up more minions on your side \nagainst the opponent.");
+        ImGui::Text("This allows your wave to \"slowly\" push in, allowing you\nto do other stuff.");
+        ImGui::Text("It is accomplished by killing the enemy caster minions first.");
+    }
+    else if (sandbox.currentScenario == "Shove") {
+        ImGui::Text("Shove is similar to slow push, but creates a more urgent\nscenario which demands more enemy attention immediately.");
+        ImGui::Text("You have to kill all melee minions as fast as possible and\nalso kill the cannon minions.");
+    }
+    else if (sandbox.currentScenario == "Tower Aggro") {
 
-        if (ImGui::Button("Slow Push", ImVec2(half, 32)))
-        {
-            Sandbox_LoadSlowPush(w, accum, paused, sandbox.seed);
-            sandbox.currentScenario = "Slow Push";
-        }
-        ImGui::SameLine();
-        if (ImGui::Button("Shove", ImVec2(half, 32)))
-        {
-            Sandbox_LoadShove(w, accum, paused, sandbox.seed);
-            sandbox.currentScenario = "Shove";
-        }
-
-        if (ImGui::Button("Tower Aggro", ImVec2(half, 32)))
-        {
-            Sandbox_LoadTowerAggro(w, accum, paused, sandbox.seed);
-            sandbox.currentScenario = "Tower Aggro";
-        }
-
-        ImGui::PopID();
+    }
+    else {
+        ImGui::Text("Unknown scenario...");
     }
 
     // ------------------------------------------------------------------------
@@ -707,20 +742,20 @@ void Sandbox_DrawImGui(World& w, RenderOptions& render, SandboxState& sandbox, f
         ImGui::TableSetColumnIndex(1); ImGui::Text("%lld", w.tick);
 
         ImGui::TableNextRow();
-        ImGui::TableSetColumnIndex(0); ImGui::TextUnformatted("Blue wave No.");
-        ImGui::TableSetColumnIndex(1); ImGui::Text("%d", w.waves[TEAM_BLUE].number);
-
-        ImGui::TableNextRow();
-        ImGui::TableSetColumnIndex(0); ImGui::TextUnformatted("Red wave No.");
-        ImGui::TableSetColumnIndex(1); ImGui::Text("%d", w.waves[TEAM_RED].number);
-
-        ImGui::TableNextRow();
         ImGui::TableSetColumnIndex(0); ImGui::TextUnformatted("Blue last hits");
         ImGui::TableSetColumnIndex(1); ImGui::Text("%d", w.blueKills);
 
         ImGui::TableNextRow();
         ImGui::TableSetColumnIndex(0); ImGui::TextUnformatted("Red last hits");
         ImGui::TableSetColumnIndex(1); ImGui::Text("%d", w.redKills);
+
+        ImGui::TableNextRow();
+        ImGui::TableSetColumnIndex(0); ImGui::TextUnformatted("Blue wave No.");
+        ImGui::TableSetColumnIndex(1); ImGui::Text("%d", w.waves[TEAM_BLUE].number);
+
+        ImGui::TableNextRow();
+        ImGui::TableSetColumnIndex(0); ImGui::TextUnformatted("Red wave No.");
+        ImGui::TableSetColumnIndex(1); ImGui::Text("%d", w.waves[TEAM_RED].number);
 
         ImGui::TableNextRow();
         ImGui::TableSetColumnIndex(0); ImGui::TextUnformatted("Blue minions alive");
