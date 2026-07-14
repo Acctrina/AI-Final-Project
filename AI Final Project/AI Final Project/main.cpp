@@ -20,7 +20,7 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg
 
 // Lane simulation plus the rendering/debug toggles driven from the keyboard.
 static World         g_world;
-static RenderOptions g_render = { true, false, false, true, true };
+static RenderOptions g_render = { true, false, false, true, true, true };
 static bool          g_paused = false;
 static float         g_accum  = 0.0f;
 
@@ -160,6 +160,7 @@ void game_update(void)
 	if (CP_Input_KeyTriggered(KEY_2))     g_render.showRanges = !g_render.showRanges;
 	if (CP_Input_KeyTriggered(KEY_3))     g_render.showInfluence = !g_render.showInfluence;
 	if (CP_Input_KeyTriggered(KEY_4))     g_render.showEquilibrium = !g_render.showEquilibrium;
+	if (CP_Input_KeyTriggered(KEY_5))     g_render.showAttackBars = !g_render.showAttackBars;
 	bool step = allowKeyboardToGame && CP_Input_KeyTriggered(KEY_PERIOD) || CP_Input_KeyTriggered(KEY_RIGHT);
 
 	// Fixed-timestep advance: the sim only ever steps by cfg.fixedDt, so it stays

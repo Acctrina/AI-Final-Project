@@ -26,22 +26,58 @@ static CP_Color StateStroke(FsmState s)
 	return CP_Color_Create(235, 235, 235, 255);
 }
 
+// Bars stack above the unit: health on top, attack charge just under it.
+static const float BAR_HEIGHT      = 5.0f;
+static const float BAR_TOP_OFFSET  = 11.0f; // above the unit's top edge
+static const float ATK_BAR_HEIGHT  = 3.0f;
+
+static float BarWidth(const Entity& e)   { return e.radius * 2.4f; }
+static float BarLeft(const Entity& e)    { return e.pos.x - BarWidth(e) * 0.5f; }
+static float HealthBarTop(const Entity& e) { return e.pos.y - e.radius - BAR_TOP_OFFSET; }
+
 static void DrawHealthBar(const Entity& e)
 {
 	if (e.hp >= e.maxHp)
 		return;
-	float w = e.radius * 2.4f;
-	float h = 5.0f;
-	float x = e.pos.x - w * 0.5f;
-	float y = e.pos.y - e.radius - 11.0f;
+	float w = BarWidth(e);
+	float x = BarLeft(e);
+	float y = HealthBarTop(e);
 	float frac = e.hp / e.maxHp;
 	if (frac < 0.0f) frac = 0.0f;
 
 	CP_Settings_NoStroke();
 	CP_Settings_Fill(CP_Color_Create(30, 30, 30, 220));
-	CP_Graphics_DrawRectAdvanced(x, y, w, h, 0.0f, 0.0f);
+	CP_Graphics_DrawRectAdvanced(x, y, w, BAR_HEIGHT, 0.0f, 0.0f);
 	CP_Settings_Fill(CP_Color_Create(90, 220, 90, 255));
-	CP_Graphics_DrawRectAdvanced(x, y, w * frac, h, 0.0f, 0.0f);
+	CP_Graphics_DrawRectAdvanced(x, y, w * frac, BAR_HEIGHT, 0.0f, 0.0f);
+}
+
+// Attack charge: fills as cooldownTimer winds down, so a full bar means the unit
+// swings the moment something is in range. Drawn only while it is recharging or
+// holding a target, to keep idle marchers clean.
+static void DrawAttackBar(const Entity& e)
+{
+	if (e.attackCooldown <= 0.0f)
+		return;
+	bool recharging = e.cooldownTimer > 0.0f;
+	if (!recharging && !IsValidId(e.target))
+		return;
+
+	float frac = 1.0f - (e.cooldownTimer / e.attackCooldown);
+	if (frac < 0.0f) frac = 0.0f;
+	if (frac > 1.0f) frac = 1.0f;
+
+	float w = BarWidth(e);
+	float x = BarLeft(e);
+	float y = HealthBarTop(e) + BAR_HEIGHT + 1.0f;
+
+	CP_Settings_NoStroke();
+	CP_Settings_Fill(CP_Color_Create(30, 30, 30, 220));
+	CP_Graphics_DrawRectAdvanced(x, y, w, ATK_BAR_HEIGHT, 0.0f, 0.0f);
+	CP_Color fill = recharging ? CP_Color_Create(110, 140, 190, 255)   // winding up
+	                           : CP_Color_Create(255, 235, 120, 255);  // ready to swing
+	CP_Settings_Fill(fill);
+	CP_Graphics_DrawRectAdvanced(x, y, w * frac, ATK_BAR_HEIGHT, 0.0f, 0.0f);
 }
 
 static void DrawRing(CP_Vector c, float radius, CP_Color col)
@@ -172,6 +208,8 @@ void Render_World(World& w, const AnalysisState& analysis, const RenderOptions& 
 			CP_Settings_StrokeWeight(3.0f);
 			CP_Graphics_DrawCircle(e.pos.x, e.pos.y, e.radius * 2.0f);
 			DrawHealthBar(e);
+			if (opt.showAttackBars)
+				DrawAttackBar(e);
 			continue;
 		}
 
@@ -192,6 +230,8 @@ void Render_World(World& w, const AnalysisState& analysis, const RenderOptions& 
 			CP_Graphics_DrawCircle(e.pos.x, e.pos.y, e.radius * 0.8f);
 		}
 		DrawHealthBar(e);
+		if (opt.showAttackBars)
+			DrawAttackBar(e);
 	}
 
 	// Champion move order: draw the A* path and the destination marker.
@@ -222,7 +262,7 @@ void Render_World(World& w, const AnalysisState& analysis, const RenderOptions& 
 
 	CP_Settings_TextSize(15.0f);
 	CP_Settings_Fill(CP_Color_Create(170, 170, 170, 255));
-	CP_Font_DrawText("Right-click: move / attack   [Space] pause  [.] step  [1] aggro  [2] ranges  [3] influence  [4] equilibrium  Q quit",
+	CP_Font_DrawText("Right-click: move / attack   [Space] pause  [.] step  [1] aggro  [2] ranges  [3] influence  [4] equilibrium  [5] attack bars  Q quit",
 	                 18.0f, (float)w.cfg.windowHeight - 22.0f);
 
 	// --- Analysis overlays: equilibrium marker + technique banner ---------------

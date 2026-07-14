@@ -14,6 +14,7 @@ struct RenderOptions
 	bool paused;
 	bool showInfluence;    // lane influence heatmap (analysis layer)
 	bool showEquilibrium;  // wave-equilibrium marker + technique banner
+	bool showAttackBars;   // attack-charge bar under each unit's health bar
 };
 
 void Render_World(World& w, const AnalysisState& analysis, const RenderOptions& opt);
