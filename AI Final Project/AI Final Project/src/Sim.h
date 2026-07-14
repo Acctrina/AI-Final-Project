@@ -151,7 +151,8 @@ void     World_Destroy(World& w, EntityId id);
 
 // --- Lifecycle -----------------------------------------------------------------
 
-void World_Init(World& w, uint32_t seed);
+void World_Init(World& w, uint32_t seed);                        // rebuild on default config
+void World_InitWith(World& w, uint32_t seed, Config cfg);        // rebuild, keeping a tuned config
 void Sim_Tick(World& w, float dt, const SimInput& input);
 
 // Helpers used by the AI layer and renderer.

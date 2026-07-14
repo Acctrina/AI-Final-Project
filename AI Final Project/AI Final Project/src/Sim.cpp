@@ -299,7 +299,15 @@ static CP_Vector ChampSpawnPos(const World& w, Team team)
 // ---------------------------------------------------------------------------
 void World_Init(World& w, uint32_t seed)
 {
-	w.cfg = Config_Default();
+	World_InitWith(w, seed, Config_Default());
+}
+
+// cfg is taken by value so callers can pass w.cfg to rebuild the world around the
+// config they already have. It must be in place before the lane, towers and champion
+// spawns below are laid out, since all of them are derived from it.
+void World_InitWith(World& w, uint32_t seed, Config cfg)
+{
+	w.cfg = cfg;
 	Rng_Seed(w.rng, seed);
 	w.tick = 0;
 	w.ents.clear();

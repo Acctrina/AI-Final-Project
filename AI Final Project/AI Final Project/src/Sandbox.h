@@ -18,6 +18,7 @@ struct SandboxState
 void Sandbox_ApplyImGuiTheme();
 
 void Sandbox_ResetWorld(World& w, float& accum, bool& paused, uint32_t seed);
+void Sandbox_ResetConfigToDefaults(World& w, float& accum, bool& paused, uint32_t seed);
 void Sandbox_ClearMinions(World& w);
 void Sandbox_ClearProjectiles(World& w);
 void Sandbox_ResetWaveTimers(World& w, float nextInSeconds);

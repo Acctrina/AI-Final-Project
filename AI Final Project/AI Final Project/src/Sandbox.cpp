@@ -102,6 +102,19 @@ static bool Sandbox_SliderInt(const char* label, const char* id, int* v, int min
     return ImGui::SliderInt(id, v, minV, maxV, fmt);
 }
 
+// The same six rows for every minion type, so the tabs line up and the types can be
+// compared by flipping between them. Upper bounds differ per type; the lower ones don't.
+static void Sandbox_MinionStatRows(float* hp, float* dmg, float* range, float* cooldown, float* speed, float* radius,
+                                   float hpMax, float dmgMax, float rangeMax, float cooldownMax, float speedMax, float radiusMax)
+{
+    Sandbox_SliderFloat("HP", "##HP", hp, 10.0f, hpMax, "%.1f");
+    Sandbox_SliderFloat("Damage", "##DMG", dmg, 1.0f, dmgMax, "%.1f");
+    Sandbox_SliderFloat("Attack range", "##RNG", range, 10.0f, rangeMax, "%.1f");
+    Sandbox_SliderFloat("Attack cooldown", "##CD", cooldown, 0.1f, cooldownMax, "%.2f s");
+    Sandbox_SliderFloat("Move speed", "##SPD", speed, 10.0f, speedMax, "%.1f");
+    Sandbox_SliderFloat("Radius", "##RAD", radius, 4.0f, radiusMax, "%.1f");
+}
+
 // Build a minion entity from config data
 static Entity MakeScenarioMinion(const Config& c, Team team, MinionType type, CP_Vector pos, float hpScale = 1.0f)
 {
@@ -175,7 +188,7 @@ static void PlaceChampionAt(World& w, float laneT)
 // Reset into a paused, controlled sandbox state
 static void ResetScenarioBase(World& w, float& accum, bool& paused, uint32_t seed)
 {
-    World_Init(w, seed);
+    World_InitWith(w, seed, w.cfg);
     accum = 0.0f;
     paused = true;
     ClearWaveQueues(w);
@@ -266,8 +279,17 @@ void Sandbox_ApplyImGuiTheme()
 // Sandbox controls
 // ----------------------------------------------------------------------------
 
-// Full world reset used by the main reset button.
+// Full world reset used by the main reset button. Keeps the current config so a
+// reset does not throw away whatever has been tuned on the sliders.
 void Sandbox_ResetWorld(World& w, float& accum, bool& paused, uint32_t seed)
+{
+    World_InitWith(w, seed, w.cfg);
+    accum = 0.0f;
+    paused = false;
+}
+
+// Rebuild on the stock config, discarding all slider tuning.
+void Sandbox_ResetConfigToDefaults(World& w, float& accum, bool& paused, uint32_t seed)
 {
     World_Init(w, seed);
     accum = 0.0f;
@@ -526,11 +548,19 @@ void Sandbox_DrawImGui(World& w, RenderOptions& render, SandboxState& sandbox, f
             Sim_Tick(w, w.cfg.fixedDt, in);
         }
 
-        if (ImGui::Button("Reset World", ImVec2(full, 34)))
+        if (ImGui::Button("Reset World", ImVec2(half, 34)))
         {
             Sandbox_ResetWorld(w, accum, paused, sandbox.seed);
             sandbox.currentScenario = "Neutral";
         }
+        ImGui::SameLine();
+        if (ImGui::Button("Reset Tuning", ImVec2(half, 34)))
+        {
+            Sandbox_ResetConfigToDefaults(w, accum, paused, sandbox.seed);
+            sandbox.currentScenario = "Neutral";
+        }
+        if (ImGui::IsItemHovered())
+            ImGui::SetTooltip("Discard all slider values and rebuild on the stock config.");
 
         // ------------------------------------------------------------------------
         // Scenarios
@@ -679,16 +709,74 @@ void Sandbox_DrawImGui(World& w, RenderOptions& render, SandboxState& sandbox, f
     if (Sandbox_BeginCard("Combat Tuning"))
     {
         ImGui::PushID("CombatTuning");
+        ImGui::TextDisabled("Minion stats are baked in at spawn: changes show up on the next wave.");
 
-        if (Sandbox_BeginPropertyTable("CombatProps"))
+        if (ImGui::BeginTabBar("CombatTabs"))
         {
-            Sandbox_SliderFloat("Melee HP", "##MeleeHP", &w.cfg.meleeHp, 10.0f, 300.0f, "%.1f");
-            Sandbox_SliderFloat("Melee DMG", "##MeleeDMG", &w.cfg.meleeDmg, 1.0f, 50.0f, "%.1f");
-            Sandbox_SliderFloat("Caster HP", "##CasterHP", &w.cfg.casterHp, 10.0f, 200.0f, "%.1f");
-            Sandbox_SliderFloat("Caster DMG", "##CasterDMG", &w.cfg.casterDmg, 1.0f, 60.0f, "%.1f");
-            Sandbox_SliderFloat("Tower DMG", "##TowerDMG", &w.cfg.towerDmg, 10.0f, 200.0f, "%.1f");
-            Sandbox_SliderFloat("Champ DMG", "##ChampDMG", &w.cfg.champDmg, 10.0f, 150.0f, "%.1f");
-            Sandbox_EndPropertyTable();
+            if (ImGui::BeginTabItem("Melee"))
+            {
+                ImGui::PushID("Melee");
+                if (Sandbox_BeginPropertyTable("MeleeProps"))
+                {
+                    Sandbox_MinionStatRows(&w.cfg.meleeHp, &w.cfg.meleeDmg, &w.cfg.meleeRange,
+                                           &w.cfg.meleeCooldown, &w.cfg.meleeSpeed, &w.cfg.meleeRadius,
+                                           600.0f, 60.0f, 300.0f, 4.0f, 200.0f, 40.0f);
+                    Sandbox_EndPropertyTable();
+                }
+                ImGui::PopID();
+                ImGui::EndTabItem();
+            }
+
+            if (ImGui::BeginTabItem("Caster"))
+            {
+                ImGui::PushID("Caster");
+                if (Sandbox_BeginPropertyTable("CasterProps"))
+                {
+                    Sandbox_MinionStatRows(&w.cfg.casterHp, &w.cfg.casterDmg, &w.cfg.casterRange,
+                                           &w.cfg.casterCooldown, &w.cfg.casterSpeed, &w.cfg.casterRadius,
+                                           400.0f, 80.0f, 400.0f, 4.0f, 200.0f, 40.0f);
+                    Sandbox_EndPropertyTable();
+                }
+                ImGui::PopID();
+                ImGui::EndTabItem();
+            }
+
+            if (ImGui::BeginTabItem("Cannon"))
+            {
+                ImGui::PushID("Cannon");
+                if (Sandbox_BeginPropertyTable("CannonProps"))
+                {
+                    Sandbox_MinionStatRows(&w.cfg.cannonHp, &w.cfg.cannonDmg, &w.cfg.cannonRange,
+                                           &w.cfg.cannonCooldown, &w.cfg.cannonSpeed, &w.cfg.cannonRadius,
+                                           1200.0f, 150.0f, 400.0f, 6.0f, 200.0f, 60.0f);
+                    Sandbox_EndPropertyTable();
+                }
+                ImGui::PopID();
+                ImGui::EndTabItem();
+            }
+
+            if (ImGui::BeginTabItem("Structures"))
+            {
+                ImGui::PushID("Structures");
+                if (Sandbox_BeginPropertyTable("StructureProps"))
+                {
+                    Sandbox_SliderFloat("Tower HP", "##TowerHP", &w.cfg.towerHp, 100.0f, 5000.0f, "%.0f");
+                    Sandbox_SliderFloat("Tower DMG", "##TowerDMG", &w.cfg.towerDmg, 10.0f, 300.0f, "%.1f");
+                    Sandbox_SliderFloat("Tower range", "##TowerRange", &w.cfg.towerRange, 50.0f, 600.0f, "%.1f");
+                    Sandbox_SliderFloat("Tower cooldown", "##TowerCD", &w.cfg.towerCooldown, 0.1f, 4.0f, "%.2f s");
+
+                    Sandbox_SliderFloat("Champ HP", "##ChampHP", &w.cfg.champHp, 100.0f, 2000.0f, "%.0f");
+                    Sandbox_SliderFloat("Champ DMG", "##ChampDMG", &w.cfg.champDmg, 5.0f, 200.0f, "%.1f");
+                    Sandbox_SliderFloat("Champ range", "##ChampRange", &w.cfg.champRange, 20.0f, 400.0f, "%.1f");
+                    Sandbox_SliderFloat("Champ cooldown", "##ChampCD", &w.cfg.champCooldown, 0.1f, 3.0f, "%.2f s");
+                    Sandbox_SliderFloat("Champ speed", "##ChampSpeed", &w.cfg.champSpeed, 40.0f, 300.0f, "%.1f");
+                    Sandbox_EndPropertyTable();
+                }
+                ImGui::PopID();
+                ImGui::EndTabItem();
+            }
+
+            ImGui::EndTabBar();
         }
 
         ImGui::PopID();
