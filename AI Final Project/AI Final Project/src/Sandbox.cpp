@@ -380,26 +380,29 @@ void Sandbox_LoadNeutral(World& w, float& accum, bool& paused, uint32_t seed)
     SetupChampions(w, 0.35f, 0.65f, ENEMY_CHAMP_PASSIVE);
 }
 
-// Set up a wave freeze near the player's side of the lane.
+// Set up a wave freeze on the player's half of the lane, but clear of the blue tower:
+// its range reaches to about t=0.37, and a tower picking off the enemy front row kills
+// the freeze on its own. A freeze also has to be fed, so waves keep coming here.
 void Sandbox_LoadFreeze(World& w, float& accum, bool& paused, uint32_t seed)
 {
     ResetScenarioBase(w, accum, paused, seed);
     Sandbox_ClearMinions(w);
-    SetupChampions(w, 0.22f, 0.65f, ENEMY_CHAMP_PASSIVE);
+    Sandbox_ResetWaveTimers(w, w.cfg.waveInterval);
+    SetupChampions(w, 0.32f, 0.65f, ENEMY_CHAMP_PASSIVE);
 
-    SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.26f);
-    SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.272f);
-    SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.284f);
-    SpawnScenarioMinion(w, TEAM_BLUE, MINION_CASTER, 0.24f);
-    SpawnScenarioMinion(w, TEAM_BLUE, MINION_CASTER, 0.252f);
+    SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.36f);
+    SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.372f);
+    SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.384f);
+    SpawnScenarioMinion(w, TEAM_BLUE, MINION_CASTER, 0.34f);
+    SpawnScenarioMinion(w, TEAM_BLUE, MINION_CASTER, 0.352f);
 
-    SpawnScenarioMinion(w, TEAM_RED, MINION_MELEE, 0.36f);
-    SpawnScenarioMinion(w, TEAM_RED, MINION_MELEE, 0.372f);
-    SpawnScenarioMinion(w, TEAM_RED, MINION_MELEE, 0.384f);
-    SpawnScenarioMinion(w, TEAM_RED, MINION_MELEE, 0.396f);
-    SpawnScenarioMinion(w, TEAM_RED, MINION_CASTER, 0.38f);
-    SpawnScenarioMinion(w, TEAM_RED, MINION_CASTER, 0.392f);
-    SpawnScenarioMinion(w, TEAM_RED, MINION_CASTER, 0.404f);
+    SpawnScenarioMinion(w, TEAM_RED, MINION_MELEE, 0.46f);
+    SpawnScenarioMinion(w, TEAM_RED, MINION_MELEE, 0.472f);
+    SpawnScenarioMinion(w, TEAM_RED, MINION_MELEE, 0.484f);
+    SpawnScenarioMinion(w, TEAM_RED, MINION_MELEE, 0.496f);
+    SpawnScenarioMinion(w, TEAM_RED, MINION_CASTER, 0.48f);
+    SpawnScenarioMinion(w, TEAM_RED, MINION_CASTER, 0.492f);
+    SpawnScenarioMinion(w, TEAM_RED, MINION_CASTER, 0.504f);
 }
 
 // Set up a blue-side slow push with a small wave advantage.
