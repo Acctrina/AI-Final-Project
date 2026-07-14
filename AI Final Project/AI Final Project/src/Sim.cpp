@@ -28,7 +28,7 @@ Config Config_Default()
 	c.champSpawnT = 0.35f;
 	c.champSpawnOffset = c.laneWidth * 0.28f; // flank the lane so spawns clear the wave
 
-	c.waveInterval      = 15.0f;
+	c.waveInterval      = 21.0f;
 	c.spawnSpacing      = 0.65f; // time between spawns; also sets the column spacing
 	c.meleePerWave      = 3;
 	c.casterPerWave     = 3;
@@ -49,11 +49,18 @@ Config Config_Default()
 	c.championAggroHold = 0.8f; // > champCooldown (0.6) so a dive holds aggro
 
 	// hp, dmg, range, cooldown, speed, radius  (sizes/ranges scaled up to read big)
-	c.meleeHp  = 120.0f; c.meleeDmg  = 12.0f; c.meleeRange  = 40.0f;  c.meleeCooldown  = 1.0f; c.meleeSpeed  = 80.0f; c.meleeRadius  = 16.0f;
-	c.casterHp = 60.0f;  c.casterDmg = 18.0f; c.casterRange = 175.0f; c.casterCooldown = 1.5f; c.casterSpeed = 80.0f; c.casterRadius = 14.0f;
-	c.cannonHp = 300.0f; c.cannonDmg = 40.0f; c.cannonRange = 200.0f; c.cannonCooldown = 2.5f; c.cannonSpeed = 72.0f; c.cannonRadius = 24.0f;
+	// A wave has to outlive the gap to the next one or the lane empties and any hold on
+	// the front collapses. Wave lifetime is total hp over incoming dps, so it is the ratio
+	// of these two columns that matters, not the minion count: raising both sides' counts
+	// scales hp and dps together and cancels out.
+	c.meleeHp  = 250.0f; c.meleeDmg  = 12.0f; c.meleeRange  = 40.0f;  c.meleeCooldown  = 1.4f; c.meleeSpeed  = 80.0f; c.meleeRadius  = 16.0f;
+	c.casterHp = 130.0f; c.casterDmg = 18.0f; c.casterRange = 175.0f; c.casterCooldown = 2.0f; c.casterSpeed = 80.0f; c.casterRadius = 14.0f;
+	c.cannonHp = 600.0f; c.cannonDmg = 40.0f; c.cannonRange = 200.0f; c.cannonCooldown = 3.5f; c.cannonSpeed = 72.0f; c.cannonRadius = 24.0f;
 
-	c.towerHp = 1500.0f; c.towerDmg = 90.0f; c.towerRange = 270.0f; c.towerCooldown = 1.1f; c.towerRadius = 40.0f;
+	// Tower damage is set against minion hp: one shot for a caster, two for a melee, so a
+	// shoved wave dies under the tower before the next one lands. It has no say in how long
+	// minions take to kill each other, so it does not disturb the freeze.
+	c.towerHp = 1500.0f; c.towerDmg = 190.0f; c.towerRange = 270.0f; c.towerCooldown = 1.1f; c.towerRadius = 40.0f;
 	c.towerChampAggroTime = 2.0f; // tower stays on a diving champion this long after each hit
 
 	c.champHp = 600.0f; c.champDmg = 55.0f; c.champRange = 200.0f; c.champCooldown = 0.6f; c.champSpeed = 130.0f; c.champRadius = 26.0f;
@@ -61,7 +68,7 @@ Config Config_Default()
 	// Enemy champion. Defaults to a stationary dummy - a still target to attack while
 	// showing the defend/tower-aggro rules, without roaming and skewing the demos.
 	c.enemyChampMode          = ENEMY_CHAMP_PASSIVE;
-	c.redChampSpawnT          = 0.65f; // mirror of champSpawnT on the red side
+	c.redChampSpawnT          = 0.95f; // beside the red nexus, clear of the lane
 	c.enemyChampRetreatHpFrac = 0.30f;
 	c.defendRadius            = 220.0f;
 

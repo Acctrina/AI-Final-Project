@@ -162,10 +162,20 @@ static Entity MakeScenarioMinion(const Config& c, Team team, MinionType type, CP
     return e;
 }
 
-// Spawn a minion at a normalized lane position.
-static void SpawnScenarioMinion(World& w, Team team, MinionType type, float laneT, float hpScale = 1.0f)
+// Spawn a minion at a normalized lane position. perpOffset shifts it across the lane, off
+// the axis, so a hand-placed wave can be spread out instead of standing in single file.
+static void SpawnScenarioMinion(World& w, Team team, MinionType type, float laneT,
+                                float hpScale = 1.0f, float perpOffset = 0.0f)
 {
-    Entity e = MakeScenarioMinion(w.cfg, team, type, Lane_PointAt(w.lane, laneT), hpScale);
+    CP_Vector pos = Lane_PointAt(w.lane, laneT);
+    if (perpOffset != 0.0f)
+    {
+        CP_Vector dir = Lane_Dir(w.lane);
+        pos = VAdd(pos, VScale(V(-dir.y, dir.x), perpOffset));
+    }
+
+    Entity e = MakeScenarioMinion(w.cfg, team, type, pos, hpScale);
+    e.pos = Lane_Clamp(w.lane, e.pos, e.radius); // keep the spread inside the lane band
     World_Spawn(w, e);
 }
 
@@ -183,6 +193,34 @@ static void PlaceChampionAt(World& w, Team team, float laneT)
     c->pos    = Champion_LanePos(w, team, laneT);
     c->vel    = CP_Vector_Zero();
     c->target = InvalidId();
+}
+
+// A preset that hand-places a wave mid-lane is showing a wave that has already marched
+// there. Charging it a full interval would leave the lane empty; instead credit the time
+// that march would have taken, so the next wave is due when it actually would be.
+//
+// Both nexuses spawn on one clock, so the two sides share a single countdown. The placed
+// waves are not always the same distance from home, so the credit is the average of what
+// each side's march would have cost: they left together, so they have been walking for the
+// same length of time. blueLeadT / redLeadT are the front of each placed wave.
+static void CreditWaveMarchTime(World& w, float blueLeadT, float redLeadT)
+{
+    float laneLen = VDist(w.lane.blueBase, w.lane.redBase);
+    float speed   = (w.cfg.meleeSpeed > 1.0f) ? w.cfg.meleeSpeed : 1.0f;
+
+    float blueMarched = (blueLeadT * laneLen) / speed;
+    float redMarched  = ((1.0f - redLeadT) * laneLen) / speed;
+    float marched     = (blueMarched + redMarched) * 0.5f;
+
+    float next = w.cfg.waveInterval - marched;
+    if (next < 1.0f) next = 1.0f;
+
+    for (int t = 0; t < 2; ++t)
+    {
+        w.waves[t].nextWaveTimer = next;
+        w.waves[t].spawnTimer    = 0.0f;
+        w.waves[t].queue.clear();
+    }
 }
 
 // Every preset states both champions and the enemy brain outright, so a scenario sets up
@@ -377,7 +415,7 @@ void Sandbox_KillAllMinionsOfTeam(World& w, Team team)
 void Sandbox_LoadNeutral(World& w, float& accum, bool& paused, uint32_t seed)
 {
     Sandbox_ResetWorld(w, accum, paused, seed);
-    SetupChampions(w, 0.35f, 0.65f, ENEMY_CHAMP_PASSIVE);
+    SetupChampions(w, 0.35f, 0.95f, ENEMY_CHAMP_PASSIVE);
 }
 
 // Set up a wave freeze on the player's half of the lane, but clear of the blue tower:
@@ -387,44 +425,60 @@ void Sandbox_LoadFreeze(World& w, float& accum, bool& paused, uint32_t seed)
 {
     ResetScenarioBase(w, accum, paused, seed);
     Sandbox_ClearMinions(w);
-    Sandbox_ResetWaveTimers(w, w.cfg.waveInterval);
-    SetupChampions(w, 0.32f, 0.65f, ENEMY_CHAMP_PASSIVE);
+    SetupChampions(w, 0.32f, 0.95f, ENEMY_CHAMP_PASSIVE);
 
-    SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.36f);
-    SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.372f);
-    SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.384f);
-    SpawnScenarioMinion(w, TEAM_BLUE, MINION_CASTER, 0.34f);
-    SpawnScenarioMinion(w, TEAM_BLUE, MINION_CASTER, 0.352f);
+    CreditWaveMarchTime(w, 0.412f, 0.460f);
 
-    SpawnScenarioMinion(w, TEAM_RED, MINION_MELEE, 0.46f);
-    SpawnScenarioMinion(w, TEAM_RED, MINION_MELEE, 0.472f);
-    SpawnScenarioMinion(w, TEAM_RED, MINION_MELEE, 0.484f);
-    SpawnScenarioMinion(w, TEAM_RED, MINION_MELEE, 0.496f);
-    SpawnScenarioMinion(w, TEAM_RED, MINION_CASTER, 0.48f);
-    SpawnScenarioMinion(w, TEAM_RED, MINION_CASTER, 0.492f);
-    SpawnScenarioMinion(w, TEAM_RED, MINION_CASTER, 0.504f);
+    // Melee in front, casters behind. Red is the heavier wave: that surplus is what
+    // holds the front on the player's half instead of it drifting back to mid.
+    SpawnScenarioMinion(w, TEAM_BLUE, MINION_CASTER, 0.316f);
+    SpawnScenarioMinion(w, TEAM_BLUE, MINION_CASTER, 0.328f);
+    SpawnScenarioMinion(w, TEAM_BLUE, MINION_CASTER, 0.340f);
+    SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE,  0.364f);
+    SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE,  0.376f);
+    SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE,  0.388f);
+    SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE,  0.400f);
+    SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE,  0.412f);
+
+    SpawnScenarioMinion(w, TEAM_RED, MINION_MELEE,  0.460f);
+    SpawnScenarioMinion(w, TEAM_RED, MINION_MELEE,  0.472f);
+    SpawnScenarioMinion(w, TEAM_RED, MINION_MELEE,  0.484f);
+    SpawnScenarioMinion(w, TEAM_RED, MINION_MELEE,  0.496f);
+    SpawnScenarioMinion(w, TEAM_RED, MINION_MELEE,  0.508f);
+    SpawnScenarioMinion(w, TEAM_RED, MINION_MELEE,  0.520f);
+    SpawnScenarioMinion(w, TEAM_RED, MINION_CASTER, 0.534f);
+    SpawnScenarioMinion(w, TEAM_RED, MINION_CASTER, 0.546f);
+    SpawnScenarioMinion(w, TEAM_RED, MINION_CASTER, 0.558f);
+    SpawnScenarioMinion(w, TEAM_RED, MINION_CASTER, 0.570f);
+    SpawnScenarioMinion(w, TEAM_RED, MINION_CASTER, 0.582f);
 }
 
-// Set up a blue-side slow push with a small wave advantage.
+// Set up a blue-side slow push with a small wave advantage. A push is built out of waves
+// arriving faster than they die, so reinforcements keep coming here as they do in Freeze.
 void Sandbox_LoadSlowPush(World& w, float& accum, bool& paused, uint32_t seed)
 {
     ResetScenarioBase(w, accum, paused, seed);
     Sandbox_ClearMinions(w);
-    SetupChampions(w, 0.38f, 0.65f, ENEMY_CHAMP_PASSIVE);
+    SetupChampions(w, 0.38f, 0.95f, ENEMY_CHAMP_PASSIVE);
 
-    SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.42f);
-    SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.432f);
-    SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.444f);
-    SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.456f);
-    SpawnScenarioMinion(w, TEAM_BLUE, MINION_CASTER, 0.40f);
-    SpawnScenarioMinion(w, TEAM_BLUE, MINION_CASTER, 0.412f);
-    SpawnScenarioMinion(w, TEAM_BLUE, MINION_CASTER, 0.424f);
+    // Meeting at mid, so both sides have marched about half the lane: the next waves are
+    // roughly half an interval out, not a full one.
+    CreditWaveMarchTime(w, 0.444f, 0.518f);
 
-    SpawnScenarioMinion(w, TEAM_RED, MINION_MELEE, 0.52f);
-    SpawnScenarioMinion(w, TEAM_RED, MINION_MELEE, 0.532f);
-    SpawnScenarioMinion(w, TEAM_RED, MINION_CASTER, 0.54f);
-    SpawnScenarioMinion(w, TEAM_RED, MINION_CASTER, 0.552f);
-    SpawnScenarioMinion(w, TEAM_RED, MINION_CASTER, 0.564f);
+    // Staggered across the lane rather than in single file, so the wave reads as a body of
+    // minions and the front row is not one minion deep.
+    SpawnScenarioMinion(w, TEAM_BLUE, MINION_CASTER, 0.402f, 1.0f,  -38.0f);
+    SpawnScenarioMinion(w, TEAM_BLUE, MINION_CASTER, 0.410f, 1.0f,    0.0f);
+    SpawnScenarioMinion(w, TEAM_BLUE, MINION_CASTER, 0.418f, 1.0f,   38.0f);
+    SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE,  0.430f, 1.0f,  -45.0f);
+    SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE,  0.437f, 1.0f,    0.0f);
+    SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE,  0.444f, 1.0f,   45.0f);
+
+    SpawnScenarioMinion(w, TEAM_RED, MINION_MELEE,  0.518f, 1.0f,  -30.0f);
+    SpawnScenarioMinion(w, TEAM_RED, MINION_MELEE,  0.525f, 1.0f,   30.0f);
+    SpawnScenarioMinion(w, TEAM_RED, MINION_CASTER, 0.536f, 1.0f,  -45.0f);
+    SpawnScenarioMinion(w, TEAM_RED, MINION_CASTER, 0.543f, 1.0f,    0.0f);
+    SpawnScenarioMinion(w, TEAM_RED, MINION_CASTER, 0.550f, 1.0f,   45.0f);
 }
 
 // Set up a fast push / shove by weakening parts of the opposing wave.
@@ -432,7 +486,7 @@ void Sandbox_LoadShove(World& w, float& accum, bool& paused, uint32_t seed)
 {
     ResetScenarioBase(w, accum, paused, seed);
     Sandbox_ClearMinions(w);
-    SetupChampions(w, 0.48f, 0.65f, ENEMY_CHAMP_PASSIVE);
+    SetupChampions(w, 0.48f, 0.95f, ENEMY_CHAMP_PASSIVE);
 
     SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.43f);
     SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.442f);
