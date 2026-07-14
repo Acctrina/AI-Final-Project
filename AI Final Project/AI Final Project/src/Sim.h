@@ -157,6 +157,9 @@ void Sim_Tick(World& w, float dt, const SimInput& input);
 
 // Helpers used by the AI layer and renderer.
 CP_Vector World_EnemyBasePoint(const World& w, Team team);
+// Where a champion of this team rests at lane position t (off-axis, so it does not
+// block its own wave).
+CP_Vector Champion_LanePos(const World& w, Team team, float t);
 Entity*   World_NearestEnemy(World& w, const Entity& self, EntityKind kind, float maxRange, EntityId* outId);
 // Topmost living enemy of myTeam whose body is under point p (within slack), else invalid.
 EntityId  World_PickEnemyAt(World& w, CP_Vector p, Team myTeam, float slack);

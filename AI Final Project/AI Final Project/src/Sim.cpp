@@ -283,15 +283,24 @@ static Entity MakeChampion(const Config& c, Team team, CP_Vector pos)
 // Champion spawn/respawn point: on the lane at the team's spawn parameter, but shifted
 // perpendicular so a champion never stands on the axis blocking its own wave. Blue flanks
 // one side, red the other (matching the tower layout).
-static CP_Vector ChampSpawnPos(const World& w, Team team)
+// A champion's resting place at lane position t: shifted off the axis so it does not
+// stand in its own wave's path. Blue shifts one way, red the other. Anything that puts
+// a champion somewhere (spawn, respawn, the holder's anchor, scenario setup) goes
+// through this, so they all agree on where "at t" actually is.
+CP_Vector Champion_LanePos(const World& w, Team team, float t)
 {
-	float     t    = (team == TEAM_BLUE) ? w.cfg.champSpawnT : w.cfg.redChampSpawnT;
 	CP_Vector base = Lane_PointAt(w.lane, t);
 	CP_Vector dir  = Lane_Dir(w.lane);
 	CP_Vector perp = V(-dir.y, dir.x);
 	if (perp.y < 0.0f) perp = VScale(perp, -1.0f); // point "down" (+y), as in World_Init
 	float off = (team == TEAM_BLUE) ? -w.cfg.champSpawnOffset : w.cfg.champSpawnOffset;
 	return VAdd(base, VScale(perp, off));
+}
+
+static CP_Vector ChampSpawnPos(const World& w, Team team)
+{
+	float t = (team == TEAM_BLUE) ? w.cfg.champSpawnT : w.cfg.redChampSpawnT;
+	return Champion_LanePos(w, team, t);
 }
 
 // ---------------------------------------------------------------------------

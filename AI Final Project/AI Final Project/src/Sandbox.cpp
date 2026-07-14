@@ -24,12 +24,6 @@ static int CountAlive(const World& w, EntityKind kind, Team team)
     return count;
 }
 
-// Convenient access to the player champion entity.
-static Entity* GetChampion(World& w)
-{
-    return World_Get(w, w.champion);
-}
-
 // Clear pending wave spawns so scenarios start from a controlled state.
 static void ClearWaveQueues(World& w)
 {
@@ -175,14 +169,29 @@ static void SpawnScenarioMinion(World& w, Team team, MinionType type, float lane
     World_Spawn(w, e);
 }
 
-// Reposition the champion for a scenario setup.
-static void PlaceChampionAt(World& w, float laneT)
+// Reposition a champion for a scenario setup. The team's anchor in the config moves with
+// it, so the holder AI and the respawn point agree with where the scenario put it rather
+// than dragging it back to the default spawn.
+static void PlaceChampionAt(World& w, Team team, float laneT)
 {
-    Entity* champ = GetChampion(w);
-    if (!champ) return;
+    if (team == TEAM_BLUE) w.cfg.champSpawnT    = laneT;
+    else                   w.cfg.redChampSpawnT = laneT;
 
-    champ->pos = Lane_PointAt(w.lane, laneT);
-    champ->target = InvalidId();
+    Entity* c = World_Get(w, (team == TEAM_BLUE) ? w.champion : w.enemyChampion);
+    if (!c) return;
+
+    c->pos    = Champion_LanePos(w, team, laneT);
+    c->vel    = CP_Vector_Zero();
+    c->target = InvalidId();
+}
+
+// Every preset states both champions and the enemy brain outright, so a scenario sets up
+// the same way no matter what was left on the sliders from the last one.
+static void SetupChampions(World& w, float blueT, float redT, EnemyChampMode enemyMode)
+{
+    w.cfg.enemyChampMode = enemyMode;
+    PlaceChampionAt(w, TEAM_BLUE, blueT);
+    PlaceChampionAt(w, TEAM_RED,  redT);
 }
 
 // Reset into a paused, controlled sandbox state
@@ -368,6 +377,7 @@ void Sandbox_KillAllMinionsOfTeam(World& w, Team team)
 void Sandbox_LoadNeutral(World& w, float& accum, bool& paused, uint32_t seed)
 {
     Sandbox_ResetWorld(w, accum, paused, seed);
+    SetupChampions(w, 0.35f, 0.65f, ENEMY_CHAMP_DUMMY);
 }
 
 // Set up a wave freeze near the player's side of the lane.
@@ -375,7 +385,7 @@ void Sandbox_LoadFreeze(World& w, float& accum, bool& paused, uint32_t seed)
 {
     ResetScenarioBase(w, accum, paused, seed);
     Sandbox_ClearMinions(w);
-    PlaceChampionAt(w, 0.22f);
+    SetupChampions(w, 0.22f, 0.65f, ENEMY_CHAMP_DUMMY);
 
     SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.26f);
     SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.272f);
@@ -397,6 +407,7 @@ void Sandbox_LoadSlowPush(World& w, float& accum, bool& paused, uint32_t seed)
 {
     ResetScenarioBase(w, accum, paused, seed);
     Sandbox_ClearMinions(w);
+    SetupChampions(w, 0.38f, 0.65f, ENEMY_CHAMP_DUMMY);
 
     SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.42f);
     SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.432f);
@@ -418,7 +429,7 @@ void Sandbox_LoadShove(World& w, float& accum, bool& paused, uint32_t seed)
 {
     ResetScenarioBase(w, accum, paused, seed);
     Sandbox_ClearMinions(w);
-    PlaceChampionAt(w, 0.48f);
+    SetupChampions(w, 0.48f, 0.65f, ENEMY_CHAMP_DUMMY);
 
     SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.43f);
     SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.442f);
@@ -437,7 +448,8 @@ void Sandbox_LoadTowerAggro(World& w, float& accum, bool& paused, uint32_t seed)
 {
     ResetScenarioBase(w, accum, paused, seed);
     Sandbox_ClearMinions(w);
-    PlaceChampionAt(w, 0.63f);
+    // Red holds a bubble in front of its tower (0.80), so the dive is contested.
+    SetupChampions(w, 0.63f, 0.74f, ENEMY_CHAMP_HOLDER);
 
     SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.60f);
     SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.614f);

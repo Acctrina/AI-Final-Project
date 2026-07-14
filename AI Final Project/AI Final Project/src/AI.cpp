@@ -380,7 +380,7 @@ void AI_DecideEnemyChampion(World& w, Entity& c)
 	// Anchor (spawn/hold point) and home tower are on the champion's own side; the
 	// lane goal is the enemy base it pushes toward.
 	float     anchorT  = (c.team == TEAM_BLUE) ? cfg.champSpawnT : cfg.redChampSpawnT;
-	CP_Vector anchor   = Lane_PointAt(w.lane, anchorT);
+	CP_Vector anchor   = Champion_LanePos(w, c.team, anchorT);
 	CP_Vector laneGoal = World_EnemyBasePoint(w, c.team);
 	Entity*   home     = World_Get(w, (c.team == TEAM_BLUE) ? w.blueTower : w.redTower);
 	CP_Vector fallback = home ? home->pos : anchor;
