@@ -77,6 +77,7 @@ Config Config_Default()
 	c.influenceTowerW   = 4.0f;
 
 	c.equilVelSmoothing = 0.08f;  // heavy smoothing: the front's drift, not per-tick jitter
+	c.detectorsEnabled  = false;
 	c.freezeVelEps      = 0.008f;
 	c.freezeHoldTime    = 2.5f;
 	c.slowPushVel       = 0.045f;

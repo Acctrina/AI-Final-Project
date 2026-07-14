@@ -199,6 +199,17 @@ void Analysis_Update(const World& w, AnalysisState& a, float simElapsed)
 		a.havePrev = true;
 	}
 
+	// Everything above feeds the map overlays and keeps running regardless.
+	if (!cfg.detectorsEnabled)
+	{
+		a.banner.tech = TECH_NONE;
+		a.banner.ttl  = 0.0f;
+		a.freezeTimer = 0.0f;
+		a.pushTimer   = 0.0f;
+		a.pushDir     = 0;
+		return;
+	}
+
 	// Detectors run on sim time; while paused we only keep the field visible.
 	if (simElapsed <= 0.0f)
 		return;

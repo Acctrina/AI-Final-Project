@@ -591,6 +591,7 @@ void Sandbox_DrawImGui(World& w, RenderOptions& render, SandboxState& sandbox, f
     ImGui::Checkbox("Show influence map", &render.showInfluence);
     ImGui::Checkbox("Show equilibrium", &render.showEquilibrium);
     ImGui::Checkbox("Show attack bars", &render.showAttackBars);
+    ImGui::Checkbox("Name techniques", &w.cfg.detectorsEnabled);
 
     // ------------------------------------------------------------------------
     // Wave Control

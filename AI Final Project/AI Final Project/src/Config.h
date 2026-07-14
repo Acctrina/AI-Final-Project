@@ -211,6 +211,10 @@ struct Config
 	float influenceTowerW;
 
 	float equilVelSmoothing;  // low-pass factor (0..1) on the equilibrium velocity
+
+	// Technique naming. Off leaves the influence field and equilibrium point running,
+	// so the map overlays still work; only the recognition and its banner stop.
+	bool  detectorsEnabled;
 	float freezeVelEps;       // |equil vel| below this counts as "held" (lane frac/sec)
 	float freezeHoldTime;     // seconds the front must stay held before "freeze" fires
 	float slowPushVel;        // |vel| up to here (but above freeze) reads as a slow push
