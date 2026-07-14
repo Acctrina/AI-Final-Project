@@ -43,7 +43,8 @@ enum FsmState
 enum EnemyChampMode
 {
 	ENEMY_CHAMP_LANE_PUSHER, // marches with its wave, engages, retreats when low
-	ENEMY_CHAMP_DUMMY,       // holds near its tower, only swings at what is in range
+	ENEMY_CHAMP_DUMMY,       // stands still, but swings at whatever comes into range
+	ENEMY_CHAMP_PASSIVE,     // stands still and never swings: a punching bag
 	ENEMY_CHAMP_HOLDER       // defends a bubble around its spawn, returns when it clears
 };
 

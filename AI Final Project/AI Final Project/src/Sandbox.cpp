@@ -377,7 +377,7 @@ void Sandbox_KillAllMinionsOfTeam(World& w, Team team)
 void Sandbox_LoadNeutral(World& w, float& accum, bool& paused, uint32_t seed)
 {
     Sandbox_ResetWorld(w, accum, paused, seed);
-    SetupChampions(w, 0.35f, 0.65f, ENEMY_CHAMP_DUMMY);
+    SetupChampions(w, 0.35f, 0.65f, ENEMY_CHAMP_PASSIVE);
 }
 
 // Set up a wave freeze near the player's side of the lane.
@@ -385,7 +385,7 @@ void Sandbox_LoadFreeze(World& w, float& accum, bool& paused, uint32_t seed)
 {
     ResetScenarioBase(w, accum, paused, seed);
     Sandbox_ClearMinions(w);
-    SetupChampions(w, 0.22f, 0.65f, ENEMY_CHAMP_DUMMY);
+    SetupChampions(w, 0.22f, 0.65f, ENEMY_CHAMP_PASSIVE);
 
     SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.26f);
     SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.272f);
@@ -407,7 +407,7 @@ void Sandbox_LoadSlowPush(World& w, float& accum, bool& paused, uint32_t seed)
 {
     ResetScenarioBase(w, accum, paused, seed);
     Sandbox_ClearMinions(w);
-    SetupChampions(w, 0.38f, 0.65f, ENEMY_CHAMP_DUMMY);
+    SetupChampions(w, 0.38f, 0.65f, ENEMY_CHAMP_PASSIVE);
 
     SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.42f);
     SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.432f);
@@ -429,7 +429,7 @@ void Sandbox_LoadShove(World& w, float& accum, bool& paused, uint32_t seed)
 {
     ResetScenarioBase(w, accum, paused, seed);
     Sandbox_ClearMinions(w);
-    SetupChampions(w, 0.48f, 0.65f, ENEMY_CHAMP_DUMMY);
+    SetupChampions(w, 0.48f, 0.65f, ENEMY_CHAMP_PASSIVE);
 
     SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.43f);
     SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.442f);
@@ -703,7 +703,8 @@ void Sandbox_DrawImGui(World& w, RenderOptions& render, SandboxState& sandbox, f
             // Enemy (red) champion brain + the "defend your champion" aggro rule.
             Sandbox_PropertyLabel("Enemy champ AI");
             {
-                const char* modes[] = { "Lane pusher", "Dummy", "Holder" };
+                // Order must track EnemyChampMode: the combo writes the raw enum index.
+                const char* modes[] = { "Lane pusher", "Dummy", "Passive", "Holder" };
                 ImGui::Combo("##EnemyChampMode", &w.cfg.enemyChampMode, modes, IM_ARRAYSIZE(modes));
             }
             Sandbox_SliderFloat("Defend radius", "##DefendRadius", &w.cfg.defendRadius, 0.0f, 400.0f, "%.1f");

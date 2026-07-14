@@ -60,7 +60,7 @@ Config Config_Default()
 
 	// Enemy champion. Defaults to a stationary dummy - a still target to attack while
 	// showing the defend/tower-aggro rules, without roaming and skewing the demos.
-	c.enemyChampMode          = ENEMY_CHAMP_DUMMY;
+	c.enemyChampMode          = ENEMY_CHAMP_PASSIVE;
 	c.redChampSpawnT          = 0.65f; // mirror of champSpawnT on the red side
 	c.enemyChampRetreatHpFrac = 0.30f;
 	c.defendRadius            = 220.0f;

@@ -391,6 +391,11 @@ void AI_DecideEnemyChampion(World& w, Entity& c)
 
 	switch (cfg.enemyChampMode)
 	{
+	case ENEMY_CHAMP_PASSIVE:
+		// Punching bag: no move, no swing. Keeps champion damage out of the lane while
+		// minion stats are being tuned.
+		break;
+
 	case ENEMY_CHAMP_DUMMY:
 	{
 		// Never moves. Swings only at whatever has already wandered into attack range.
