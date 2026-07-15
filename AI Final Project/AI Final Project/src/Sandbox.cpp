@@ -408,7 +408,7 @@ void Sandbox_KillAllMinionsOfTeam(World& w, Team team)
 }
 
 // ----------------------------------------------------------------------------
-// Scenarios (Still WIP)
+// Scenarios 
 // ----------------------------------------------------------------------------
 
 // Baseline world state with normal spawning behavior.
@@ -487,17 +487,21 @@ void Sandbox_LoadShove(World& w, float& accum, bool& paused, uint32_t seed)
     ResetScenarioBase(w, accum, paused, seed);
     Sandbox_ClearMinions(w);
     SetupChampions(w, 0.48f, 0.95f, ENEMY_CHAMP_PASSIVE);
+    Sandbox_ResetWaveTimers(w, 20.0f);
 
-    SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.43f);
-    SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.442f);
-    SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.454f);
-    SpawnScenarioMinion(w, TEAM_BLUE, MINION_CASTER, 0.466f);
+    SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.496f);
+    SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.506f);
+    SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.516f);
+    SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.464f);
+    SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.474f);
+    SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.484f);
+    SpawnScenarioMinion(w, TEAM_BLUE, MINION_CASTER, 0.43f);
+    SpawnScenarioMinion(w, TEAM_BLUE, MINION_CASTER, 0.442f);
+    SpawnScenarioMinion(w, TEAM_BLUE, MINION_CASTER, 0.454f);
 
     SpawnScenarioMinion(w, TEAM_RED, MINION_MELEE, 0.54f, 0.30f);
     SpawnScenarioMinion(w, TEAM_RED, MINION_MELEE, 0.552f);
-    SpawnScenarioMinion(w, TEAM_RED, MINION_MELEE, 0.564f);
-    SpawnScenarioMinion(w, TEAM_RED, MINION_CASTER, 0.576f, 0.50f);
-    SpawnScenarioMinion(w, TEAM_RED, MINION_CASTER, 0.588f, 0.50f);
+    SpawnScenarioMinion(w, TEAM_RED, MINION_CANNON, 0.588f, 0.50f);
 }
 
 // Set up a simple tower aggro demonstration near the enemy structure.
@@ -505,15 +509,32 @@ void Sandbox_LoadTowerAggro(World& w, float& accum, bool& paused, uint32_t seed)
 {
     ResetScenarioBase(w, accum, paused, seed);
     Sandbox_ClearMinions(w);
-    // Red holds a bubble in front of its tower (0.80), so the dive is contested.
-    SetupChampions(w, 0.63f, 0.74f, ENEMY_CHAMP_HOLDER);
 
-    SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.60f);
-    SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.614f);
-    SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.628f);
+    // Blue is poised to dive while red is holding near tower.
+    SetupChampions(w, 0.69f, 0.76f, ENEMY_CHAMP_HOLDER);
+    Sandbox_ResetWaveTimers(w, 20.0f);
 
-    SpawnScenarioMinion(w, TEAM_RED, MINION_MELEE, 0.68f);
-    SpawnScenarioMinion(w, TEAM_RED, MINION_MELEE, 0.692f);
+    // Blue wave arrives first to soak initial tower shots.
+    SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.72f);
+    SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.734f);
+    SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.748f);
+    SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.758f);
+    SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.710f);
+    SpawnScenarioMinion(w, TEAM_BLUE, MINION_CASTER, 0.696f);
+    SpawnScenarioMinion(w, TEAM_BLUE, MINION_CASTER, 0.688f);
+    SpawnScenarioMinion(w, TEAM_BLUE, MINION_CASTER, 0.678f);
+
+    // Red has a small defensive line.
+    SpawnScenarioMinion(w, TEAM_RED, MINION_MELEE, 0.778f);
+    SpawnScenarioMinion(w, TEAM_RED, MINION_MELEE, 0.792f);
+
+    // Make the dive window obvious.
+    Entity* redChamp = World_Get(w, w.enemyChampion);
+    if (redChamp)
+    {
+        redChamp->hp = redChamp->maxHp * 0.40f;
+        if (redChamp->hp < 1.0f) redChamp->hp = 1.0f;
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -662,7 +683,7 @@ void Sandbox_DrawImGui(World& w, RenderOptions& render, SandboxState& sandbox, f
                 sandbox.currentScenario = "Shove";
             }
 
-            if (ImGui::Button("Tower Aggro", ImVec2(half, 32)))
+            if (ImGui::Button("Dive", ImVec2(half, 32)))
             {
                 Sandbox_LoadTowerAggro(w, accum, paused, sandbox.seed);
                 sandbox.currentScenario = "Tower Aggro";
@@ -881,7 +902,9 @@ void Sandbox_DrawImGui(World& w, RenderOptions& render, SandboxState& sandbox, f
         ImGui::Text("You have to kill all melee minions as fast as possible and\nalso kill the cannon minions.");
     }
     else if (sandbox.currentScenario == "Tower Aggro") {
-
+        ImGui::Text("Diving occurs when you attack an enemy champion under\ntheir tower.");
+        ImGui::Text("It is usually performed after shoving the minion wave.");
+        ImGui::Text("The minions absorb the initial tower shots allowing you\nto dive the enemy champion safely.");
     }
     else {
         ImGui::Text("Unknown scenario...");
