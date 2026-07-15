@@ -492,16 +492,13 @@ void Sandbox_LoadShove(World& w, float& accum, bool& paused, uint32_t seed)
     SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.496f);
     SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.506f);
     SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.516f);
-    SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.464f);
-    SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.474f);
-    SpawnScenarioMinion(w, TEAM_BLUE, MINION_MELEE, 0.484f);
     SpawnScenarioMinion(w, TEAM_BLUE, MINION_CASTER, 0.43f);
     SpawnScenarioMinion(w, TEAM_BLUE, MINION_CASTER, 0.442f);
     SpawnScenarioMinion(w, TEAM_BLUE, MINION_CASTER, 0.454f);
 
     SpawnScenarioMinion(w, TEAM_RED, MINION_MELEE, 0.54f, 0.30f);
-    SpawnScenarioMinion(w, TEAM_RED, MINION_MELEE, 0.552f);
-    SpawnScenarioMinion(w, TEAM_RED, MINION_CANNON, 0.588f, 0.50f);
+    SpawnScenarioMinion(w, TEAM_RED, MINION_MELEE, 0.552f, 0.65f);
+    SpawnScenarioMinion(w, TEAM_RED, MINION_CANNON, 0.588f, 0.25f);
 }
 
 // Set up a simple tower aggro demonstration near the enemy structure.
@@ -528,7 +525,7 @@ void Sandbox_LoadTowerAggro(World& w, float& accum, bool& paused, uint32_t seed)
     SpawnScenarioMinion(w, TEAM_RED, MINION_MELEE, 0.778f);
     SpawnScenarioMinion(w, TEAM_RED, MINION_MELEE, 0.792f);
 
-    // Make the dive window obvious.
+    // Make the dive window obvious, by setting enemy champ to low hp.
     Entity* redChamp = World_Get(w, w.enemyChampion);
     if (redChamp)
     {
