@@ -7,6 +7,7 @@ struct SandboxState
 {
     uint32_t seed = 1337u;
     const char* currentScenario = "Neutral";
+    const char* tooltipScenario = "Neutral";
 
     bool allowGameMouseInput = true;
     bool allowGameKeyboardInput = true;

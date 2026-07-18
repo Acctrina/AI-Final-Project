@@ -881,24 +881,24 @@ void Sandbox_DrawImGui(World& w, RenderOptions& render, SandboxState& sandbox, f
         return;
     }
 
-    if (sandbox.currentScenario == "Neutral") {
-        ImGui::Text("Try and get as many last hits as possible!");
+    if (sandbox.tooltipScenario == "Neutral") {
+        ImGui::Text("Try and recreate any of the scenarios. You can click the \nbuttons below to recieve tips on how to execute it.");
     }
-    else if (sandbox.currentScenario == "Freeze") {
+    else if (sandbox.tooltipScenario == "Freeze") {
         ImGui::Text("Wave freezing refers to a stable lane state in which opposing \nminion waves meet at approximately the same time.");
         ImGui::Text("It is done to maintain a favorable lane position, \nfor example near your tower.");
         ImGui::Text("It is accomplished by mirroring what the opponent is doing, \ndealing equal damage to their minion as they do to yours");
     }
-    else if (sandbox.currentScenario == "Slow Push") {
+    else if (sandbox.tooltipScenario == "Slow Push") {
         ImGui::Text("Slow push refers to building up more minions on your side \nagainst the opponent.");
         ImGui::Text("This allows your wave to \"slowly\" push in, allowing you\nto do other stuff.");
         ImGui::Text("It is accomplished by killing the enemy caster minions first.");
     }
-    else if (sandbox.currentScenario == "Shove") {
+    else if (sandbox.tooltipScenario == "Shove") {
         ImGui::Text("Shove is similar to slow push, but creates a more urgent\nscenario which demands more enemy attention immediately.");
         ImGui::Text("You have to kill all melee minions as fast as possible and\nalso kill the cannon minions.");
     }
-    else if (sandbox.currentScenario == "Tower Aggro") {
+    else if (sandbox.tooltipScenario == "Tower Aggro") {
         ImGui::Text("Diving occurs when you attack an enemy champion under\ntheir tower.");
         ImGui::Text("It is usually performed after shoving the minion wave.");
         ImGui::Text("The minions absorb the initial tower shots allowing you\nto dive the enemy champion safely.");
@@ -906,6 +906,18 @@ void Sandbox_DrawImGui(World& w, RenderOptions& render, SandboxState& sandbox, f
     else {
         ImGui::Text("Unknown scenario...");
     }
+
+    Sandbox_DrawSectionHeader("Select tip: ");
+
+    {
+        if (ImGui::Button("Neutral", ImVec2(half, 32))) { sandbox.tooltipScenario = "Neutral"; }     ImGui::SameLine();
+        if (ImGui::Button("Freeze", ImVec2(half, 32))) { sandbox.tooltipScenario = "Freeze"; }
+        if (ImGui::Button("Slow Push", ImVec2(half, 32))) { sandbox.tooltipScenario = "Slow Push"; }   ImGui::SameLine();
+        if (ImGui::Button("Shove", ImVec2(half, 32))) { sandbox.tooltipScenario = "Shove"; }
+        if (ImGui::Button("Dive", ImVec2(half, 32))) { sandbox.tooltipScenario = "Tower Aggro"; }
+    }
+
+
 
     // ------------------------------------------------------------------------
     // Stats
@@ -917,9 +929,6 @@ void Sandbox_DrawImGui(World& w, RenderOptions& render, SandboxState& sandbox, f
         ImGuiTableFlags_BordersInnerV |
         ImGuiTableFlags_RowBg))
     {
-        ImGui::TableNextRow();
-        ImGui::TableSetColumnIndex(0); ImGui::TextUnformatted("Tick");
-        ImGui::TableSetColumnIndex(1); ImGui::Text("%lld", w.tick);
 
         ImGui::TableNextRow();
         ImGui::TableSetColumnIndex(0); ImGui::TextUnformatted("Blue last hits");
@@ -928,6 +937,22 @@ void Sandbox_DrawImGui(World& w, RenderOptions& render, SandboxState& sandbox, f
         ImGui::TableNextRow();
         ImGui::TableSetColumnIndex(0); ImGui::TextUnformatted("Red last hits");
         ImGui::TableSetColumnIndex(1); ImGui::Text("%d", w.redKills);
+
+        ImGui::EndTable();
+    }
+
+
+    Sandbox_DrawSectionHeader("Nerdier Stats");
+
+    if (ImGui::BeginTable("nerd_stats_table", 2,
+        ImGuiTableFlags_SizingStretchProp |
+        ImGuiTableFlags_BordersInnerV |
+        ImGuiTableFlags_RowBg))
+    {
+
+        ImGui::TableNextRow();
+        ImGui::TableSetColumnIndex(0); ImGui::TextUnformatted("Tick");
+        ImGui::TableSetColumnIndex(1); ImGui::Text("%lld", w.tick);
 
         ImGui::TableNextRow();
         ImGui::TableSetColumnIndex(0); ImGui::TextUnformatted("Blue wave No.");
